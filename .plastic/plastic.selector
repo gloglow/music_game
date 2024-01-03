@@ -1,0 +1,4 @@
+repository "music_game@silveyoon@cloud"
+  path "/"
+    br "/main"
+    co "/main"
