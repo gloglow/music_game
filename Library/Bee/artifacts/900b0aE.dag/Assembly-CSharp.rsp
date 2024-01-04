@@ -371,6 +371,7 @@
 "Assets/Scripts/Hit.cs"
 "Assets/Scripts/HitCollider.cs"
 "Assets/Scripts/Note.cs"
+"Assets/Scripts/ObjectPoolManager.cs"
 "Assets/Scripts/RealJudgeLine.cs"
 "Assets/Scripts/Scroller.cs"
 "Assets/Scripts/StageManager.cs"

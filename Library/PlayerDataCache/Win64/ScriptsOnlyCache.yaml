@@ -1,13 +1,17 @@
 ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
+    - AudioManager
+    - CFX_AutoDestructShuriken
     - GameManager
     - Hit
     - HitCollider
-    - JudgeLine
     - Note
+    - ObjectPoolManager
     - RealJudgeLine
+    - StageManager
     - TouchArea
+    - VisualJudgeLine
     Unity.PlasticSCM.Editor.dll:
     - Unity.PlasticSCM.Editor.PlasticWindow
     Unity.Rider.Editor.dll:
@@ -27,7 +31,13 @@ ScriptsOnlyBuild:
     - UnityEngine.EventSystems.StandaloneInputModule
     - UnityEngine.UI.CanvasScaler
     - UnityEngine.UI.GraphicRaycaster
-  serializedClasses: {}
+    - UnityEngine.UI.Text
+  serializedClasses:
+    UnityEngine.CoreModule:
+    - UnityEngine.Events.PersistentCallGroup
+    UnityEngine.UI:
+    - UnityEngine.UI.FontData
+    - UnityEngine.UI.MaskableGraphic/CullStateChangedEvent
   methodsToPreserve: []
   sceneClasses:
     Assets/Scenes/SampleScene.unity:
@@ -68,36 +78,58 @@ ScriptsOnlyBuild:
     - Class: 108
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 2290}
+      Script: {instanceID: 17362}
     - Class: 114
-      Script: {instanceID: 2704}
+      Script: {instanceID: 17776}
     - Class: 114
-      Script: {instanceID: 2926}
+      Script: {instanceID: 17998}
     - Class: 114
-      Script: {instanceID: 3598}
+      Script: {instanceID: 18668}
     - Class: 114
-      Script: {instanceID: 4264}
+      Script: {instanceID: 19334}
     - Class: 114
-      Script: {instanceID: 5268}
+      Script: {instanceID: 19638}
     - Class: 114
-      Script: {instanceID: 5712}
+      Script: {instanceID: 19690}
     - Class: 114
-      Script: {instanceID: 5970}
+      Script: {instanceID: 20338}
     - Class: 114
-      Script: {instanceID: 6492}
+      Script: {instanceID: 20708}
     - Class: 114
-      Script: {instanceID: 8242}
+      Script: {instanceID: 20782}
     - Class: 114
-      Script: {instanceID: 8292}
+      Script: {instanceID: 21040}
+    - Class: 114
+      Script: {instanceID: 21562}
+    - Class: 114
+      Script: {instanceID: 22528}
+    - Class: 114
+      Script: {instanceID: 23314}
+    - Class: 114
+      Script: {instanceID: 23364}
+    - Class: 114
+      Script: {instanceID: 23426}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 120
+      Script: {instanceID: 0}
+    - Class: 128
       Script: {instanceID: 0}
     - Class: 135
       Script: {instanceID: 0}
     - Class: 157
       Script: {instanceID: 0}
     - Class: 196
+      Script: {instanceID: 0}
+    - Class: 198
+      Script: {instanceID: 0}
+    - Class: 199
+      Script: {instanceID: 0}
+    - Class: 212
+      Script: {instanceID: 0}
+    - Class: 213
+      Script: {instanceID: 0}
+    - Class: 222
       Script: {instanceID: 0}
     - Class: 223
       Script: {instanceID: 0}
@@ -190,7 +222,7 @@ ScriptsOnlyBuild:
     className: UnityOnPointerUpMessageListener
   - hash:
       serializedVersion: 2
-      Hash: d1adf9b7693b09a554ba431f87b18158
+      Hash: 366a3194a6285e8dcf9ce5f254792bf5
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: GameManager
@@ -412,7 +444,7 @@ ScriptsOnlyBuild:
     className: PlayerQuitHandler
   - hash:
       serializedVersion: 2
-      Hash: 97cd5c4066a3dbd7955158b523145b51
+      Hash: 558f5c0fb13730f103ea26f8b1548d9d
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: HitCollider
@@ -736,7 +768,7 @@ ScriptsOnlyBuild:
     className: Text
   - hash:
       serializedVersion: 2
-      Hash: 50335b2c5cb67fb35f78770b3c7d372a
+      Hash: 4d7bb19b44b49b982a74b28268d3d895
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: Note
@@ -946,6 +978,12 @@ ScriptsOnlyBuild:
     className: SignalTrack
   - hash:
       serializedVersion: 2
+      Hash: a8556d975211a6f09c4d02295967120b
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: StageManager
+  - hash:
+      serializedVersion: 2
       Hash: 67272c9c30c50b68ef1ce72ac0191c57
     assemblyName: Unity.VisualScripting.Core
     namespaceName: Unity.VisualScripting
@@ -1018,13 +1056,13 @@ ScriptsOnlyBuild:
     className: TMP_ScrollbarEventHandler
   - hash:
       serializedVersion: 2
-      Hash: 423e12889e36d771c207bea2659a9a62
+      Hash: 514a3197e37c5afa1bf37cb61dd13443
     assemblyName: Assembly-CSharp
     namespaceName: 
-    className: JudgeLine
+    className: VisualJudgeLine
   - hash:
       serializedVersion: 2
-      Hash: 51adc6ea8f6057fb697d5bc331ed2569
+      Hash: 2ee17c71c6471c457b15254aa889fdc8
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: Hit
@@ -1034,6 +1072,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.Timeline
     namespaceName: UnityEngine.Timeline
     className: SignalEmitter
+  - hash:
+      serializedVersion: 2
+      Hash: 019add6460a8970cab6199df3bf63d5f
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: ObjectPoolManager
   - hash:
       serializedVersion: 2
       Hash: 02a47340661d2ea7c6d30e292cfef403

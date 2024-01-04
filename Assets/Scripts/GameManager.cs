@@ -7,7 +7,6 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     private static GameManager instance;
-    public AudioManager audioManager;
     public VisualJudgeLine visualJudgeLine;
 
     public Vector2 idealScreenSize;
@@ -52,12 +51,5 @@ public class GameManager : MonoBehaviour
         lineEndPos.z = 0;
 
         visualJudgeLine.DrawLine();
-    }
-
-
-
-    private void StartUIFinish()
-    {
-        //audioManager.MusicPlay();
     }
 }

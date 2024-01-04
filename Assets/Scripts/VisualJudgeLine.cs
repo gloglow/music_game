@@ -7,7 +7,6 @@ public class VisualJudgeLine : MonoBehaviour
     public TouchArea touchArea;
     public RealJudgeLine realJudgeLine;
     public Transform noteSign;
-    public Transform spawner;
 
     private LineRenderer lineRenderer;
     public float lineOffset;
@@ -34,7 +33,6 @@ public class VisualJudgeLine : MonoBehaviour
         }
         DrawOtherLines();
 
-        spawner.position = new Vector3(0, GameManager.Instance.lineStartPos.y * 2.4f, 0);
         noteSign.position = new Vector3 (0, GameManager.Instance.lineStartPos.y * 0.8f, 0);
     }
    
