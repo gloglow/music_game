@@ -11,47 +11,34 @@ public class Note : MonoBehaviour
     public float speed;
     public Vector3 dirVec;
     public float bpm;
-    public Vector3 destination;
-    public Rigidbody rigid;
 
-    public int status; // 0 : idle, 1 : initial, 2 : arrive at sign, 3 : moving to destination
+    public int status; // 0 : idle, 1 : Check Destination 2 : Move to Destination
 
-    private void Awake()
-    {
-        rigid = GetComponent<Rigidbody>();
-    }
     private void Update()
     {
         switch (status)
         {
             case 0:
-                speed = Vector3.Distance(transform.position, destination) * bpm / 60f;
-                status = 1;
                 break;
             case 1:
-                //transform.Translate(Vector3.down * speed * Time.deltaTime);
-                if(transform.position.y == destination.y)
+                RaycastHit rayHit;
+                int layerMask = (1 << 7);
+                /*
+                if (Physics.Raycast(transform.position, dirVec, out rayHit, Mathf.Infinity, layerMask))
                 {
-                    RaycastHit rayHit;
-                    int layerMask = (1 << 7);
-                    if (Physics.Raycast(transform.position, dirVec, out rayHit, Mathf.Infinity, layerMask))
-                    {
-                        destination = rayHit.point;
-                        speed = Vector3.Distance(transform.position, rayHit.transform.position) * bpm / 60f;
-                        transform.Translate(dirVec * speed * Time.deltaTime);
-                    }
-                    status = 2;
-                }
+                    float dist = Vector3.Distance(transform.position, rayHit.point);
+                    speed = dist * bpm / 60f * 0.001f;
+                }*/
+                speed = 0.01f;
+                transform.Translate(dirVec * speed);
+                status = 2;
                 break;
             case 2:
-                transform.Translate(dirVec * speed * Time.deltaTime);
-                if(transform.position.y < destination.y)
+                transform.Translate(dirVec * speed);
+                if(transform.position.y < Camera.main.ScreenToWorldPoint(new Vector2(0, -1 * Screen.height)).y)
                 {
-                    status = 3;
+                    Exit();
                 }
-                break;
-            case 3:
-                Exit();
                 break;
         }
     }

@@ -18,7 +18,7 @@ public class ObjectPoolManager : MonoBehaviour
     public void Initialize()
     {
         notePool = new ObjectPool<GameObject>(CreateNote, BringNoteFromPool, ReturnNoteToPool
-            , null, true, noteMaxCnt, noteMaxCnt);
+            , notdestroybuttmp, true, noteMaxCnt, noteMaxCnt);
 
         for (int i = 0; i< noteMaxCnt; i++)
         {
@@ -42,5 +42,10 @@ public class ObjectPoolManager : MonoBehaviour
     public void ReturnNoteToPool (GameObject note)
     {
         note.SetActive(false);
+    }
+
+    public void notdestroybuttmp(GameObject note)
+    {
+
     }
 }
