@@ -1,18 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
+using UnityEngine.UI;
 
 public class HitCollider : MonoBehaviour
 {
-    private int grade;
-    private void Start()
-    {
-        gameObject.SetActive(false);
-    }
+    public Text gradeText;
+    private int grade; // 4 : great, 3 : good, 2 : bad, 1 : miss
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("dd");
         if (other.gameObject.layer == 8)
         {
             float tmp = Vector3.Distance(transform.position, other.transform.position);
@@ -21,27 +19,27 @@ public class HitCollider : MonoBehaviour
         }
     }
 
-    /*
-    private void OnCollisionEnter(Collision collision)
-    {
-        Debug.Log("dd");
-        if(collision.gameObject.layer == 8)
-        {
-            float tmp = Vector3.Distance(transform.position, collision.transform.position);
-            grade = Grading(tmp);
-            collision.gameObject.SetActive(false);
-        }
-    }*/
-
     private int Grading (float dist)
     {
         if (dist < 0.2f)
+        {
+            gradeText.text = "Perfect";
             return 4;
+        }
         else if (dist < 0.3f)
+        {
+            gradeText.text = "Great";
             return 3;
+        }
         else if (dist < 0.4f)
+        {
+            gradeText.text = "Good";
             return 2;
+        }
         else
+        {
+            gradeText.text = "Bad";
             return 1;
+        }
     }
 }

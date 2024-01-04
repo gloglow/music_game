@@ -6,49 +6,55 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    private static GameManager instance;
     public AudioManager audioManager;
-    public JudgeLine judgeLine;
-    public Hit hit;
+    public VisualJudgeLine visualJudgeLine;
+
+    public Vector2 idealScreenSize;
+    public Vector3 lineStartPos, lineEndPos;
+
+    public static GameManager Instance
+    {
+        get
+        {
+            if (!instance)
+            {
+                instance = FindObjectOfType(typeof(GameManager)) as GameManager;
+
+                if(instance == null)
+                {
+                    Debug.Log("no singleton obj");
+                }
+            }
+            return instance;
+        }
+    }
+
+    private void Awake()
+    {
+        if(instance == null)
+        {
+            instance = this;
+        }
+        else if (instance != this)
+        {
+            Destroy(gameObject);
+        }
+        DontDestroyOnLoad(gameObject);
+    }
 
     private void Start()
     {
-        StartUI();
+        float screenWeight = Screen.height - (Screen.width * idealScreenSize.y / idealScreenSize.x);
+        lineStartPos = Camera.main.ScreenToWorldPoint(new Vector2(0, Screen.height - screenWeight));
+        lineEndPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height - screenWeight));
+        lineStartPos.z = 0;
+        lineEndPos.z = 0;
+
+        visualJudgeLine.DrawLine();
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            SceneManager.LoadScene(0);
-        }
 
-        if (Input.GetMouseButtonDown(0))
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit rayHit;
-            if (Physics.Raycast(ray, out rayHit))
-            {
-                if (rayHit.collider.name == "TouchArea")
-                {
-                    Vector3 dirVec = ((judgeLine.startPos + judgeLine.endPos) * 0.5f) - rayHit.point;
-                    dirVec = Vector3.Normalize(dirVec);
-
-                    RaycastHit ray2Hit;
-                    int layerMask = (1 << 7);
-
-                    if (Physics.Raycast(rayHit.point, dirVec, out ray2Hit, 100f, layerMask) || Physics.Raycast(rayHit.point, -dirVec, out ray2Hit, 100f, layerMask))
-                    {
-                        hit.hitting(ray2Hit.point);
-                    }
-                }
-            }
-        }
-    }
-
-    private void StartUI()
-    {
-        Invoke("StartUIFinish", 3f);
-    }
 
     private void StartUIFinish()
     {

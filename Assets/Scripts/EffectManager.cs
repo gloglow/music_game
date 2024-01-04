@@ -17,7 +17,5 @@ public class EffectManager : MonoBehaviour
             tmp = Instantiate(prefab_destroyEffect, transform);
             destroyEffects[i] = tmp;
         }
-
-
     }
 }
