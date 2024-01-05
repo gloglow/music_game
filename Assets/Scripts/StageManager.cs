@@ -1,8 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.Pool;
 using UnityEngine.UI;
+using LitJson;
+using Unity.VisualScripting;
 
 public class StageManager : MonoBehaviour
 {
@@ -25,6 +28,14 @@ public class StageManager : MonoBehaviour
     private float lastBeatTime; // timing of last beat.
 
     public float secondPerBeat; // second per beat. calculated by bpm.
+
+    public static List<NoteData> noteList = new List<NoteData>();
+    JsonData noteJson;
+    public string title;
+    public string composer;
+    public int index = 0;
+    public int crtIndex = 0;
+    float musicStartTime;
 
     public static StageManager Instance
     {
@@ -61,7 +72,30 @@ public class StageManager : MonoBehaviour
         startTime = (float)AudioSettings.dspTime;
         lastBeatTime = startTime;
         secondPerBeat = 60 / bpm;
-        //Invoke("MusicPlay", secondPerBeat * musicStartAfterBeats);
+        LoadNoteData();
+    }
+
+    private void LoadNoteData()
+    {
+        if(File.Exists(Application.dataPath+ "/Resources/JSON/miles.json"))
+        {
+            string jsonStr = File.ReadAllText(Application.dataPath + "/Resources/JSON/miles.json");
+            JsonData noteD = JsonMapper.ToObject(jsonStr);
+
+            title = noteD[0].ToString();
+            composer = noteD[1].ToString();
+
+            for (int i=0; i<12; i++)
+            {
+                
+                NoteData noteData = new NoteData();
+                noteData.beat = float.Parse(noteD[2][i]["beat"].ToString());
+                noteData.x = float.Parse(noteD[2][i]["x"].ToString());
+                noteData.y = float.Parse(noteD[2][i]["y"].ToString());
+                noteList.Add(noteData);
+            }
+        }
+        
     }
 
     private void Update()
@@ -76,11 +110,25 @@ public class StageManager : MonoBehaviour
             if (beatCnt == musicStartAfterBeats + 1)
             {
                 MusicPlay();
+                musicStartTime = (float)AudioSettings.dspTime;
                 flag = true;
             }
 
             if (flag)
-                MakeNote();
+            {    
+                while (beatCnt - musicStartAfterBeats == (int)noteList[index].beat)
+                {
+                    if(noteList[index].beat - (beatCnt - musicStartAfterBeats) == 0)
+                    {
+                        MakeNote();
+                    }
+                    else
+                    {
+                        Invoke("MakeNote", (noteList[index].beat - (beatCnt - musicStartAfterBeats)) * secondPerBeat);
+                    }
+                    index++;
+                }
+            }
         }
     }
 
@@ -93,7 +141,9 @@ public class StageManager : MonoBehaviour
         // activate note.
         note.status = 1;
         note.transform.position = Spawners[1].transform.position;
-        note.dirVec = Vector3.down;
+        note.dirVec = new Vector3(noteList[crtIndex].x, noteList[crtIndex].y, 0);
+        crtIndex++;
+        //note.dirVec = Vector3.down;
     }
 
     public void MusicPlay()

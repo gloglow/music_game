@@ -1030,11 +1030,15 @@ MonoBehaviour:
   - {fileID: 1184027528}
   gradeText: {fileID: 708986864}
   bpm: 130
-  userSpeed: 1.2
+  userSpeed: 1
   musicStartAfterBeats: 8
   flag: 0
   beatCnt: 0
   secondPerBeat: 0
+  title: 
+  composer: 
+  index: 0
+  crtIndex: 0
 --- !u!1 &880014763
 GameObject:
   m_ObjectHideFlags: 0
