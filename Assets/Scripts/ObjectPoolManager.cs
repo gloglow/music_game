@@ -5,13 +5,40 @@ using UnityEngine.Pool;
 
 public class ObjectPoolManager : MonoBehaviour
 {
+    private static ObjectPoolManager instance;
     public IObjectPool<GameObject> notePool { get; private set; }
 
     public int noteMaxCnt;
     public GameObject prefab_note;
 
+    public static ObjectPoolManager Instance
+    {
+        get
+        {
+            if (!instance)
+            {
+                instance = FindObjectOfType(typeof(ObjectPoolManager)) as ObjectPoolManager;
+
+                if (instance == null)
+                {
+                    Debug.Log("no singleton obj");
+                }
+            }
+            return instance;
+        }
+    }
+
     private void Awake()
     {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else if (instance != this)
+        {
+            Destroy(gameObject);
+        }
+        DontDestroyOnLoad(gameObject);
         Initialize();
     }
 

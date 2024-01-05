@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
+using static UnityEditor.PlayerSettings;
 
 public class Hit : MonoBehaviour
 {
@@ -13,7 +15,6 @@ public class Hit : MonoBehaviour
     public ParticleSystem[] hitEffects;
 
     public TouchArea touchArea;
-    public Text gradeText;
 
     public int hitCnt;
 
@@ -32,7 +33,6 @@ public class Hit : MonoBehaviour
             hitEffect.gameObject.SetActive(false);
             hitCollider.transform.SetParent(transform);
             hitEffect.transform.SetParent(transform);
-            hitCollider.gradeText = gradeText;
             hitColliders[i] = hitCollider;
             hitEffects[i] = hitEffect;
         }
@@ -40,6 +40,25 @@ public class Hit : MonoBehaviour
 
     private void Update()
     {
+        if(Input.GetMouseButtonDown(0))
+        {
+            Vector3 point = isinTouchArea(Input.mousePosition);
+            if (point != new Vector3(999, 999, 999))
+            {
+                point = DecideColliderPos(point);
+            }
+            int index = 0;
+            hitEffects[index].gameObject.SetActive(true);
+            hitEffects[index].transform.position = point;
+            hitEffects[index].Play();
+            hitColliders[index].gameObject.SetActive(true);
+            hitColliders[index].transform.position = point;
+        }
+        if(Input.GetMouseButtonUp(0))
+        {
+            hitColliders[0].gameObject.SetActive(false);
+        }
+        /*
         if (Input.touchCount > 0)
         {
             for (int i = 0; i < Input.touchCount; i++)
@@ -63,12 +82,12 @@ public class Hit : MonoBehaviour
                     hitColliders[i].gameObject.SetActive(false);
                 }
             }
-        }
+        }*/
     }
 
-    private Vector3 isinTouchArea(Touch touch)
+    private Vector3 isinTouchArea(Vector3 mousepos)//(Touch touch)
     {
-        Ray ray = Camera.main.ScreenPointToRay(touch.position);
+        Ray ray = Camera.main.ScreenPointToRay(mousepos);//touch.position);
         RaycastHit rayHit;
         int layerMask = (1 << 9);
         if (Physics.Raycast(ray, out rayHit, Mathf.Infinity, layerMask))

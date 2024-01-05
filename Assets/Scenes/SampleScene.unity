@@ -963,7 +963,6 @@ MonoBehaviour:
   hitColliders: []
   hitEffects: []
   touchArea: {fileID: 584533958}
-  gradeText: {fileID: 708986864}
   hitCnt: 4
 --- !u!4 &742536658
 Transform:
@@ -1005,12 +1004,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 873557674}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1987079801}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &873557676
 MonoBehaviour:
@@ -1025,7 +1024,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bpm: 130
-  poolManager: {fileID: 880014765}
   audioManager: {fileID: 1453549113}
   Spawners:
   - {fileID: 307758458}
@@ -1036,6 +1034,7 @@ MonoBehaviour:
   secondPerBeat: 0
   startTime: 0
   lastBeatTime: 0
+  gradeText: {fileID: 708986864}
 --- !u!1 &880014763
 GameObject:
   m_ObjectHideFlags: 0
@@ -1787,7 +1786,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1453549111}
-  - {fileID: 873557675}
   - {fileID: 880014764}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1864,6 +1862,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1342243232}
+  - {fileID: 873557675}
   - {fileID: 1987079801}
   - {fileID: 963194228}
   - {fileID: 705507995}
