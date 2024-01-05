@@ -56,10 +56,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 260e1a8468086c44c9cb5080ac5966ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0
   dirVec: {x: 0, y: 0, z: 0}
-  bpm: 0
-  offset: 0.5
+  offset: 1
+  perfectRange: 0.75
+  greatRange: 0.83
   status: 0
 --- !u!23 &8795545317961979412
 MeshRenderer:

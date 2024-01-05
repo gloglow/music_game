@@ -72,9 +72,7 @@
     <Compile Include="Assets\Scripts\Note.cs" />
     <Compile Include="Assets\Scripts\AudioManager.cs" />
     <Compile Include="Assets\JMO Assets\Cartoon FX (legacy)\Scripts\CFX_AutoDestructShuriken.cs" />
-    <Compile Include="Assets\Scripts\EffectManager.cs" />
     <Compile Include="Assets\Scripts\StageManager.cs" />
-    <Compile Include="Assets\Scripts\Scroller.cs" />
     <Compile Include="Assets\Scripts\TouchArea.cs" />
   </ItemGroup>
   <ItemGroup>

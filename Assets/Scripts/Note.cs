@@ -8,16 +8,19 @@ public class Note : MonoBehaviour
 {
     public IObjectPool<GameObject> notePool {  get; set; }
 
-    public float speed;
-    public Vector3 dirVec;
-    public float bpm;
-    Vector3 destination;
-    float dist;
-    Vector3 initialPos;
-    float initialTime;
-    public float offset;
+    public Vector3 dirVec; // direction vector to move.
 
-    public int status; // 0 : idle, 1 : Check Destination 2 : Move to Destination
+    // variables to calculate move speed.
+    private Vector3 initialPos; // position when note is activated (spawner's position)
+    private float initialTime; // time when note is activated
+    private Vector3 destination; // on judge line.
+    private float dist; // distance between initial position and destination.
+
+    // range of perfect and great grade
+    [SerializeField] private float perfectRange;
+    [SerializeField] private float greatRange;
+
+    public int status; // 0 : idle, 1 : set destination and speed, 2 : move
 
     private void Update()
     {
@@ -25,29 +28,41 @@ public class Note : MonoBehaviour
         {
             case 0:
                 break;
-            case 1:
-                initialPos = transform.position;
+
+            case 1: // when activated by stage manager
+                initialPos = transform.position; // initial position (position of spawner)
+                initialTime = (float)AudioSettings.dspTime; // activated timing
+                
                 RaycastHit rayHit;
-                initialTime = (float)AudioSettings.dspTime;
-                int layerMask = (1 << 7);
+                int layerMask = (1 << 7); // layer of real judge line
                 
                 if (Physics.Raycast(transform.position, dirVec, out rayHit, Mathf.Infinity, layerMask))
                 {
-                    destination = rayHit.point;
-                    dist = Vector3.Distance(transform.position, destination);
-                    //speed = dist * bpm / 60f * 0.0008f;
+                    destination = rayHit.point; // set destination on judge line
+                    dist = Vector3.Distance(transform.position, destination); // distance to move.
                 }
-                float tmp = (((float)AudioSettings.dspTime - initialTime) / StageManager.Instance.secondPerBeat) * dist;
-                transform.position = initialPos + dirVec * tmp * 0.5f;
-                //transform.Translate(dirVec * speed);
-                status = 2;
+
+                // move.
+                // calculate the position where this note should be at current timing.
+
+                // speed = (current time / beat) * distance.
+                // -> time taken for move initial position to destination is ONE BEAT. 
+                float defaultSpeed = (((float)AudioSettings.dspTime - initialTime) / StageManager.Instance.secondPerBeat) * dist;
+                
+                // position = initial position + direction * speed * useroffset
+                transform.position = initialPos + dirVec * defaultSpeed * StageManager.Instance.userSpeed;
+                status = 2; // change status into 2 (don't need to calculate distance)
                 break;
+
             case 2:
-                tmp = (((float)AudioSettings.dspTime - initialTime) / StageManager.Instance.secondPerBeat) * dist;
-                transform.position = initialPos + dirVec * tmp *0.5f;
-                //transform.Translate(dirVec * speed);
+                // moving mechanism is same.
+                defaultSpeed= (((float)AudioSettings.dspTime - initialTime) / StageManager.Instance.secondPerBeat) * dist;
+                transform.position = initialPos + dirVec * defaultSpeed * StageManager.Instance.userSpeed;
+
+                // if arrive on destroy line, destroy
                 if(transform.position.y < Camera.main.ScreenToWorldPoint(new Vector2(0, -1 * Screen.height)).y)
                 {
+                    // grading this note MISS
                     StageManager.Instance.ShowGrade(0);
                     Exit();
                 }
@@ -57,16 +72,19 @@ public class Note : MonoBehaviour
 
     public int Grading()
     {
+        // grading by calculating distance between note and judgeline.
+        // the closer, the higher grade
         dist = Vector3.Distance(transform.position, destination);
-        if (dist < 0.5f)
-        {
-            return 4;
-        }
-        else if(dist < 0.85f)
+
+        if (dist < perfectRange) // set 0.5
         {
             return 3;
         }
-        else
+        else if(dist <greatRange) // set 0.85
+        {
+            return 2;
+        }
+        else // bad grade.
         {
             return 1;
         }
@@ -74,6 +92,7 @@ public class Note : MonoBehaviour
 
     public void Exit()
     {
+        // set note status 0 and return to note object pool.
         status = 0;
         notePool.Release(gameObject);
     }

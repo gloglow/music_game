@@ -8,11 +8,12 @@ public class HitCollider : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == 8)
+        // when collide with note
+        if (other.gameObject.layer == 8) // layer of note
         {
             Note note = other.gameObject.GetComponent<Note>();
-            StageManager.Instance.ShowGrade(note.Grading());
-            ObjectPoolManager.Instance.notePool.Release(other.gameObject);
+            StageManager.Instance.ShowGrade(note.Grading()); // grade the note.
+            ObjectPoolManager.Instance.notePool.Release(other.gameObject); // return note back to object pool.
         }
     }
 }

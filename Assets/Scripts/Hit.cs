@@ -2,37 +2,39 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
-using static UnityEditor.PlayerSettings;
 
 public class Hit : MonoBehaviour
 {
-    public GameObject prefab_hitCollider;
-    public ParticleSystem prefab_hitEffect;
-    public HitCollider[] hitColliders;
-    public ParticleSystem[] hitEffects;
+    // Managing input. -> check whether input was in available area or not, and manage colliders and effects.
 
-    public TouchArea touchArea;
+    [SerializeField] private GameObject prefab_hitCollider; // prefab of hit collider
+    [SerializeField] private ParticleSystem prefab_hitEffect; // prefab of hit effect
 
-    public int hitCnt;
+    [SerializeField] private HitCollider[] hitColliders; // array to manage hit colliders
+    [SerializeField] private ParticleSystem[] hitEffects; // array to manage hit effects
 
+    [SerializeField] private TouchArea touchArea; // available touch area
 
+    [SerializeField] private int hitCnt; // the maximum number of available touch. I thought users will play with 2~4 fingers, so I set this variable 4.
 
     private void Start()
     {
         hitColliders = new HitCollider[hitCnt];
         hitEffects = new ParticleSystem[hitCnt];
 
+        // instantiate hit colliders and effects. and set their array.
         for (int i = 0; i < hitCnt; i++)
         {
             HitCollider hitCollider = Instantiate(prefab_hitCollider).GetComponent<HitCollider>();
             ParticleSystem hitEffect = Instantiate(prefab_hitEffect).GetComponent<ParticleSystem>();
+
             hitCollider.gameObject.SetActive(false);
             hitEffect.gameObject.SetActive(false);
+
             hitCollider.transform.SetParent(transform);
             hitEffect.transform.SetParent(transform);
+
             hitColliders[i] = hitCollider;
             hitEffects[i] = hitEffect;
         }
@@ -40,76 +42,86 @@ public class Hit : MonoBehaviour
 
     private void Update()
     {
+        // PC. 
         if(Input.GetMouseButtonDown(0))
         {
+            // if there was mouse input, check whether input is in toucharea.
             Vector3 point = isinTouchArea(Input.mousePosition);
+
             if (point != new Vector3(999, 999, 999))
             {
+                // if input is in toucharea, calculate position where collider and effect will be made.
                 point = DecideColliderPos(point);
             }
-            int index = 0;
-            hitEffects[index].gameObject.SetActive(true);
-            hitEffects[index].transform.position = point;
-            hitEffects[index].Play();
-            hitColliders[index].gameObject.SetActive(true);
-            hitColliders[index].transform.position = point;
+
+            // PC only use mouse click so only need one collider and one effect.
+            ActivateHit(0, point);
         }
+
         if(Input.GetMouseButtonUp(0))
         {
+            // when mouseclick ended, hit collider off.
             hitColliders[0].gameObject.SetActive(false);
         }
-        /*
+        
+        // Mobile.
         if (Input.touchCount > 0)
         {
+            // there can be one touch or multiple touches.
             for (int i = 0; i < Input.touchCount; i++)
             {
                 Touch tmpTouch = Input.GetTouch(i);
                 Vector3 point  = isinTouchArea(tmpTouch);
+
                 if (point != new Vector3(999,999,999))
                 {
                     point = DecideColliderPos(point);
                 }
+
+                // when start touch, make collider and effect.
                 if (tmpTouch.phase == TouchPhase.Began)
                 {
                     ActivateHit(i, point);
                 }
+                // during touching, move collider to touch position.
                 else if (tmpTouch.phase == TouchPhase.Moved || tmpTouch.phase == TouchPhase.Stationary)
                 {
                     hitColliders[i].transform.position = point;
                 }
+                // when end touch, hit collider off.
                 else
                 {
                     hitColliders[i].gameObject.SetActive(false);
                 }
             }
-        }*/
+        }
     }
 
-    private Vector3 isinTouchArea(Vector3 mousepos)//(Touch touch)
+    private Vector3 isinTouchArea(Vector3 mousepos)
     {
-        Ray ray = Camera.main.ScreenPointToRay(mousepos);//touch.position);
+        // check whether input is in available touch area or not.
+
+        Ray ray = Camera.main.ScreenPointToRay(mousepos);
         RaycastHit rayHit;
-        int layerMask = (1 << 9);
+        int layerMask = (1 << 9); // toucharea layer
         if (Physics.Raycast(ray, out rayHit, Mathf.Infinity, layerMask))
         {
+            // if input is in toucharea, return the point.
             return rayHit.point;
         }
         else 
         { 
+            // else, return meaningless vector.
             return new Vector3(999, 999, 999); 
         }
     }
 
-    private Vector3 DecideColliderPos(Vector3 point)
+    private Vector3 isinTouchArea(Touch touch) // overloading for mobile.
     {
-        Vector3 dirVec = ((GameManager.Instance.lineStartPos + GameManager.Instance.lineEndPos) * 0.5f) - point;
-        dirVec = Vector3.Normalize(dirVec);
-
+        Ray ray = Camera.main.ScreenPointToRay(touch.position);
         RaycastHit rayHit;
-        int layerMask = (1 << 7);
-
-        if (Physics.Raycast(point, dirVec, out rayHit, Mathf.Infinity, layerMask) 
-            || Physics.Raycast(point, -dirVec, out rayHit, Mathf.Infinity, layerMask))
+        int layerMask = (1 << 9);
+        if (Physics.Raycast(ray, out rayHit, Mathf.Infinity, layerMask))
         {
             return rayHit.point;
         }
@@ -119,12 +131,39 @@ public class Hit : MonoBehaviour
         }
     }
 
+    private Vector3 DecideColliderPos(Vector3 point)
+    {
+        // touch area is wide than actual judgeline.
+        // so calculate position of collider and effect to be on the judgeline for them.
+
+        // calculate direction vector of ray.
+        Vector3 dirVec = ((GameManager.Instance.lineStartPos + GameManager.Instance.lineEndPos) * 0.5f) - point;
+        dirVec = Vector3.Normalize(dirVec);
+
+        RaycastHit rayHit;
+        int layerMask = (1 << 7); // layer of real judge line.
+
+        if (Physics.Raycast(point, dirVec, out rayHit, Mathf.Infinity, layerMask) 
+            || Physics.Raycast(point, -dirVec, out rayHit, Mathf.Infinity, layerMask))
+        {
+            // draw ray for two point with infinite length.
+            // return rayHit.point that is on judgeline.
+            return rayHit.point;
+        }
+        else
+        {
+            // else, return meaningless vector.
+            return new Vector3(999, 999, 999);
+        }
+    }
+
     private void ActivateHit(int index, Vector3 pos)
     {
+        // when there was touch, activate collider and effect.
+        hitColliders[index].gameObject.SetActive(true);
         hitEffects[index].gameObject.SetActive(true);
+        hitColliders[index].transform.position = pos;
         hitEffects[index].transform.position = pos;
         hitEffects[index].Play();
-        hitColliders[index].gameObject.SetActive(true);
-        hitColliders[index].transform.position = pos;
     }
 }

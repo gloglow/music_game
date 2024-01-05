@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-    private AudioSource audioSource;
-    public bool flag = false;
+    [SerializeField] private AudioSource audioSource;
 
     private void Awake()
     {
@@ -14,7 +13,6 @@ public class AudioManager : MonoBehaviour
 
     public void MusicPlay()
     {
-        flag = true;
         audioSource.Play();
     }
 }

@@ -1023,18 +1023,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a927692299668964f9b48b5a9a6978a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bpm: 130
   audioManager: {fileID: 1453549113}
   Spawners:
   - {fileID: 307758458}
   - {fileID: 161887595}
   - {fileID: 1184027528}
-  beatCnt: 1
-  barCnt: 1
-  secondPerBeat: 0
-  startTime: 0
-  lastBeatTime: 0
   gradeText: {fileID: 708986864}
+  bpm: 130
+  userSpeed: 1.2
+  musicStartAfterBeats: 8
+  flag: 0
+  beatCnt: 0
+  secondPerBeat: 0
 --- !u!1 &880014763
 GameObject:
   m_ObjectHideFlags: 0
@@ -1257,7 +1257,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   touchArea: {fileID: 584533958}
   realJudgeLine: {fileID: 17247170}
-  noteSign: {fileID: 674730952}
   lineOffset: 2
 --- !u!23 &951450924
 MeshRenderer:
@@ -1719,7 +1718,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1bf732a11ea107641ae9471cf4ed95d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  flag: 0
+  audioSource: {fileID: 0}
 --- !u!1 &1735685627
 GameObject:
   m_ObjectHideFlags: 0

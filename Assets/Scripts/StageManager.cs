@@ -6,20 +6,25 @@ using UnityEngine.UI;
 
 public class StageManager : MonoBehaviour
 {
-    private static StageManager instance; 
-    public float bpm;
-    
-    public AudioManager audioManager;
-    public Transform[] Spawners;
+    // managing a stageUI, music, note.
+    // singleton.
 
-    public int beatCnt;
-    public int barCnt;
-    public float secondPerBeat;
-    public float startTime;
-    public float lastBeatTime;
-    bool flag=false;
+    private static StageManager instance;
 
-    public Text gradeText;
+    [SerializeField] private AudioManager audioManager;
+    [SerializeField] private Transform[] Spawners; // positions where notes are activated.
+    [SerializeField] private Text gradeText; // UI text of grade.
+
+    [SerializeField] private float bpm; // music bpm.
+    public float userSpeed; // speed set by user.
+    [SerializeField] private int musicStartAfterBeats; // the number of initial beats. set 8.
+    [SerializeField] private bool flag; // music play start flag.
+
+    [SerializeField] private int beatCnt; // counting beat.
+    private float startTime; // start timing of audio system. 
+    private float lastBeatTime; // timing of last beat.
+
+    public float secondPerBeat; // second per beat. calculated by bpm.
 
     public static StageManager Instance
     {
@@ -53,42 +58,42 @@ public class StageManager : MonoBehaviour
 
     private void Start()
     {
-        flag = false;
         startTime = (float)AudioSettings.dspTime;
         lastBeatTime = startTime;
         secondPerBeat = 60 / bpm;
-        MusicPlay();
+        //Invoke("MusicPlay", secondPerBeat * musicStartAfterBeats);
     }
 
     private void Update()
     {
-        if(AudioSettings.dspTime - lastBeatTime > (float)secondPerBeat)
+        // count beat because note should be activated and move with beat timing.
+        if(AudioSettings.dspTime - lastBeatTime > secondPerBeat) // if over one beat time passed from last beat time, count beat.
         {
             beatCnt++;
-            lastBeatTime += (float)secondPerBeat;
-            if(beatCnt == 5)
+            lastBeatTime += secondPerBeat;
+
+            // after initial beats, music start and make note.
+            if (beatCnt == musicStartAfterBeats + 1)
             {
-                barCnt++;
-                beatCnt = 1;
-            }
-            if (barCnt == 1 && beatCnt == 4)
+                MusicPlay();
                 flag = true;
+            }
+
             if (flag)
-                MakeBeat();
+                MakeNote();
         }
     }
 
-    public void MakeBeat()
+    public void MakeNote()
     {
+        // bring note from note object pool.
         GameObject obj = ObjectPoolManager.Instance.notePool.Get();
         Note note = obj.GetComponent<Note>();
-        note.bpm = bpm;
+
+        // activate note.
         note.status = 1;
         note.transform.position = Spawners[1].transform.position;
         note.dirVec = Vector3.down;
-        Debug.Log(AudioSettings.dspTime);
-        //Vector3 randVec = new Vector3(Random.Range(-0.3f, 0.3f), Random.Range(-1f, 0f), 0);
-        //note.transform.position = Spawners[Random.Range(0, 3)].transform.position;
     }
 
     public void MusicPlay()
@@ -98,6 +103,7 @@ public class StageManager : MonoBehaviour
 
     public void ShowGrade(int grade)
     {
+        // display grade.
         switch (grade)
         {
             case 0:
@@ -105,10 +111,8 @@ public class StageManager : MonoBehaviour
             case 1:
                 gradeText.text = "Bad"; break;
             case 2:
-                gradeText.text = "Good"; break;
-            case 3:
                 gradeText.text = "Great"; break;
-            case 4:
+            case 3:
                 gradeText.text = "Perfect"; break;
         }
     }

@@ -5,11 +5,13 @@ using UnityEngine.Pool;
 
 public class ObjectPoolManager : MonoBehaviour
 {
-    private static ObjectPoolManager instance;
-    public IObjectPool<GameObject> notePool { get; private set; }
+    // manager of object pooling. singleton.
 
-    public int noteMaxCnt;
-    public GameObject prefab_note;
+    private static ObjectPoolManager instance;
+    public IObjectPool<GameObject> notePool { get; private set; } // object pool of notes.
+
+    [SerializeField] private int noteMaxCnt; // the default number of notes. 
+    [SerializeField] private GameObject prefab_note; // prefab of note.
 
     public static ObjectPoolManager Instance
     {
@@ -39,14 +41,16 @@ public class ObjectPoolManager : MonoBehaviour
             Destroy(gameObject);
         }
         DontDestroyOnLoad(gameObject);
-        Initialize();
+        Initialize(); // create object pool and objects.
     }
 
     public void Initialize()
     {
+        // create note object pool.
         notePool = new ObjectPool<GameObject>(CreateNote, BringNoteFromPool, ReturnNoteToPool
             , notdestroybuttmp, true, noteMaxCnt, noteMaxCnt);
 
+        // create notes and let them in pool.
         for (int i = 0; i< noteMaxCnt; i++)
         {
             Note note = CreateNote().GetComponent<Note>();

@@ -6,11 +6,11 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    private static GameManager instance;
-    public VisualJudgeLine visualJudgeLine;
+    private static GameManager instance; // Singleton
 
-    public Vector2 idealScreenSize;
-    public Vector3 lineStartPos, lineEndPos;
+    [SerializeField] private VisualJudgeLine visualJudgeLine; // UI
+    [SerializeField] private Vector2 idealScreenSize; // Resolution Reference : Apple iPhone 12
+    public Vector3 lineStartPos, lineEndPos; // start point & end point of Lines (JudgeLine)
 
     public static GameManager Instance
     {
@@ -44,9 +44,10 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        float screenWeight = Screen.height - (Screen.width * idealScreenSize.y / idealScreenSize.x);
-        lineStartPos = Camera.main.ScreenToWorldPoint(new Vector2(0, Screen.height - screenWeight));
-        lineEndPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height - screenWeight));
+        // To make ideal line for every resolution
+        float idealLinePoint = Screen.width * idealScreenSize.y / idealScreenSize.x;
+        lineStartPos = Camera.main.ScreenToWorldPoint(new Vector2(0, idealLinePoint));
+        lineEndPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, idealLinePoint));
         lineStartPos.z = 0;
         lineEndPos.z = 0;
 

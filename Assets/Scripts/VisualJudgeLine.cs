@@ -2,14 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VisualJudgeLine : MonoBehaviour
+public class VisualJudgeLine : MonoBehaviour 
 {
-    public TouchArea touchArea;
-    public RealJudgeLine realJudgeLine;
-    public Transform noteSign;
+    // Draw Visual Judge Line(UI) -> reference for other lines (real judge line & toucharea)
+
+    [SerializeField] private TouchArea touchArea;
+    [SerializeField] private RealJudgeLine realJudgeLine;
 
     private LineRenderer lineRenderer;
-    public float lineOffset;
+    [SerializeField] private float lineOffset; // decide the shape of line. best is 2.
 
     private void Start()
     {
@@ -17,8 +18,10 @@ public class VisualJudgeLine : MonoBehaviour
     }
     public void DrawLine()
     {
+        // variables for drawing line
         Vector3 stPos, edPos, center;
 
+        // draw parabola with linerenderer and Slerp. 
         for (int i = 0; i < lineRenderer.positionCount; i++)
         {
             stPos = GameManager.Instance.lineStartPos;
@@ -31,18 +34,19 @@ public class VisualJudgeLine : MonoBehaviour
             point += center;
             lineRenderer.SetPosition(i, point);
         }
-        DrawOtherLines();
 
-        noteSign.position = new Vector3 (0, GameManager.Instance.lineStartPos.y * 0.8f, 0);
+        // draw touch area and real judge line.
+        DrawOtherLines();
     }
    
     void DrawOtherLines()
     {
-        int tmp;
-        Vector3[] tmpArr = new Vector3[lineRenderer.positionCount];
-        tmp = lineRenderer.GetPositions(tmpArr);
+        // get all position of line.
+        Vector3[] posArr = new Vector3[lineRenderer.positionCount];
+        int pos = lineRenderer.GetPositions(posArr);
 
-        touchArea.Draw(tmp, tmpArr);
-        realJudgeLine.Draw(tmp, tmpArr);
+        // draw touch area and real judge line.
+        touchArea.Draw(pos, posArr);
+        realJudgeLine.Draw(pos, posArr);
     }
 }
