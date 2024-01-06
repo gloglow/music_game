@@ -137,7 +137,7 @@ public class Hit : MonoBehaviour
         // so calculate position of collider and effect to be on the judgeline for them.
 
         // calculate direction vector of ray.
-        Vector3 dirVec = ((GameManager.Instance.lineStartPos + GameManager.Instance.lineEndPos) * 0.5f) - point;
+        Vector3 dirVec = ((UIManager.Instance.lineStartPos + UIManager.Instance.lineEndPos) * 0.5f) - point;
         dirVec = Vector3.Normalize(dirVec);
 
         RaycastHit rayHit;

@@ -6,6 +6,7 @@ using UnityEngine.Pool;
 using UnityEngine.UI;
 using LitJson;
 using Unity.VisualScripting;
+using System;
 
 public class StageManager : MonoBehaviour
 {
@@ -29,13 +30,12 @@ public class StageManager : MonoBehaviour
 
     public float secondPerBeat; // second per beat. calculated by bpm.
 
-    public static List<NoteData> noteList = new List<NoteData>();
-    JsonData noteJson;
-    public string title;
-    public string composer;
-    public int index = 0;
-    public int crtIndex = 0;
-    float musicStartTime;
+    // note data.
+    private static List<NoteData> noteList = new List<NoteData>();
+    private string title;
+    private string composer;
+    private int index = 0;
+    private int crtIndex = 0;
 
     public static StageManager Instance
     {
@@ -77,6 +77,7 @@ public class StageManager : MonoBehaviour
 
     private void LoadNoteData()
     {
+        // load json file that have note data.
         if(File.Exists(Application.dataPath+ "/Resources/JSON/miles.json"))
         {
             string jsonStr = File.ReadAllText(Application.dataPath + "/Resources/JSON/miles.json");
@@ -84,14 +85,13 @@ public class StageManager : MonoBehaviour
 
             title = noteD[0].ToString();
             composer = noteD[1].ToString();
-
-            for (int i=0; i<12; i++)
+            for (int i=0; i < int.Parse(noteD[2].ToString()); i++)
             {
-                
+                // load notedata and add in notedata list.
                 NoteData noteData = new NoteData();
-                noteData.beat = float.Parse(noteD[2][i]["beat"].ToString());
-                noteData.x = float.Parse(noteD[2][i]["x"].ToString());
-                noteData.y = float.Parse(noteD[2][i]["y"].ToString());
+                noteData.beat = float.Parse(noteD[3][i]["beat"].ToString());
+                noteData.x = float.Parse(noteD[3][i]["x"].ToString());
+                noteData.y = float.Parse(noteD[3][i]["y"].ToString());
                 noteList.Add(noteData);
             }
         }
@@ -110,20 +110,21 @@ public class StageManager : MonoBehaviour
             if (beatCnt == musicStartAfterBeats + 1)
             {
                 MusicPlay();
-                musicStartTime = (float)AudioSettings.dspTime;
                 flag = true;
             }
 
             if (flag)
-            {    
-                while (beatCnt - musicStartAfterBeats == (int)noteList[index].beat)
+            {
+                // if there is note, and it is the time when note should be created,
+                while (noteList.Count > index && beatCnt - musicStartAfterBeats == (int)noteList[index].beat)
                 {
-                    if(noteList[index].beat - (beatCnt - musicStartAfterBeats) == 0)
+                    if (noteList[index].beat - (beatCnt - musicStartAfterBeats) == 0)
                     {
                         MakeNote();
                     }
                     else
                     {
+                        // for 1/8note, 1/16note, and the others.
                         Invoke("MakeNote", (noteList[index].beat - (beatCnt - musicStartAfterBeats)) * secondPerBeat);
                     }
                     index++;

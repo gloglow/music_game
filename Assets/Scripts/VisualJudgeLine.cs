@@ -16,30 +16,19 @@ public class VisualJudgeLine : MonoBehaviour
     {
         lineRenderer = GetComponent<LineRenderer>();
     }
-    public void DrawLine()
+    public void DrawLine(int posCnt, Vector3[] posArr)
     {
-        // variables for drawing line
-        Vector3 stPos, edPos, center;
-
         // draw parabola with linerenderer and Slerp. 
-        for (int i = 0; i < lineRenderer.positionCount; i++)
+        for (int i = 0; i < posCnt; i++)
         {
-            stPos = GameManager.Instance.lineStartPos;
-            edPos = GameManager.Instance.lineEndPos;
-            center = (stPos + edPos) * 0.5f;
-            center.y += lineOffset;
-            stPos = stPos - center;
-            edPos = edPos - center;
-            Vector3 point = Vector3.Slerp(stPos, edPos, i / (float)(lineRenderer.positionCount - 1));
-            point += center;
-            lineRenderer.SetPosition(i, point);
+            lineRenderer.SetPosition(i, posArr[i]);
         }
 
         // draw touch area and real judge line.
         DrawOtherLines();
     }
    
-    void DrawOtherLines()
+    public void DrawOtherLines()
     {
         // get all position of line.
         Vector3[] posArr = new Vector3[lineRenderer.positionCount];

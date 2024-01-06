@@ -3,14 +3,20 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Audio;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class GameManager : MonoBehaviour
 {
     private static GameManager instance; // Singleton
 
-    [SerializeField] private VisualJudgeLine visualJudgeLine; // UI
-    [SerializeField] private Vector2 idealScreenSize; // Resolution Reference : Apple iPhone 12
-    public Vector3 lineStartPos, lineEndPos; // start point & end point of Lines (JudgeLine)
+    [SerializeField] private UIManager uiManager;
+    public AudioMixer audioMixer;
+    public Slider musicVolumeSlider;
+    public Slider noteSpeedSlider;
+
+    public float noteSpeed;
 
     public static GameManager Instance
     {
@@ -42,15 +48,84 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    private void Start()
+    private void Update()
     {
-        // To make ideal line for every resolution
-        float idealLinePoint = Screen.width * idealScreenSize.y / idealScreenSize.x;
-        lineStartPos = Camera.main.ScreenToWorldPoint(new Vector2(0, idealLinePoint));
-        lineEndPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, idealLinePoint));
-        lineStartPos.z = 0;
-        lineEndPos.z = 0;
+        if(SceneManager.GetActiveScene().name.Equals("Title")
+            || SceneManager.GetActiveScene().name.Equals("MusicSelect"))
+        {
+            Vector3 pos;
+            if (Input.GetMouseButtonDown(0))
+            {
+                pos = Input.mousePosition;
+            }
+            else if (Input.touchCount > 0)
+            {
+                pos = Input.GetTouch(0).position;
+            }
+            else pos = Vector3.zero;
+            Ray ray = Camera.main.ScreenPointToRay(pos);
+            RaycastHit rayHit;
+            if (Physics.Raycast(ray, out rayHit, Mathf.Infinity))
+            {
+                string name = rayHit.collider.name;
+                uiManager.TitleBtnClicked(name);
+            }
+        }
+    }
 
-        visualJudgeLine.DrawLine();
+    public void MoveScene(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
+    }
+
+    public void ShowOptionUI()
+    {
+        uiManager.ShowOption();
+    }
+
+    public void BackToDefaultUI()
+    {
+        uiManager.BackToDefault();
+    }
+
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
+
+    public void ChangeMusicVolume()
+    {
+        // control music volume by slider.
+        // value range : -40 ~ 0
+        float value = musicVolumeSlider.value;
+
+        if (value == -40f)
+        {
+            // ~-40f : almost can not hear
+            audioMixer.SetFloat("Music", -80);
+        }
+        else
+        {
+            audioMixer.SetFloat("Music", value);
+        }
+    }
+
+    public void ChangeNoteSpeed()
+    {
+        // control note speed by slider.
+        // 0 (0.5x) ~ 1 (1x)
+        float value = noteSpeedSlider.value;
+
+        switch (value)
+        {
+            case 0:
+                noteSpeed = 0.5f;
+                break;
+            case 1:
+                noteSpeed = 1f;
+                break;
+        }
+
+        uiManager.ChangeNoteSpeedText(noteSpeed);
     }
 }
