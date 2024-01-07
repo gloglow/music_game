@@ -9,12 +9,16 @@ using UnityEngine.EventSystems;
 
 public class GameManager : MonoBehaviour
 {
+    // manage user information
     private static GameManager instance; // Singleton
 
-    [SerializeField] private UIManager uiManager;
+    [SerializeField] private Vector2 idealScreenSize; // Resolution Reference : Apple iPhone 12
+    public Vector3 lineStartPos, lineEndPos; // start point & end point of Lines (JudgeLine)
+    [SerializeField] private int lineRendererPosCnt;
+    [SerializeField] private float lineOffset;
+    public Vector3[] lineRendererPosArr;
+
     public AudioMixer audioMixer;
-    public Slider musicVolumeSlider;
-    public Slider noteSpeedSlider;
 
     public float noteSpeed;
 
@@ -46,59 +50,55 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
         DontDestroyOnLoad(gameObject);
+
+        LoadPlayerData();
+        ReadyToDrawLine();
+        GetLinePoint();
     }
 
-    private void Update()
+    private void LoadPlayerData()
     {
-        if(SceneManager.GetActiveScene().name.Equals("Title")
-            || SceneManager.GetActiveScene().name.Equals("MusicSelect"))
+        float volume = PlayerPrefs.HasKey("musicVolume") ? PlayerPrefs.GetFloat("musicVolume") : -20f;
+        audioMixer.SetFloat("Music", volume);
+        noteSpeed = PlayerPrefs.HasKey("noteSpeed") ? PlayerPrefs.GetFloat("noteSpeed") : 1;
+    }
+
+    public void ReadyToDrawLine()
+    {
+        lineRendererPosArr = new Vector3[lineRendererPosCnt];
+
+        // To make ideal line for every resolution
+        float idealLinePoint = Screen.width * idealScreenSize.y / idealScreenSize.x;
+        lineStartPos = Camera.main.ScreenToWorldPoint(new Vector2(0, idealLinePoint));
+        lineEndPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, idealLinePoint));
+        lineStartPos.z = 0;
+        lineEndPos.z = 0;
+    }
+
+    public void GetLinePoint()
+    {
+        // variables for drawing line
+        Vector3 stPos, edPos, center;
+
+        // draw parabola with linerenderer and Slerp. 
+        for (int i = 0; i < lineRendererPosCnt; i++)
         {
-            Vector3 pos;
-            if (Input.GetMouseButtonDown(0))
-            {
-                pos = Input.mousePosition;
-            }
-            else if (Input.touchCount > 0)
-            {
-                pos = Input.GetTouch(0).position;
-            }
-            else pos = Vector3.zero;
-            Ray ray = Camera.main.ScreenPointToRay(pos);
-            RaycastHit rayHit;
-            if (Physics.Raycast(ray, out rayHit, Mathf.Infinity))
-            {
-                string name = rayHit.collider.name;
-                uiManager.TitleBtnClicked(name);
-            }
+            stPos = lineStartPos;
+            edPos = lineEndPos;
+            center = (stPos + edPos) * 0.5f;
+            center.y += lineOffset;
+            stPos = stPos - center;
+            edPos = edPos - center;
+            Vector3 point = Vector3.Slerp(stPos, edPos, i / (float)(lineRendererPosCnt - 1));
+            point += center;
+            lineRendererPosArr[i] = point;
         }
     }
 
-    public void MoveScene(string sceneName)
-    {
-        SceneManager.LoadScene(sceneName);
-    }
-
-    public void ShowOptionUI()
-    {
-        uiManager.ShowOption();
-    }
-
-    public void BackToDefaultUI()
-    {
-        uiManager.BackToDefault();
-    }
-
-    public void ExitGame()
-    {
-        Application.Quit();
-    }
-
-    public void ChangeMusicVolume()
+    public void ChangeMusicVolume(float value)
     {
         // control music volume by slider.
         // value range : -40 ~ 0
-        float value = musicVolumeSlider.value;
-
         if (value == -40f)
         {
             // ~-40f : almost can not hear
@@ -108,24 +108,12 @@ public class GameManager : MonoBehaviour
         {
             audioMixer.SetFloat("Music", value);
         }
+        PlayerPrefs.SetFloat("musicVolume", value);
     }
 
-    public void ChangeNoteSpeed()
+    public void ChangeNoteSpeed(float value)
     {
-        // control note speed by slider.
-        // 0 (0.5x) ~ 1 (1x)
-        float value = noteSpeedSlider.value;
-
-        switch (value)
-        {
-            case 0:
-                noteSpeed = 0.5f;
-                break;
-            case 1:
-                noteSpeed = 1f;
-                break;
-        }
-
-        uiManager.ChangeNoteSpeedText(noteSpeed);
+        noteSpeed = value;
+        PlayerPrefs.SetFloat("noteSpeed", value);
     }
 }

@@ -12,14 +12,16 @@ public class Note : MonoBehaviour
 
     // variables to calculate move speed.
     private Vector3 initialPos; // position when note is activated (spawner's position)
-    private float initialTime; // time when note is activated
+    public float initialTime; // time when note is activated
     private Vector3 destination; // on judge line.
     private float dist; // distance between initial position and destination.
 
     // range of perfect and great grade
     [SerializeField] private float perfectRange;
     [SerializeField] private float greatRange;
+    public float index;
 
+    StageManager stageManager;
     public int status; // 0 : idle, 1 : set destination and speed, 2 : move
 
     private void Update()
@@ -30,6 +32,7 @@ public class Note : MonoBehaviour
                 break;
 
             case 1: // when activated by stage manager
+                stageManager = transform.GetComponentInParent<StageManager>();
                 initialPos = transform.position; // initial position (position of spawner)
                 initialTime = (float)AudioSettings.dspTime; // activated timing
                 
@@ -47,23 +50,23 @@ public class Note : MonoBehaviour
 
                 // speed = (current time / beat) * distance.
                 // -> time taken for move initial position to destination is ONE BEAT. 
-                float defaultSpeed = (((float)AudioSettings.dspTime - initialTime) / StageManager.Instance.secondPerBeat) * dist;
+                float defaultSpeed = (((float)AudioSettings.dspTime - initialTime) / stageManager.secondPerBeat) * dist;
                 
                 // position = initial position + direction * speed * useroffset
-                transform.position = initialPos + dirVec * defaultSpeed * StageManager.Instance.userSpeed;
+                transform.position = initialPos + dirVec * defaultSpeed * stageManager.userSpeed;
                 status = 2; // change status into 2 (don't need to calculate distance)
                 break;
 
             case 2:
                 // moving mechanism is same.
-                defaultSpeed= (((float)AudioSettings.dspTime - initialTime) / StageManager.Instance.secondPerBeat) * dist;
-                transform.position = initialPos + dirVec * defaultSpeed * StageManager.Instance.userSpeed;
+                defaultSpeed= (((float)AudioSettings.dspTime - initialTime) / stageManager.secondPerBeat) * dist;
+                transform.position = initialPos + dirVec * defaultSpeed * stageManager.userSpeed;
 
                 // if arrive on destroy line, destroy
                 if(transform.position.y < Camera.main.ScreenToWorldPoint(new Vector2(0, -1 * Screen.height)).y)
                 {
                     // grading this note MISS
-                    StageManager.Instance.ShowGrade(0);
+                    stageManager.ShowGrade(0);
                     Exit();
                 }
                 break;

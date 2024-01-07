@@ -4,38 +4,20 @@ using UnityEngine;
 
 public class VisualJudgeLine : MonoBehaviour 
 {
-    // Draw Visual Judge Line(UI) -> reference for other lines (real judge line & toucharea)
-
-    [SerializeField] private TouchArea touchArea;
-    [SerializeField] private RealJudgeLine realJudgeLine;
-
     private LineRenderer lineRenderer;
-    [SerializeField] private float lineOffset; // decide the shape of line. best is 2.
 
     private void Start()
     {
         lineRenderer = GetComponent<LineRenderer>();
     }
-    public void DrawLine(int posCnt, Vector3[] posArr)
+
+    public void DrawLine()
     {
+        Vector3[] lineArr = GameManager.Instance.lineRendererPosArr;
         // draw parabola with linerenderer and Slerp. 
-        for (int i = 0; i < posCnt; i++)
+        for (int i = 0; i < lineArr.Length; i++)
         {
-            lineRenderer.SetPosition(i, posArr[i]);
+            lineRenderer.SetPosition(i, lineArr[i]);
         }
-
-        // draw touch area and real judge line.
-        DrawOtherLines();
-    }
-   
-    public void DrawOtherLines()
-    {
-        // get all position of line.
-        Vector3[] posArr = new Vector3[lineRenderer.positionCount];
-        int pos = lineRenderer.GetPositions(posArr);
-
-        // draw touch area and real judge line.
-        touchArea.Draw(pos, posArr);
-        realJudgeLine.Draw(pos, posArr);
     }
 }

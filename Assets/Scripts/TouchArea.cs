@@ -14,12 +14,13 @@ public class TouchArea : MonoBehaviour
         meshCollider = GetComponent<MeshCollider>();
     }
 
-    public void Draw(int cnt, Vector3[] posList)
+    public void Draw()
     {
+        Vector3[] lineArr = GameManager.Instance.lineRendererPosArr;
         // draw line with points.
-        for (int i = 0; i < cnt; i++)
+        for (int i = 0; i < lineArr.Length; i++)
         {
-            lineRenderer.SetPosition(i, posList[i]);
+            lineRenderer.SetPosition(i, lineArr[i]);
         }
 
         // make mesh collider to sense input(ray from mouse or touch)

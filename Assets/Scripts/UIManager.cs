@@ -3,134 +3,82 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
-    private static UIManager instance; // Singleton
-
-    [SerializeField] private Vector2 idealScreenSize; // Resolution Reference : Apple iPhone 12
     [SerializeField] private VisualJudgeLine visualJudgeLine;
-    [SerializeField] private int lineRendererPosCnt;
-    [SerializeField] private float lineOffset;
-    private Vector3[] lineRendererPosArr;
+    [SerializeField] private TouchArea touchArea;
+    [SerializeField] private RealJudgeLine realJudgeLine;
 
     [SerializeField] private GameObject defaultUI;
+    [SerializeField] private GameObject menuUI;
 
-    [SerializeField] private GameObject titleStart;
-    [SerializeField] private GameObject titleOption;
-    [SerializeField] private GameObject titleExit;
-    [SerializeField] private GameObject btnStart;
-    [SerializeField] private GameObject btnOption;
-    [SerializeField] private GameObject btnExit;
-    [SerializeField] private Image titleIcon;
-    [SerializeField] private Sprite[] titleIcons;
+    [SerializeField] private GameObject btnCenter;
+    [SerializeField] private GameObject btnRight;
+    [SerializeField] private GameObject btnLeft;
 
     [SerializeField] private GameObject optionUI;
     [SerializeField] private TextMeshProUGUI noteSpeedText;
 
-    public Vector3 lineStartPos, lineEndPos; // start point & end point of Lines (JudgeLine)
+    [SerializeField] private Slider noteSpeedSlider;
+    [SerializeField] private Slider musicVolumeSlider;
 
-    public static UIManager Instance
-    {
-        get
-        {
-            if (!instance)
-            {
-                instance = FindObjectOfType(typeof(UIManager)) as UIManager;
+    [SerializeField] private StageManager stageManager;
+    [SerializeField] private AudioManager audioManager;
 
-                if (instance == null)
-                {
-                    Debug.Log("no singleton obj");
-                }
-            }
-            return instance;
-        }
-    }
+    public TextMeshProUGUI timerUI;
+    private float timerForRestart;
 
-    private void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else if (instance != this)
-        {
-            Destroy(gameObject);
-        }
-        DontDestroyOnLoad(gameObject);
-    }
+    private Vector3[] linePoints;
+    private int lineLength;
+
+    private float timerForPause;
+    public int seconds3Timer;
+
+    float tmpNoteSpeed;
+    float tmpVolume;
 
     private void Start()
     {
-        ReadyToDrawLine();
-        DrawLineAndPlaceUI();
-        
-    }
+        visualJudgeLine.DrawLine();
 
-    public void ReadyToDrawLine()
-    {
-        // To make ideal line for every resolution
-        float idealLinePoint = Screen.width * idealScreenSize.y / idealScreenSize.x;
-        lineStartPos = Camera.main.ScreenToWorldPoint(new Vector2(0, idealLinePoint));
-        lineEndPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, idealLinePoint));
-        lineStartPos.z = 0;
-        lineEndPos.z = 0;
-        lineRendererPosArr = new Vector3[lineRendererPosCnt];
-    }
-
-    public void DrawLineAndPlaceUI()
-    {
-        // variables for drawing line
-        Vector3 stPos, edPos, center;
-
-        // draw parabola with linerenderer and Slerp. 
-        for (int i = 0; i < lineRendererPosCnt; i++)
+        if(SceneManager.GetActiveScene().name == "PlayScene")
         {
-            stPos = lineStartPos;
-            edPos = lineEndPos;
-            center = (stPos + edPos) * 0.5f;
-            center.y += lineOffset;
-            stPos = stPos - center;
-            edPos = edPos - center;
-            Vector3 point = Vector3.Slerp(stPos, edPos, i / (float)(lineRendererPosCnt - 1));
-            point += center;
-            lineRendererPosArr[i] = point;
-            
+            touchArea.Draw();
+            realJudgeLine.Draw();
         }
-        PlaceUI();
-
-        visualJudgeLine.DrawLine(lineRendererPosCnt, lineRendererPosArr);
+        GetLineInfo();
+        SetUI();
+        InitializeUserPref();
     }
 
-    private void PlaceUI()
+    private void InitializeUserPref()
     {
-        btnStart.transform.position = lineRendererPosArr[lineRendererPosCnt / 2];
-        btnOption.transform.position = lineRendererPosArr[lineRendererPosCnt / 4 * 3];
-        btnExit.transform.position = lineRendererPosArr[lineRendererPosCnt / 4];
-        titleStart.transform.position = Camera.main.WorldToScreenPoint(lineRendererPosArr[lineRendererPosCnt / 2]);
-        titleOption.transform.position = Camera.main.WorldToScreenPoint(lineRendererPosArr[lineRendererPosCnt / 4 * 3]);
-        titleExit.transform.position = Camera.main.WorldToScreenPoint(lineRendererPosArr[lineRendererPosCnt / 4]);
+        noteSpeedSlider.value = GameManager.Instance.noteSpeed;
+        noteSpeedText.text = ((int)noteSpeedSlider.value).ToString();
+        float volume = PlayerPrefs.HasKey("musicVolume") ? PlayerPrefs.GetFloat("musicVolume") : -20f;
+        musicVolumeSlider.value = volume;
     }
 
-    public void TitleBtnClicked(string str)
+    private void GetLineInfo()
     {
-        switch (str)
+        linePoints = GameManager.Instance.lineRendererPosArr;
+        lineLength = linePoints.Length;
+    }
+
+    private void SetUI()
+    {
+        Vector3 centerPos = Camera.main.WorldToScreenPoint(linePoints[lineLength / 2]);
+        Vector3 leftPos = Camera.main.WorldToScreenPoint(linePoints[lineLength / 4]);
+        Vector3 rightPos = Camera.main.WorldToScreenPoint(linePoints[lineLength / 4 * 3]);
+
+        if(SceneManager.GetActiveScene().name == "Title" || SceneManager.GetActiveScene().name == "MusicSelect")
         {
-            case "StartBtn":
-                GameManager.Instance.MoveScene("MusicSelect");
-                break;
-            case "OptionBtn":
-                ShowOption();
-                break;
-            case "ExitBtn":
-                GameManager.Instance.ExitGame();
-                break;
+            btnCenter.transform.position = centerPos;
+            btnLeft.transform.position = leftPos;
+            btnRight.transform.position = rightPos;
         }
-    }
-
-    public void DrawOtherLine()
-    {
-        visualJudgeLine.DrawOtherLines();
     }
 
     public void ShowOption()
@@ -145,8 +93,85 @@ public class UIManager : MonoBehaviour
         optionUI.SetActive(false);
     }
 
-    public void ChangeNoteSpeedText(float value)
+    private float NoteSpeedModify(Slider slider)
     {
-        noteSpeedText.text = value.ToString();
+        float valueModified = 1;
+        // 0 (0.5x) ~ 1 (1x)
+        switch (slider.value)
+        {
+            case 0:
+                valueModified = 0.5f;
+                break;
+            case 1:
+                valueModified = 1f;
+                break;
+        }
+        return valueModified;
+    }
+
+    public void ChangeNoteSpeed(Slider slider)
+    {
+        // control note speed by slider.
+        float valueModified = NoteSpeedModify(slider);
+        noteSpeedText.text = valueModified.ToString();
+        tmpNoteSpeed = valueModified;
+    }
+
+    public void ChangeMusicVolume(Slider slider)
+    {
+        tmpVolume = slider.value;
+    }
+
+    public void MoveScene(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
+    }
+
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
+
+    public void ApplyPref()
+    {
+        Debug.Log(tmpVolume);
+        Debug.Log(tmpNoteSpeed);
+        GameManager.Instance.ChangeMusicVolume(tmpVolume);
+        GameManager.Instance.ChangeNoteSpeed(tmpNoteSpeed);
+    }
+
+    public void Pause()
+    {
+        defaultUI.SetActive(false);
+        menuUI.SetActive(true);
+    }
+
+    public void UnPause()
+    {
+        defaultUI.SetActive(true);
+        menuUI.SetActive(false);
+        Invoke("PlayBack", 3f);
+        timerUI.gameObject.SetActive(true);
+        timerUI.text = "3";
+        Invoke("TimerUpdate", 1f);
+        Invoke("TimerUpdate", 2f);
+        Invoke("TimerUpdate", 3f);
+    }
+
+    private void TimerUpdate()
+    {
+        seconds3Timer--;
+        timerUI.text = seconds3Timer.ToString();
+        if(seconds3Timer == 0)
+        {
+            seconds3Timer = 3;
+            timerUI.gameObject.SetActive(false);
+        }
+        timerUI.text = seconds3Timer.ToString();
+    }
+
+    public void PlayBack()
+    {
+        stageManager.PlayBack();
     }
 }
