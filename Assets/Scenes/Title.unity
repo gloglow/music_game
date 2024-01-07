@@ -244,8 +244,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1110275189}
-        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+      - m_Target: {fileID: 1110275191}
+        m_TargetAssemblyTypeName: UIManagerNonPlay, Assembly-CSharp
         m_MethodName: ShowOption
         m_Mode: 1
         m_Arguments:
@@ -406,6 +406,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 292061230}
   m_CullTransparentMesh: 1
+--- !u!1 &392580318
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 392580320}
+  - component: {fileID: 392580319}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &392580319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 392580318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bf732a11ea107641ae9471cf4ed95d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioSource: {fileID: 0}
+--- !u!4 &392580320
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 392580318}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &451042064
 GameObject:
   m_ObjectHideFlags: 0
@@ -763,8 +808,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1110275189}
-        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+      - m_Target: {fileID: 1110275191}
+        m_TargetAssemblyTypeName: UIManagerNonPlay, Assembly-CSharp
         m_MethodName: BackToDefault
         m_Mode: 1
         m_Arguments:
@@ -1514,8 +1559,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1110275189}
-        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+      - m_Target: {fileID: 1110275191}
+        m_TargetAssemblyTypeName: UIManagerNonPlay, Assembly-CSharp
         m_MethodName: ApplyPref
         m_Mode: 1
         m_Arguments:
@@ -1526,8 +1571,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1110275189}
-        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+      - m_Target: {fileID: 1110275191}
+        m_TargetAssemblyTypeName: UIManagerNonPlay, Assembly-CSharp
         m_MethodName: BackToDefault
         m_Mode: 1
         m_Arguments:
@@ -1631,12 +1676,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1035657492}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1198180479}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1066294090
 GameObject:
@@ -1759,8 +1804,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1110275189}
-        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+      - m_Target: {fileID: 1110275191}
+        m_TargetAssemblyTypeName: UIManagerNonPlay, Assembly-CSharp
         m_MethodName: ExitGame
         m_Mode: 1
         m_Arguments:
@@ -1780,7 +1825,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1110275190}
-  - component: {fileID: 1110275189}
+  - component: {fileID: 1110275191}
   m_Layer: 0
   m_Name: UIManager
   m_TagString: Untagged
@@ -1788,29 +1833,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1110275189
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1110275188}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7df9f1729c25fc4f9be54fcc58e8fbd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  visualJudgeLine: {fileID: 526012876}
-  touchArea: {fileID: 0}
-  realJudgeLine: {fileID: 0}
-  defaultUI: {fileID: 1524190606}
-  btnCenter: {fileID: 1240318726}
-  btnRight: {fileID: 249462542}
-  btnLeft: {fileID: 1066294090}
-  optionUI: {fileID: 1124924696}
-  noteSpeedText: {fileID: 1364258564}
-  noteSpeedSlider: {fileID: 2118458717}
-  musicVolumeSlider: {fileID: 2058124309}
 --- !u!4 &1110275190
 Transform:
   m_ObjectHideFlags: 0
@@ -1826,6 +1848,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1110275191
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1110275188}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd14b4556353d3d488f57838b96c6b5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  visualJudgeLine: {fileID: 526012876}
+  defaultUI: {fileID: 1524190606}
+  btnCenter: {fileID: 1240318726}
+  btnRight: {fileID: 249462542}
+  btnLeft: {fileID: 1066294090}
+  optionUI: {fileID: 1124924696}
+  noteSpeedText: {fileID: 1364258564}
+  noteSpeedSlider: {fileID: 2118458717}
+  musicVolumeSlider: {fileID: 2058124309}
+  audioManager: {fileID: 392580319}
 --- !u!1 &1124924696
 GameObject:
   m_ObjectHideFlags: 0
@@ -1896,6 +1940,8 @@ Transform:
   m_Children:
   - {fileID: 1628080324}
   - {fileID: 526012877}
+  - {fileID: 1035657495}
+  - {fileID: 1386644615}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1240318726
@@ -2019,8 +2065,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1110275189}
-        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+      - m_Target: {fileID: 1110275191}
+        m_TargetAssemblyTypeName: UIManagerNonPlay, Assembly-CSharp
         m_MethodName: MoveScene
         m_Mode: 5
         m_Arguments:
@@ -2257,7 +2303,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1198180479}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &1506475059
 GameObject:
@@ -3746,15 +3792,15 @@ MonoBehaviour:
   m_FillRect: {fileID: 837895197}
   m_HandleRect: {fileID: 783055415}
   m_Direction: 0
-  m_MinValue: -40
-  m_MaxValue: 0
+  m_MinValue: 0
+  m_MaxValue: 100
   m_WholeNumbers: 0
-  m_Value: -20
+  m_Value: 50
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1110275189}
-        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+      - m_Target: {fileID: 1110275191}
+        m_TargetAssemblyTypeName: UIManagerNonPlay, Assembly-CSharp
         m_MethodName: ChangeMusicVolume
         m_Mode: 2
         m_Arguments:
@@ -3852,12 +3898,12 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 1
-  m_Value: 1
+  m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1110275189}
-        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+      - m_Target: {fileID: 1110275191}
+        m_TargetAssemblyTypeName: UIManagerNonPlay, Assembly-CSharp
         m_MethodName: ChangeNoteSpeed
         m_Mode: 2
         m_Arguments:
@@ -3874,8 +3920,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 684790091}
   - {fileID: 1110275190}
-  - {fileID: 1386644615}
+  - {fileID: 392580320}
   - {fileID: 945108077}
   - {fileID: 1548082200}
-  - {fileID: 1035657495}
   - {fileID: 1198180479}

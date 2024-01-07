@@ -33,31 +33,31 @@ public class UIManager : MonoBehaviour
     private Vector3[] linePoints;
     private int lineLength;
 
-    private float timerForPause;
-    public int seconds3Timer;
+    // variables to save data
+    float realNoteSpeed;
+    float realVolume;
 
-    float tmpNoteSpeed;
-    float tmpVolume;
+    // variables for actual change
+    float fakeNoteSpeed;
+    float fakeVolume;
+
+    int seconds3Timer;
 
     private void Start()
     {
-        visualJudgeLine.DrawLine();
-
-        if(SceneManager.GetActiveScene().name == "PlayScene")
-        {
-            touchArea.Draw();
-            realJudgeLine.Draw();
-        }
+        touchArea.Draw();
+        realJudgeLine.Draw();
+        seconds3Timer = 3;
+        
         GetLineInfo();
-        SetUI();
         InitializeUserPref();
     }
 
     private void InitializeUserPref()
     {
         noteSpeedSlider.value = GameManager.Instance.noteSpeed;
-        noteSpeedText.text = ((int)noteSpeedSlider.value).ToString();
-        float volume = PlayerPrefs.HasKey("musicVolume") ? PlayerPrefs.GetFloat("musicVolume") : -20f;
+        noteSpeedText.text = ((noteSpeedSlider.value == 0f) ? 0.5f : 1f).ToString();
+        float volume = PlayerPrefs.HasKey("musicVolume") ? (PlayerPrefs.GetFloat("musicVolume") + 40) * 100 / 40 : -20f;
         musicVolumeSlider.value = volume;
     }
 
@@ -67,37 +67,34 @@ public class UIManager : MonoBehaviour
         lineLength = linePoints.Length;
     }
 
-    private void SetUI()
-    {
-        Vector3 centerPos = Camera.main.WorldToScreenPoint(linePoints[lineLength / 2]);
-        Vector3 leftPos = Camera.main.WorldToScreenPoint(linePoints[lineLength / 4]);
-        Vector3 rightPos = Camera.main.WorldToScreenPoint(linePoints[lineLength / 4 * 3]);
-
-        if(SceneManager.GetActiveScene().name == "Title" || SceneManager.GetActiveScene().name == "MusicSelect")
-        {
-            btnCenter.transform.position = centerPos;
-            btnLeft.transform.position = leftPos;
-            btnRight.transform.position = rightPos;
-        }
-    }
-
     public void ShowOption()
     {
         defaultUI.SetActive(false);
+        menuUI.SetActive(false);
         optionUI.SetActive(true);
+    }
+
+    public void OpenMenu()
+    {
+        defaultUI.SetActive(false);
+        menuUI.SetActive(true);
+        optionUI.SetActive(false);
     }
 
     public void BackToDefault()
     {
         defaultUI.SetActive(true);
+        menuUI.SetActive(false);
         optionUI.SetActive(false);
     }
 
-    private float NoteSpeedModify(Slider slider)
+    private float NoteSpeedModify(float tmpSpeed)
     {
+        // change 0 into 0.5
+
         float valueModified = 1;
         // 0 (0.5x) ~ 1 (1x)
-        switch (slider.value)
+        switch (tmpSpeed)
         {
             case 0:
                 valueModified = 0.5f;
@@ -112,14 +109,19 @@ public class UIManager : MonoBehaviour
     public void ChangeNoteSpeed(Slider slider)
     {
         // control note speed by slider.
-        float valueModified = NoteSpeedModify(slider);
+        realNoteSpeed = slider.value; // 0 or 1
+        float valueModified = NoteSpeedModify(realNoteSpeed); // 0.5 or 1
         noteSpeedText.text = valueModified.ToString();
-        tmpNoteSpeed = valueModified;
     }
 
     public void ChangeMusicVolume(Slider slider)
     {
-        tmpVolume = slider.value;
+        fakeVolume = slider.value; // 0 ~ 100
+        realVolume = fakeVolume * 40 / 100 - 40;
+        if (realVolume == -40f)
+        {
+            realVolume = -80f;
+        }
     }
 
     public void MoveScene(string sceneName)
@@ -134,10 +136,8 @@ public class UIManager : MonoBehaviour
 
     public void ApplyPref()
     {
-        Debug.Log(tmpVolume);
-        Debug.Log(tmpNoteSpeed);
-        GameManager.Instance.ChangeMusicVolume(tmpVolume);
-        GameManager.Instance.ChangeNoteSpeed(tmpNoteSpeed);
+        GameManager.Instance.ChangeMusicVolume(realVolume); // -40 ~ 0
+        GameManager.Instance.ChangeNoteSpeed(realNoteSpeed);
     }
 
     public void Pause()

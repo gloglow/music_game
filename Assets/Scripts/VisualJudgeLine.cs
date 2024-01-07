@@ -9,10 +9,6 @@ public class VisualJudgeLine : MonoBehaviour
     private void Start()
     {
         lineRenderer = GetComponent<LineRenderer>();
-    }
-
-    public void DrawLine()
-    {
         Vector3[] lineArr = GameManager.Instance.lineRendererPosArr;
         // draw parabola with linerenderer and Slerp. 
         for (int i = 0; i < lineArr.Length; i++)

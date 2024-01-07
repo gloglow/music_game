@@ -19,7 +19,6 @@ public class GameManager : MonoBehaviour
     public Vector3[] lineRendererPosArr;
 
     public AudioMixer audioMixer;
-
     public float noteSpeed;
 
     public static GameManager Instance
@@ -97,23 +96,17 @@ public class GameManager : MonoBehaviour
 
     public void ChangeMusicVolume(float value)
     {
-        // control music volume by slider.
-        // value range : -40 ~ 0
-        if (value == -40f)
-        {
-            // ~-40f : almost can not hear
-            audioMixer.SetFloat("Music", -80);
-        }
-        else
-        {
-            audioMixer.SetFloat("Music", value);
-        }
-        PlayerPrefs.SetFloat("musicVolume", value);
+        audioMixer.SetFloat("Music", value);
     }
 
     public void ChangeNoteSpeed(float value)
     {
         noteSpeed = value;
-        PlayerPrefs.SetFloat("noteSpeed", value);
+    }
+
+    public void SaveOptionData(float noteSpeed, float volume)
+    {
+        PlayerPrefs.SetFloat("musicVolume", volume);
+        PlayerPrefs.SetFloat("noteSpeed", noteSpeed);
     }
 }

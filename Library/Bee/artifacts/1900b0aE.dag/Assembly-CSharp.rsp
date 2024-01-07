@@ -387,6 +387,7 @@
 "Assets/Scripts/StageManager.cs"
 "Assets/Scripts/TouchArea.cs"
 "Assets/Scripts/UIManager.cs"
+"Assets/Scripts/UIManagerNonPlay.cs"
 "Assets/Scripts/VisualJudgeLine.cs"
 -langversion:9.0
 
