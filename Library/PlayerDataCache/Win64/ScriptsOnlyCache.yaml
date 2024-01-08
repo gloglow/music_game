@@ -11,11 +11,24 @@ ScriptsOnlyBuild:
     - RealJudgeLine
     - StageManager
     - TouchArea
+    - UIManager
+    - UIManagerNonPlay
     - VisualJudgeLine
     Unity.PlasticSCM.Editor.dll:
     - Unity.PlasticSCM.Editor.PlasticWindow
     Unity.Rider.Editor.dll:
     - Packages.Rider.Editor.UnitTesting.CallbackData
+    Unity.TextMeshPro:
+    - TMPro.TMP_FontAsset
+    - TMPro.TMP_Settings
+    - TMPro.TMP_SpriteAsset
+    - TMPro.TMP_StyleSheet
+    Unity.TextMeshPro.dll:
+    - TMPro.TMP_FontAsset
+    - TMPro.TMP_Settings
+    - TMPro.TMP_SpriteAsset
+    - TMPro.TMP_StyleSheet
+    - TMPro.TextMeshProUGUI
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
     - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
@@ -29,18 +42,206 @@ ScriptsOnlyBuild:
     UnityEngine.UI.dll:
     - UnityEngine.EventSystems.EventSystem
     - UnityEngine.EventSystems.StandaloneInputModule
+    - UnityEngine.UI.Button
     - UnityEngine.UI.CanvasScaler
     - UnityEngine.UI.GraphicRaycaster
-    - UnityEngine.UI.Text
+    - UnityEngine.UI.Image
+    - UnityEngine.UI.Slider
   serializedClasses:
+    Unity.TextMeshPro:
+    - TMPro.FaceInfo_Legacy
+    - TMPro.FontAssetCreationSettings
+    - TMPro.KerningTable
+    - TMPro.TMP_Character
+    - TMPro.TMP_FontFeatureTable
+    - TMPro.TMP_FontWeightPair
+    - TMPro.TMP_GlyphAdjustmentRecord
+    - TMPro.TMP_GlyphPairAdjustmentRecord
+    - TMPro.TMP_GlyphValueRecord
+    - TMPro.TMP_Sprite
+    - TMPro.TMP_SpriteCharacter
+    - TMPro.TMP_SpriteGlyph
+    - TMPro.TMP_Style
+    - TMPro.VertexGradient
     UnityEngine.CoreModule:
+    - UnityEngine.Events.ArgumentCache
     - UnityEngine.Events.PersistentCallGroup
+    - UnityEngine.Events.PersistentListenerMode
+    UnityEngine.TextCoreFontEngineModule:
+    - UnityEngine.TextCore.FaceInfo
+    - UnityEngine.TextCore.Glyph
+    - UnityEngine.TextCore.GlyphMetrics
+    - UnityEngine.TextCore.GlyphRect
     UnityEngine.UI:
-    - UnityEngine.UI.FontData
+    - UnityEngine.UI.AnimationTriggers
+    - UnityEngine.UI.Button/ButtonClickedEvent
+    - UnityEngine.UI.ColorBlock
     - UnityEngine.UI.MaskableGraphic/CullStateChangedEvent
-  methodsToPreserve: []
+    - UnityEngine.UI.Navigation
+    - UnityEngine.UI.Slider/SliderEvent
+    - UnityEngine.UI.SpriteState
+  methodsToPreserve:
+  - assembly: Assembly-CSharp
+    fullTypeName: UIManagerNonPlay
+    methodName: ShowOption
+  - assembly: Assembly-CSharp
+    fullTypeName: UIManagerNonPlay
+    methodName: BackToDefault
+  - assembly: Assembly-CSharp
+    fullTypeName: UIManagerNonPlay
+    methodName: BackToDefault
+  - assembly: Assembly-CSharp
+    fullTypeName: UIManagerNonPlay
+    methodName: ApplyPref
+  - assembly: Assembly-CSharp
+    fullTypeName: UIManagerNonPlay
+    methodName: ExitGame
+  - assembly: Assembly-CSharp
+    fullTypeName: UIManagerNonPlay
+    methodName: MoveScene
+  - assembly: Assembly-CSharp
+    fullTypeName: UIManagerNonPlay
+    methodName: VolumeChanged
+  - assembly: Assembly-CSharp
+    fullTypeName: UIManagerNonPlay
+    methodName: SpeedChanged
+  - assembly: Assembly-CSharp
+    fullTypeName: UIManagerNonPlay
+    methodName: MoveScene
+  - assembly: Assembly-CSharp
+    fullTypeName: UIManagerNonPlay
+    methodName: BackToDefault
+  - assembly: Assembly-CSharp
+    fullTypeName: UIManagerNonPlay
+    methodName: ApplyPref
+  - assembly: Assembly-CSharp
+    fullTypeName: UIManagerNonPlay
+    methodName: SpeedChanged
+  - assembly: Assembly-CSharp
+    fullTypeName: UIManagerNonPlay
+    methodName: MoveScene
+  - assembly: Assembly-CSharp
+    fullTypeName: UIManagerNonPlay
+    methodName: VolumeChanged
+  - assembly: Assembly-CSharp
+    fullTypeName: UIManagerNonPlay
+    methodName: ShowOption
+  - assembly: Assembly-CSharp
+    fullTypeName: UIManagerNonPlay
+    methodName: BackToDefault
+  - assembly: Assembly-CSharp
+    fullTypeName: UIManager
+    methodName: MoveScene
+  - assembly: Assembly-CSharp
+    fullTypeName: UIManager
+    methodName: MoveScene
+  - assembly: Assembly-CSharp
+    fullTypeName: UIManager
+    methodName: MoveScene
+  - assembly: Assembly-CSharp
+    fullTypeName: UIManager
+    methodName: MoveScene
+  - assembly: Assembly-CSharp
+    fullTypeName: UIManager
+    methodName: ShowOption
+  - assembly: Assembly-CSharp
+    fullTypeName: UIManager
+    methodName: OpenMenu
+  - assembly: Assembly-CSharp
+    fullTypeName: UIManager
+    methodName: VolumeChanged
+  - assembly: Assembly-CSharp
+    fullTypeName: UIManager
+    methodName: UnPause
+  - assembly: Assembly-CSharp
+    fullTypeName: UIManager
+    methodName: Pause
+  - assembly: Assembly-CSharp
+    fullTypeName: StageManager
+    methodName: Pause
+  - assembly: Assembly-CSharp
+    fullTypeName: UIManager
+    methodName: ApplyPref
+  - assembly: Assembly-CSharp
+    fullTypeName: UIManager
+    methodName: OpenMenu
   sceneClasses:
-    Assets/Scenes/SampleScene.unity:
+    Assets/Scenes/MusicSelect.unity:
+    - Class: 1
+      Script: {instanceID: 0}
+    - Class: 4
+      Script: {instanceID: 0}
+    - Class: 20
+      Script: {instanceID: 0}
+    - Class: 21
+      Script: {instanceID: 0}
+    - Class: 23
+      Script: {instanceID: 0}
+    - Class: 28
+      Script: {instanceID: 0}
+    - Class: 48
+      Script: {instanceID: 0}
+    - Class: 64
+      Script: {instanceID: 0}
+    - Class: 81
+      Script: {instanceID: 0}
+    - Class: 89
+      Script: {instanceID: 0}
+    - Class: 104
+      Script: {instanceID: 0}
+    - Class: 108
+      Script: {instanceID: 0}
+    - Class: 114
+      Script: {instanceID: 16726}
+    - Class: 114
+      Script: {instanceID: 17392}
+    - Class: 114
+      Script: {instanceID: 17822}
+    - Class: 114
+      Script: {instanceID: 18044}
+    - Class: 114
+      Script: {instanceID: 18362}
+    - Class: 114
+      Script: {instanceID: 20438}
+    - Class: 114
+      Script: {instanceID: 20508}
+    - Class: 114
+      Script: {instanceID: 21116}
+    - Class: 114
+      Script: {instanceID: 21282}
+    - Class: 114
+      Script: {instanceID: 21640}
+    - Class: 114
+      Script: {instanceID: 21656}
+    - Class: 114
+      Script: {instanceID: 23426}
+    - Class: 115
+      Script: {instanceID: 0}
+    - Class: 120
+      Script: {instanceID: 0}
+    - Class: 128
+      Script: {instanceID: 0}
+    - Class: 157
+      Script: {instanceID: 0}
+    - Class: 196
+      Script: {instanceID: 0}
+    - Class: 212
+      Script: {instanceID: 0}
+    - Class: 213
+      Script: {instanceID: 0}
+    - Class: 222
+      Script: {instanceID: 0}
+    - Class: 223
+      Script: {instanceID: 0}
+    - Class: 224
+      Script: {instanceID: 0}
+    - Class: 241
+      Script: {instanceID: 0}
+    - Class: 243
+      Script: {instanceID: 0}
+    - Class: 245
+      Script: {instanceID: 0}
+    Assets/Scenes/PlayScene.unity:
     - Class: 1
       Script: {instanceID: 0}
     - Class: 4
@@ -78,37 +279,47 @@ ScriptsOnlyBuild:
     - Class: 108
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 17362}
+      Script: {instanceID: 16726}
     - Class: 114
-      Script: {instanceID: 17776}
+      Script: {instanceID: 17392}
     - Class: 114
-      Script: {instanceID: 17998}
+      Script: {instanceID: 17822}
     - Class: 114
-      Script: {instanceID: 18668}
+      Script: {instanceID: 18044}
     - Class: 114
-      Script: {instanceID: 19334}
+      Script: {instanceID: 18362}
     - Class: 114
-      Script: {instanceID: 19638}
+      Script: {instanceID: 18722}
     - Class: 114
-      Script: {instanceID: 19690}
+      Script: {instanceID: 19390}
     - Class: 114
-      Script: {instanceID: 20338}
+      Script: {instanceID: 19696}
     - Class: 114
-      Script: {instanceID: 20708}
+      Script: {instanceID: 19750}
     - Class: 114
-      Script: {instanceID: 20782}
+      Script: {instanceID: 20408}
     - Class: 114
-      Script: {instanceID: 21040}
+      Script: {instanceID: 20438}
     - Class: 114
-      Script: {instanceID: 21562}
+      Script: {instanceID: 20508}
     - Class: 114
-      Script: {instanceID: 22528}
+      Script: {instanceID: 20856}
     - Class: 114
-      Script: {instanceID: 23314}
+      Script: {instanceID: 21116}
     - Class: 114
-      Script: {instanceID: 23364}
+      Script: {instanceID: 21282}
+    - Class: 114
+      Script: {instanceID: 21656}
+    - Class: 114
+      Script: {instanceID: 22450}
+    - Class: 114
+      Script: {instanceID: 22632}
     - Class: 114
       Script: {instanceID: 23426}
+    - Class: 114
+      Script: {instanceID: 23476}
+    - Class: 114
+      Script: {instanceID: 23540}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 120
@@ -134,6 +345,97 @@ ScriptsOnlyBuild:
     - Class: 223
       Script: {instanceID: 0}
     - Class: 224
+      Script: {instanceID: 0}
+    - Class: 241
+      Script: {instanceID: 0}
+    - Class: 243
+      Script: {instanceID: 0}
+    - Class: 245
+      Script: {instanceID: 0}
+    Assets/Scenes/Title.unity:
+    - Class: 1
+      Script: {instanceID: 0}
+    - Class: 4
+      Script: {instanceID: 0}
+    - Class: 20
+      Script: {instanceID: 0}
+    - Class: 21
+      Script: {instanceID: 0}
+    - Class: 23
+      Script: {instanceID: 0}
+    - Class: 28
+      Script: {instanceID: 0}
+    - Class: 48
+      Script: {instanceID: 0}
+    - Class: 49
+      Script: {instanceID: 0}
+    - Class: 64
+      Script: {instanceID: 0}
+    - Class: 81
+      Script: {instanceID: 0}
+    - Class: 83
+      Script: {instanceID: 0}
+    - Class: 89
+      Script: {instanceID: 0}
+    - Class: 104
+      Script: {instanceID: 0}
+    - Class: 108
+      Script: {instanceID: 0}
+    - Class: 114
+      Script: {instanceID: 16726}
+    - Class: 114
+      Script: {instanceID: 17360}
+    - Class: 114
+      Script: {instanceID: 17392}
+    - Class: 114
+      Script: {instanceID: 17822}
+    - Class: 114
+      Script: {instanceID: 18044}
+    - Class: 114
+      Script: {instanceID: 18362}
+    - Class: 114
+      Script: {instanceID: 19446}
+    - Class: 114
+      Script: {instanceID: 19722}
+    - Class: 114
+      Script: {instanceID: 20438}
+    - Class: 114
+      Script: {instanceID: 20508}
+    - Class: 114
+      Script: {instanceID: 21116}
+    - Class: 114
+      Script: {instanceID: 21282}
+    - Class: 114
+      Script: {instanceID: 21640}
+    - Class: 114
+      Script: {instanceID: 21656}
+    - Class: 114
+      Script: {instanceID: 23426}
+    - Class: 115
+      Script: {instanceID: 0}
+    - Class: 120
+      Script: {instanceID: 0}
+    - Class: 128
+      Script: {instanceID: 0}
+    - Class: 157
+      Script: {instanceID: 0}
+    - Class: 196
+      Script: {instanceID: 0}
+    - Class: 212
+      Script: {instanceID: 0}
+    - Class: 213
+      Script: {instanceID: 0}
+    - Class: 222
+      Script: {instanceID: 0}
+    - Class: 223
+      Script: {instanceID: 0}
+    - Class: 224
+      Script: {instanceID: 0}
+    - Class: 241
+      Script: {instanceID: 0}
+    - Class: 243
+      Script: {instanceID: 0}
+    - Class: 245
       Script: {instanceID: 0}
   scriptHashData:
   - hash:
@@ -216,16 +518,16 @@ ScriptsOnlyBuild:
     className: UnityOnDropMessageListener
   - hash:
       serializedVersion: 2
+      Hash: c45445ce0b0f2194c738f5d2630a8af3
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: GameManager
+  - hash:
+      serializedVersion: 2
       Hash: 1bc6ff8d02d2d68019aa6a028f8d409d
     assemblyName: Unity.VisualScripting.Core
     namespaceName: Unity.VisualScripting
     className: UnityOnPointerUpMessageListener
-  - hash:
-      serializedVersion: 2
-      Hash: 366a3194a6285e8dcf9ce5f254792bf5
-    assemblyName: Assembly-CSharp
-    namespaceName: 
-    className: GameManager
   - hash:
       serializedVersion: 2
       Hash: 7e93247d600e115dac0cdd880de94e99
@@ -444,7 +746,7 @@ ScriptsOnlyBuild:
     className: PlayerQuitHandler
   - hash:
       serializedVersion: 2
-      Hash: 558f5c0fb13730f103ea26f8b1548d9d
+      Hash: 24d907ba1454cceec67a96ecb5d1278b
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: HitCollider
@@ -582,7 +884,7 @@ ScriptsOnlyBuild:
     className: TMP_SubMeshUI
   - hash:
       serializedVersion: 2
-      Hash: 442b5323cb7e79ddb28fccf581a5d8b1
+      Hash: 8cd3b312c5671de94567a7fbfcaf06eb
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: AudioManager
@@ -768,7 +1070,7 @@ ScriptsOnlyBuild:
     className: Text
   - hash:
       serializedVersion: 2
-      Hash: 4d7bb19b44b49b982a74b28268d3d895
+      Hash: 23dfa5dd1267bf4aacb1819fe8c993e4
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: Note
@@ -820,6 +1122,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.VisualScripting.Core
     namespaceName: Unity.VisualScripting
     className: UnityOnTriggerStay2DMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: fa18fd77f0c0f80ad1669da8cdbd5183
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: UIManagerNonPlay
   - hash:
       serializedVersion: 2
       Hash: 9104447b683bf70406fa01f12ecb564a
@@ -948,6 +1256,12 @@ ScriptsOnlyBuild:
     className: UnityOnScrollRectValueChangedMessageListener
   - hash:
       serializedVersion: 2
+      Hash: 3a4891f9e81900aa2929b84b7f391004
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: UIManager
+  - hash:
+      serializedVersion: 2
       Hash: 830c3b545f6e6ee60a4cebab90516f2c
     assemblyName: UnityEngine.TestRunner
     namespaceName: UnityEngine.TestTools.TestRunner.Callbacks
@@ -978,7 +1292,7 @@ ScriptsOnlyBuild:
     className: SignalTrack
   - hash:
       serializedVersion: 2
-      Hash: a8556d975211a6f09c4d02295967120b
+      Hash: 87525d8968c95386010fed145da9e83e
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: StageManager
@@ -996,22 +1310,10 @@ ScriptsOnlyBuild:
     className: ControlTrack
   - hash:
       serializedVersion: 2
-      Hash: 932fefc4f2cf068f9fee0bfe214bec2e
-    assemblyName: Assembly-CSharp
-    namespaceName: 
-    className: EffectManager
-  - hash:
-      serializedVersion: 2
       Hash: d5cd7f207e91ca8336c65a577a6fb2a0
     assemblyName: UnityEngine.UI
     namespaceName: UnityEngine.UI
     className: ScrollRect
-  - hash:
-      serializedVersion: 2
-      Hash: afd499c06cbec91a4b1550e483e26d83
-    assemblyName: Assembly-CSharp
-    namespaceName: 
-    className: Scroller
   - hash:
       serializedVersion: 2
       Hash: 9a174471d4db2c0c6d3ac47d2f818db1
@@ -1056,13 +1358,13 @@ ScriptsOnlyBuild:
     className: TMP_ScrollbarEventHandler
   - hash:
       serializedVersion: 2
-      Hash: 514a3197e37c5afa1bf37cb61dd13443
+      Hash: 4ffb5eec29dac675b8810180eb03db13
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: VisualJudgeLine
   - hash:
       serializedVersion: 2
-      Hash: 2ee17c71c6471c457b15254aa889fdc8
+      Hash: 391a37e78bc6b6e1edea005754c9ed99
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: Hit
@@ -1110,5 +1412,7 @@ ScriptsOnlyBuild:
     className: UnityOnSliderValueChangedMessageListener
   platform: 19
   scenePathNames:
-  - Assets/Scenes/SampleScene.unity
+  - Assets/Scenes/Title.unity
+  - Assets/Scenes/MusicSelect.unity
+  - Assets/Scenes/PlayScene.unity
   playerPath: "C:/Users/db_98/OneDrive/\uBC14\uD0D5 \uD654\uBA74/\uC0C8 \uD3F4\uB354/music_game.exe"

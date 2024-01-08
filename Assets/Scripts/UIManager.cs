@@ -4,44 +4,46 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using JetBrains.Annotations;
 
 public class UIManager : MonoBehaviour
 {
+    // objects using line renderer
     [SerializeField] private VisualJudgeLine visualJudgeLine;
     [SerializeField] private TouchArea touchArea;
     [SerializeField] private RealJudgeLine realJudgeLine;
 
+    // ui set.
     [SerializeField] private GameObject defaultUI;
     [SerializeField] private GameObject menuUI;
-
-    [SerializeField] private GameObject btnCenter;
-    [SerializeField] private GameObject btnRight;
-    [SerializeField] private GameObject btnLeft;
-
     [SerializeField] private GameObject optionUI;
-    [SerializeField] private TextMeshProUGUI noteSpeedText;
+    [SerializeField] private GameObject resultUI;
 
+    // ui text.
+    [SerializeField] private TextMeshProUGUI scoreText;
+    [SerializeField] private TextMeshProUGUI comboText;
+    [SerializeField] private TextMeshProUGUI result_scoreText;
+    [SerializeField] private TextMeshProUGUI result_comboText;
+    [SerializeField] private TextMeshProUGUI result_rankText;
+
+    // ui used in option.
+    [SerializeField] private float noteSpeed;
+    [SerializeField] private float musicVolume;
+    [SerializeField] private TextMeshProUGUI noteSpeedText;
     [SerializeField] private Slider noteSpeedSlider;
     [SerializeField] private Slider musicVolumeSlider;
 
     [SerializeField] private StageManager stageManager;
     [SerializeField] private AudioManager audioManager;
 
-    public TextMeshProUGUI timerUI;
-    private float timerForRestart;
+    [SerializeField] private TextMeshProUGUI timerUI;
 
+    // use for line rendering.
     private Vector3[] linePoints;
     private int lineLength;
 
-    // variables to save data
-    float realNoteSpeed;
-    float realVolume;
-
-    // variables for actual change
-    float fakeNoteSpeed;
-    float fakeVolume;
-
-    int seconds3Timer;
+    // unpause timer
+    private int seconds3Timer;
 
     private void Start()
     {
@@ -49,16 +51,22 @@ public class UIManager : MonoBehaviour
         realJudgeLine.Draw();
         seconds3Timer = 3;
         
+        // 
         GetLineInfo();
         InitializeUserPref();
+
+        // in playing, only music volume can adjusted.
+        musicVolumeSlider.onValueChanged.AddListener(VolumeChanged);
     }
 
     private void InitializeUserPref()
     {
-        noteSpeedSlider.value = GameManager.Instance.noteSpeed;
-        noteSpeedText.text = ((noteSpeedSlider.value == 0f) ? 0.5f : 1f).ToString();
-        float volume = PlayerPrefs.HasKey("musicVolume") ? (PlayerPrefs.GetFloat("musicVolume") + 40) * 100 / 40 : -20f;
-        musicVolumeSlider.value = volume;
+        // if there isn't data, music volume = -20f, notespeed = 1
+        musicVolumeSlider.value = PlayerPrefs.HasKey("musicVolume") ? PlayerPrefs.GetFloat("musicVolume") : -20f;
+        musicVolume = musicVolumeSlider.value;
+        noteSpeedSlider.value = PlayerPrefs.HasKey("noteSpeed") ? PlayerPrefs.GetFloat("noteSpeed") : 1;
+        noteSpeed = noteSpeedSlider.value;
+        noteSpeedText.text = noteSpeedSlider.value.ToString();
     }
 
     private void GetLineInfo()
@@ -69,6 +77,7 @@ public class UIManager : MonoBehaviour
 
     public void ShowOption()
     {
+        // when option button pressed.
         defaultUI.SetActive(false);
         menuUI.SetActive(false);
         optionUI.SetActive(true);
@@ -76,6 +85,7 @@ public class UIManager : MonoBehaviour
 
     public void OpenMenu()
     {
+        // when menu button pressed. (pause button)
         defaultUI.SetActive(false);
         menuUI.SetActive(true);
         optionUI.SetActive(false);
@@ -83,45 +93,10 @@ public class UIManager : MonoBehaviour
 
     public void BackToDefault()
     {
-        defaultUI.SetActive(true);
+        // default.
+        defaultUI.SetActive(false);
         menuUI.SetActive(false);
         optionUI.SetActive(false);
-    }
-
-    private float NoteSpeedModify(float tmpSpeed)
-    {
-        // change 0 into 0.5
-
-        float valueModified = 1;
-        // 0 (0.5x) ~ 1 (1x)
-        switch (tmpSpeed)
-        {
-            case 0:
-                valueModified = 0.5f;
-                break;
-            case 1:
-                valueModified = 1f;
-                break;
-        }
-        return valueModified;
-    }
-
-    public void ChangeNoteSpeed(Slider slider)
-    {
-        // control note speed by slider.
-        realNoteSpeed = slider.value; // 0 or 1
-        float valueModified = NoteSpeedModify(realNoteSpeed); // 0.5 or 1
-        noteSpeedText.text = valueModified.ToString();
-    }
-
-    public void ChangeMusicVolume(Slider slider)
-    {
-        fakeVolume = slider.value; // 0 ~ 100
-        realVolume = fakeVolume * 40 / 100 - 40;
-        if (realVolume == -40f)
-        {
-            realVolume = -80f;
-        }
     }
 
     public void MoveScene(string sceneName)
@@ -134,10 +109,14 @@ public class UIManager : MonoBehaviour
         Application.Quit();
     }
 
+    public void VolumeChanged(float value)
+    {
+        musicVolume = musicVolumeSlider.value;
+    }
+
     public void ApplyPref()
     {
-        GameManager.Instance.ChangeMusicVolume(realVolume); // -40 ~ 0
-        GameManager.Instance.ChangeNoteSpeed(realNoteSpeed);
+        GameManager.Instance.SaveOptionData(noteSpeed, musicVolume);
     }
 
     public void Pause()
@@ -147,31 +126,62 @@ public class UIManager : MonoBehaviour
     }
 
     public void UnPause()
-    {
-        defaultUI.SetActive(true);
+    { 
+        defaultUI.SetActive(false);
         menuUI.SetActive(false);
-        Invoke("PlayBack", 3f);
+
+        // when back button pressed during pausing, restart after 3 seconds. 
+        StartCoroutine(PlayBack(3f));
+
+        // display timer.
         timerUI.gameObject.SetActive(true);
         timerUI.text = "3";
-        Invoke("TimerUpdate", 1f);
-        Invoke("TimerUpdate", 2f);
-        Invoke("TimerUpdate", 3f);
+        StartCoroutine(TimerUpdate(1f));
+        StartCoroutine(TimerUpdate(2f));
+        StartCoroutine(TimerUpdate(3f));
     }
 
-    private void TimerUpdate()
+    IEnumerator TimerUpdate(float time)
     {
+        yield return new WaitForSeconds(time);
+
         seconds3Timer--;
+
         timerUI.text = seconds3Timer.ToString();
         if(seconds3Timer == 0)
         {
+            // after 3 seconds, initialize timer and turn off.
             seconds3Timer = 3;
             timerUI.gameObject.SetActive(false);
         }
         timerUI.text = seconds3Timer.ToString();
     }
 
-    public void PlayBack()
+    IEnumerator PlayBack(float time)
     {
+        // after 3 seconds, unpause game.
+        yield return new WaitForSeconds(time);
+        defaultUI.SetActive(true);
         stageManager.PlayBack();
+    }
+
+    public void updateScore(int score)
+    {
+        scoreText.text = "Score : " + score.ToString();
+    }
+
+    public void updateCombo(int combo)
+    {
+        comboText.text = combo.ToString() + " COMBO !";
+    }
+
+    public void ShowResultUI(int combo, int score, char rank)
+    {
+        resultUI.SetActive(true);
+        defaultUI.SetActive(false);
+
+        result_comboText.text = "COMBO : " + combo.ToString();
+        result_scoreText.text = "SCORE : " + score.ToString();
+        result_rankText.text = rank.ToString();
     }
 }

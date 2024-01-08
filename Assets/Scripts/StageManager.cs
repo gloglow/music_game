@@ -2,33 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-using UnityEngine.Pool;
-using UnityEngine.UI;
 using LitJson;
-using Unity.VisualScripting;
-using System;
 using TMPro;
-using UnityEditor.Experimental.GraphView;
 
 public class StageManager : MonoBehaviour
 {
+    private string noteDataFilePath = Application.streamingAssetsPath + "/Json/miles.json";
+
     // managing a stageUI, music, note.
-
-
     [SerializeField] private AudioManager audioManager;
     [SerializeField] private UIManager uiManager;
     [SerializeField] private Transform[] Spawners; // positions where notes are activated.
     [SerializeField] private TextMeshProUGUI gradeText; // UI text of grade.
 
     [SerializeField] private float bpm; // music bpm.
-    public float userSpeed; // speed set by user.
     [SerializeField] private int musicStartAfterBeats; // the number of initial beats. set 8.
-    public bool flag; // music play start flag.
     public bool isPause;
 
     [SerializeField] private int beatCnt; // counting beat.
     private float startTime; // start timing of audio system. 
-    public float lastBeatTime; // timing of last beat.
+    private float lastBeatTime; // timing of last beat.
 
     public float secondPerBeat; // second per beat. calculated by bpm.
 
@@ -39,40 +32,56 @@ public class StageManager : MonoBehaviour
     private int index = 0;
     private int crtIndex = 0;
 
-    private float pauseTimer;
+    private float pauseTimer; // save the time when pause button is pressed.
 
+    // play data.
+    private int score;
+    private int combo;
+    private int maxCombo;
+
+    // standards of grading.
+    [SerializeField] private int perfectScore, greatScore, badScore;
+    [SerializeField] private int rankSStandard, rankAStandard, rankBStandard;
 
     private void Start()
     {
         startTime = (float)AudioSettings.dspTime;
         lastBeatTime = startTime;
         secondPerBeat = 60 / bpm;
+        
+        // load note data from json file.
         LoadNoteData();
+
+        // initialize play data.
+        score = 0;
+        combo = 0;
+        maxCombo = 0;
     }
 
     private void LoadNoteData()
     {
-        // load json file that have note data.
-        if(File.Exists(Application.dataPath+ "/Resources/JSON/miles.json"))
-        {
-            string jsonStr = File.ReadAllText(Application.dataPath + "/Resources/JSON/miles.json");
-            JsonData noteD = JsonMapper.ToObject(jsonStr);
+        // load json file
+        // json file [title, composer, note count, notedata[startpoint, directionx, directiony]
 
+        if (File.Exists(noteDataFilePath))
+        {
+            var noteDataFile = File.ReadAllText(noteDataFilePath);
+            JsonData noteD = JsonMapper.ToObject(noteDataFile.ToString());
             title = noteD[0].ToString();
             composer = noteD[1].ToString();
-            for (int i=0; i < int.Parse(noteD[2].ToString()); i++)
+            for (int i = 0; i < int.Parse(noteD[2].ToString()); i++)
             {
                 // load notedata and add in notedata list.
                 NoteData noteData = new NoteData();
+                noteData.spawnPoint = int.Parse(noteD[3][i]["point"].ToString());
                 noteData.beat = float.Parse(noteD[3][i]["beat"].ToString());
                 noteData.x = float.Parse(noteD[3][i]["x"].ToString());
                 noteData.y = float.Parse(noteD[3][i]["y"].ToString());
                 noteList.Add(noteData);
             }
         }
-        
+        else Debug.Log("????");
     }
-
     private void Update()
     {
         if (!isPause)
@@ -83,40 +92,48 @@ public class StageManager : MonoBehaviour
                 beatCnt++;
                 lastBeatTime += secondPerBeat;
 
-                // after initial beats, music start and make note.
+                // after first 8 beats, music start.
                 if (beatCnt == musicStartAfterBeats + 1)
                 {
                     MusicPlay();
-                    flag = true;
                 }
 
-                if (flag)
+                // there is any note data && current beat == note beat, make note.
+                while (noteList.Count > index && (beatCnt - musicStartAfterBeats) == (int)noteList[index].beat)
                 {
-                    // if there is note, and it is the time when note should be created,
-                    while (noteList.Count > index && beatCnt - musicStartAfterBeats == (int)noteList[index].beat)
+                    float f; // the waiting time of note. (if note is 1/4 note, not wait.)
+                    if (noteList[index].beat - (beatCnt - musicStartAfterBeats) == 0) // 1/4 note.
                     {
-                        if (noteList[index].beat - (beatCnt - musicStartAfterBeats) == 0)
-                        {
-                            MakeNote();
-                        }
-                        else
-                        {
-                            Invoke("MakeNote", (noteList[index].beat - (beatCnt - musicStartAfterBeats)) * secondPerBeat);
-                        }
-                        index++;
+                        f = 0;
                     }
+                    else // 1/8 note, 1/16 note, etc
+                    {
+                        // if beat of a note is 6.5, at 6th beat, wait 0.5beat time and be made.
+                        f = (noteList[index].beat - (beatCnt - musicStartAfterBeats)) * secondPerBeat;
+                    }
+                    StartCoroutine(MakeNote(f));
+                    index++;
                 }
             }
         }
-    }
 
-    public void Pause()
+        // if there isn't note in noteList, and audio is not playing, show result.
+        if(index == noteList.Count && !audioManager.audioSource.isPlaying)
+        {
+            checkResult();
+        }
+    }
+    
+    public void Pause() // when pause button is pressed in playing time.
     {
         isPause = true;
         audioManager.MusicPause();
+
+        // record the time when pause button is pressed.
         pauseTimer = (float)AudioSettings.dspTime;
-        int childCnt = transform.childCount;
-        for (int i = 0; i < childCnt; i++)
+
+        // all of notes stop when pause button is pressed.
+        for (int i = 0; i < transform.childCount; i++)
         {
             Note note = transform.GetChild(i).GetComponent<Note>();
             note.status = 0;
@@ -125,9 +142,14 @@ public class StageManager : MonoBehaviour
 
     public void PlayBack()
     {
+        // unpause.
         isPause = false;
+
+        // add the time passed during pause to lastBeatTime.
         lastBeatTime += (float)AudioSettings.dspTime - pauseTimer;
         audioManager.MusicPlay();
+
+        // reactivate notes.
         int childCnt = transform.childCount;
         for (int i = 0; i < childCnt; i++)
         {
@@ -136,9 +158,10 @@ public class StageManager : MonoBehaviour
             note.status = 2;
         }
     }
-    
-    public void MakeNote()
+
+    IEnumerator MakeNote(float time)
     {
+        yield return new WaitForSeconds(time);  
         // bring note from note object pool.
         GameObject obj = ObjectPoolManager.Instance.notePool.Get();
         Note note = obj.GetComponent<Note>();
@@ -146,7 +169,7 @@ public class StageManager : MonoBehaviour
 
         // activate note.
         note.status = 1;
-        note.transform.position = Spawners[1].transform.position;
+        note.transform.position = Spawners[noteList[crtIndex].spawnPoint].transform.position;
         note.dirVec = new Vector3(noteList[crtIndex].x, noteList[crtIndex].y, 0);
         crtIndex++;
         if (isPause) note.status = 0;
@@ -159,17 +182,46 @@ public class StageManager : MonoBehaviour
 
     public void ShowGrade(int grade)
     {
-        // display grade.
+        // display grade and combo.
         switch (grade)
         {
             case 0:
-                gradeText.text = "Miss"; break;
+                gradeText.text = "Miss";
+                maxCombo = combo;
+                combo = 0;
+                uiManager.updateCombo(combo);
+                return;
             case 1:
-                gradeText.text = "Bad"; break;
+                gradeText.text = "Bad";
+                grade = badScore;
+                break;
             case 2:
-                gradeText.text = "Great"; break;
+                gradeText.text = "Great";
+                grade = greatScore;
+                break;
             case 3:
-                gradeText.text = "Perfect"; break;
+                gradeText.text = "Perfect";
+                grade = perfectScore;
+                break;
         }
+        score += grade;
+        combo++;
+        uiManager.updateScore(score);
+        uiManager.updateCombo(combo);
+    }
+
+    private void checkResult()
+    {
+        // show result (rank, maxcombo, score)
+        char rank;
+        float rate = (score / 5) / noteList.Count;
+        
+        if (rate > rankSStandard) rank = 'S';
+        else if (rate > rankAStandard) rank = 'A';
+        else if (rate > rankBStandard) rank = 'B';
+        else rank = 'C';
+
+        uiManager.ShowResultUI(maxCombo, score, rank);
+        isPause = true;
     }
 }

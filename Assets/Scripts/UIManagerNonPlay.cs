@@ -4,21 +4,21 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using UnityEngine.Audio;
 
 public class UIManagerNonPlay : MonoBehaviour
 {
     [SerializeField] private VisualJudgeLine visualJudgeLine;
 
     [SerializeField] private GameObject defaultUI;
+    [SerializeField] private GameObject optionUI;
 
     [SerializeField] private GameObject btnCenter;
     [SerializeField] private GameObject btnRight;
     [SerializeField] private GameObject btnLeft;
 
-    [SerializeField] private GameObject optionUI;
+    [SerializeField] private float musicVolume;
+    [SerializeField] private float noteSpeed;
     [SerializeField] private TextMeshProUGUI noteSpeedText;
-
     [SerializeField] private Slider noteSpeedSlider;
     [SerializeField] private Slider musicVolumeSlider;
 
@@ -27,27 +27,22 @@ public class UIManagerNonPlay : MonoBehaviour
     private Vector3[] linePoints;
     private int lineLength;
 
-    // variables to save data
-    float realNoteSpeed;
-    float realVolume;
-
-    // variables for actual change
-    float fakeNoteSpeed;
-    float fakeVolume; 
-
     private void Start()
     {
         GetLineInfo();
         SetUI();
         InitializeUserPref();
+        noteSpeedSlider.onValueChanged.AddListener(SpeedChanged);
+        musicVolumeSlider.onValueChanged.AddListener(VolumeChanged);
     }
 
     private void InitializeUserPref()
     {
-        noteSpeedSlider.value = GameManager.Instance.noteSpeed;
-        noteSpeedText.text = ((noteSpeedSlider.value == 0f) ? 0.5f : 1f).ToString();
-        float volume = PlayerPrefs.HasKey("musicVolume") ? (PlayerPrefs.GetFloat("musicVolume") + 40) * 100 / 40 : -20f;
-        musicVolumeSlider.value = volume;
+        musicVolumeSlider.value = PlayerPrefs.HasKey("musicVolume") ? PlayerPrefs.GetFloat("musicVolume") : -20f;
+        musicVolume = musicVolumeSlider.value;
+        noteSpeedSlider.value = PlayerPrefs.HasKey("noteSpeed") ? PlayerPrefs.GetFloat("noteSpeed") : 1;
+        noteSpeed = noteSpeedSlider.value;
+        noteSpeedText.text = noteSpeedSlider.value.ToString();
     }
 
     private void GetLineInfo()
@@ -79,42 +74,6 @@ public class UIManagerNonPlay : MonoBehaviour
         optionUI.SetActive(false);
     }
 
-    private float NoteSpeedModify(float tmpSpeed)
-    {
-        // change 0 into 0.5
-
-        float valueModified = 1;
-        // 0 (0.5x) ~ 1 (1x)
-        switch (tmpSpeed)
-        {
-            case 0:
-                valueModified = 0.5f;
-                break;
-            case 1:
-                valueModified = 1f;
-                break;
-        }
-        return valueModified;
-    }
-
-    public void ChangeNoteSpeed(Slider slider)
-    {
-        // control note speed by slider.
-        realNoteSpeed = slider.value; // 0 or 1
-        float valueModified = NoteSpeedModify(realNoteSpeed); // 0.5 or 1
-        noteSpeedText.text = valueModified.ToString();
-    }
-
-    public void ChangeMusicVolume(Slider slider)
-    {
-        fakeVolume = slider.value; // 0 ~ 100
-        realVolume = fakeVolume * 40 / 100 - 40;
-        if(realVolume == -40f)
-        {
-            realVolume = -80f;
-        }
-    }
-
     public void MoveScene(string sceneName)
     {
         SceneManager.LoadScene(sceneName);
@@ -125,9 +84,19 @@ public class UIManagerNonPlay : MonoBehaviour
         Application.Quit();
     }
 
+    public void VolumeChanged(float value)
+    {
+        musicVolume = musicVolumeSlider.value;
+    }
+
+    public void SpeedChanged(float value)
+    {
+        noteSpeed = noteSpeedSlider.value;
+        noteSpeedText.text = value.ToString();
+    }
+
     public void ApplyPref()
     {
-        GameManager.Instance.ChangeMusicVolume(realVolume); // -40 ~ 0
-        GameManager.Instance.ChangeNoteSpeed(realNoteSpeed);
+        GameManager.Instance.SaveOptionData(noteSpeed, musicVolume);
     }
 }

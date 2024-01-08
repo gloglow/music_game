@@ -20,6 +20,7 @@ public class Note : MonoBehaviour
     [SerializeField] private float perfectRange;
     [SerializeField] private float greatRange;
     public float index;
+    private float speed;
 
     StageManager stageManager;
     public int status; // 0 : idle, 1 : set destination and speed, 2 : move
@@ -33,6 +34,7 @@ public class Note : MonoBehaviour
 
             case 1: // when activated by stage manager
                 stageManager = transform.GetComponentInParent<StageManager>();
+                speed = GameManager.Instance.actualSpeed[(int)GameManager.Instance.noteSpeed];
                 initialPos = transform.position; // initial position (position of spawner)
                 initialTime = (float)AudioSettings.dspTime; // activated timing
                 
@@ -51,16 +53,16 @@ public class Note : MonoBehaviour
                 // speed = (current time / beat) * distance.
                 // -> time taken for move initial position to destination is ONE BEAT. 
                 float defaultSpeed = (((float)AudioSettings.dspTime - initialTime) / stageManager.secondPerBeat) * dist;
-                
+
                 // position = initial position + direction * speed * useroffset
-                transform.position = initialPos + dirVec * defaultSpeed * stageManager.userSpeed;
+                transform.position = initialPos + dirVec * defaultSpeed * speed;
                 status = 2; // change status into 2 (don't need to calculate distance)
                 break;
 
             case 2:
                 // moving mechanism is same.
                 defaultSpeed= (((float)AudioSettings.dspTime - initialTime) / stageManager.secondPerBeat) * dist;
-                transform.position = initialPos + dirVec * defaultSpeed * stageManager.userSpeed;
+                transform.position = initialPos + dirVec * defaultSpeed * speed;
 
                 // if arrive on destroy line, destroy
                 if(transform.position.y < Camera.main.ScreenToWorldPoint(new Vector2(0, -1 * Screen.height)).y)
@@ -79,11 +81,11 @@ public class Note : MonoBehaviour
         // the closer, the higher grade
         dist = Vector3.Distance(transform.position, destination);
 
-        if (dist < perfectRange) // set 0.5
+        if (dist < perfectRange / GameManager.Instance.noteSpeed) // set 0.5
         {
             return 3;
         }
-        else if(dist <greatRange) // set 0.85
+        else if(dist <greatRange / GameManager.Instance.noteSpeed) // set 0.85
         {
             return 2;
         }

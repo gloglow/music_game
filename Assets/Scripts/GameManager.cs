@@ -16,10 +16,12 @@ public class GameManager : MonoBehaviour
     public Vector3 lineStartPos, lineEndPos; // start point & end point of Lines (JudgeLine)
     [SerializeField] private int lineRendererPosCnt;
     [SerializeField] private float lineOffset;
-    public Vector3[] lineRendererPosArr;
+    public Vector3[] lineRendererPosArr; // objects that use line renderer draw line from this array
 
     public AudioMixer audioMixer;
-    public float noteSpeed;
+
+    public float noteSpeed; // user control
+    public float[] actualSpeed = {0.5f, 1f, 2f}; // indexing by noteSpeed valuable
 
     public static GameManager Instance
     {
@@ -57,6 +59,7 @@ public class GameManager : MonoBehaviour
 
     private void LoadPlayerData()
     {
+        // when game starts, load player data (music volume, note speed, etc)
         float volume = PlayerPrefs.HasKey("musicVolume") ? PlayerPrefs.GetFloat("musicVolume") : -20f;
         audioMixer.SetFloat("Music", volume);
         noteSpeed = PlayerPrefs.HasKey("noteSpeed") ? PlayerPrefs.GetFloat("noteSpeed") : 1;
@@ -96,6 +99,9 @@ public class GameManager : MonoBehaviour
 
     public void ChangeMusicVolume(float value)
     {
+        // volume less than -40, almost mute.
+        if (value == -40)
+            value = -80;
         audioMixer.SetFloat("Music", value);
     }
 
@@ -106,6 +112,9 @@ public class GameManager : MonoBehaviour
 
     public void SaveOptionData(float noteSpeed, float volume)
     {
+        // change current game option and save data.
+        ChangeNoteSpeed(noteSpeed);
+        ChangeMusicVolume(volume);
         PlayerPrefs.SetFloat("musicVolume", volume);
         PlayerPrefs.SetFloat("noteSpeed", noteSpeed);
     }
