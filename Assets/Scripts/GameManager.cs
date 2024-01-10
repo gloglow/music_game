@@ -1,11 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.Audio;
-using UnityEngine.UI;
-using UnityEngine.EventSystems;
 
 public class GameManager : MonoBehaviour
 {
@@ -20,8 +14,8 @@ public class GameManager : MonoBehaviour
 
     public AudioMixer audioMixer;
 
-    public float noteSpeed; // user control
-    public float[] actualSpeed = {0.5f, 1f, 2f}; // indexing by noteSpeed valuable
+    public int crtSpeed; // 0,1,2 : slider value
+    public float[] speeds = {0.5f, 1f, 2f}; // 0.5,1,2 : actual speed = speeds[crtSpeed]
 
     public static GameManager Instance
     {
@@ -62,7 +56,7 @@ public class GameManager : MonoBehaviour
         // when game starts, load player data (music volume, note speed, etc)
         float volume = PlayerPrefs.HasKey("musicVolume") ? PlayerPrefs.GetFloat("musicVolume") : -20f;
         audioMixer.SetFloat("Music", volume);
-        noteSpeed = PlayerPrefs.HasKey("noteSpeed") ? PlayerPrefs.GetFloat("noteSpeed") : 1;
+        crtSpeed = PlayerPrefs.HasKey("noteSpeed") ? PlayerPrefs.GetInt("noteSpeed") : 1;
     }
 
     public void ReadyToDrawLine()
@@ -105,17 +99,17 @@ public class GameManager : MonoBehaviour
         audioMixer.SetFloat("Music", value);
     }
 
-    public void ChangeNoteSpeed(float value)
+    public void ChangeNoteSpeed(int value)
     {
-        noteSpeed = value;
+        crtSpeed = value;
     }
 
-    public void SaveOptionData(float noteSpeed, float volume)
+    public void SaveOptionData(int noteSpeed, float volume)
     {
         // change current game option and save data.
         ChangeNoteSpeed(noteSpeed);
         ChangeMusicVolume(volume);
         PlayerPrefs.SetFloat("musicVolume", volume);
-        PlayerPrefs.SetFloat("noteSpeed", noteSpeed);
+        PlayerPrefs.SetInt("noteSpeed", noteSpeed);
     }
 }

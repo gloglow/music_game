@@ -40,9 +40,9 @@ public class UIManagerNonPlay : MonoBehaviour
     {
         musicVolumeSlider.value = PlayerPrefs.HasKey("musicVolume") ? PlayerPrefs.GetFloat("musicVolume") : -20f;
         musicVolume = musicVolumeSlider.value;
-        noteSpeedSlider.value = PlayerPrefs.HasKey("noteSpeed") ? PlayerPrefs.GetFloat("noteSpeed") : 1;
+        noteSpeedSlider.value = PlayerPrefs.HasKey("noteSpeed") ? PlayerPrefs.GetInt("noteSpeed") : 1;
         noteSpeed = noteSpeedSlider.value;
-        noteSpeedText.text = noteSpeedSlider.value.ToString();
+        noteSpeedText.text = GameManager.Instance.speeds[(int)noteSpeedSlider.value].ToString();
     }
 
     private void GetLineInfo()
@@ -89,14 +89,29 @@ public class UIManagerNonPlay : MonoBehaviour
         musicVolume = musicVolumeSlider.value;
     }
 
+    public float SpeedToActualSpeed(float value)
+    {
+        switch (value)
+        {
+            case 0:
+                return 0.5f;
+            case 1:
+                return 1f;
+            case 2:
+                return 2f;
+            default:
+                return 1f;
+        }
+    }
+
     public void SpeedChanged(float value)
     {
-        noteSpeed = noteSpeedSlider.value;
-        noteSpeedText.text = value.ToString();
+        noteSpeedText.text = GameManager.Instance.speeds[(int)value].ToString();
+        noteSpeed = value;
     }
 
     public void ApplyPref()
     {
-        GameManager.Instance.SaveOptionData(noteSpeed, musicVolume);
+        GameManager.Instance.SaveOptionData((int)noteSpeed, musicVolume);
     }
 }

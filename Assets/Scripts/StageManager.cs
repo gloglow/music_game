@@ -24,6 +24,7 @@ public class StageManager : MonoBehaviour
     private float lastBeatTime; // timing of last beat.
 
     public float secondPerBeat; // second per beat. calculated by bpm.
+    private int speedLogic;
 
     // note data.
     private static List<NoteData> noteList = new List<NoteData>();
@@ -56,6 +57,13 @@ public class StageManager : MonoBehaviour
         score = 0;
         combo = 0;
         maxCombo = 0;
+
+        switch(GameManager.Instance.crtSpeed)
+        {
+            case 0: speedLogic = 3; break;
+            case 1: speedLogic = 1; break;
+            case 2: speedLogic = 0; break;
+        }
     }
 
     private void LoadNoteData()
@@ -99,17 +107,17 @@ public class StageManager : MonoBehaviour
                 }
 
                 // there is any note data && current beat == note beat, make note.
-                while (noteList.Count > index && (beatCnt - musicStartAfterBeats) == (int)noteList[index].beat)
+                while (noteList.Count > index && (beatCnt - musicStartAfterBeats + speedLogic) == (int)noteList[index].beat)
                 {
                     float f; // the waiting time of note. (if note is 1/4 note, not wait.)
-                    if (noteList[index].beat - (beatCnt - musicStartAfterBeats) == 0) // 1/4 note.
+                    if (noteList[index].beat == (beatCnt - musicStartAfterBeats + speedLogic))// == 0) // 1/4 note.
                     {
                         f = 0;
                     }
                     else // 1/8 note, 1/16 note, etc
                     {
                         // if beat of a note is 6.5, at 6th beat, wait 0.5beat time and be made.
-                        f = (noteList[index].beat - (beatCnt - musicStartAfterBeats)) * secondPerBeat;
+                        f = (noteList[index].beat - (beatCnt - musicStartAfterBeats + speedLogic)) * secondPerBeat * GameManager.Instance.speeds[GameManager.Instance.crtSpeed] * 0.5f;
                     }
                     StartCoroutine(MakeNote(f));
                     index++;

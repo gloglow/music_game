@@ -2835,7 +2835,7 @@ MonoBehaviour:
   bpm: 130
   musicStartAfterBeats: 8
   isPause: 0
-  beatCnt: 0
+  beatCnt: 1
   secondPerBeat: 0
   perfectScore: 500
   greatScore: 300
@@ -4105,10 +4105,6 @@ MonoBehaviour:
   lineRendererPosArr: []
   audioMixer: {fileID: 24100000, guid: 22313d41ee3215540b3205d6f84d8e72, type: 2}
   noteSpeed: 0
-  actualSpeed:
-  - 0.5
-  - 1
-  - 2
 --- !u!1 &1358928602
 GameObject:
   m_ObjectHideFlags: 0
@@ -4783,7 +4779,7 @@ AudioSource:
   m_GameObject: {fileID: 1453549110}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -7775155531384754663, guid: 22313d41ee3215540b3205d6f84d8e72, type: 2}
   m_audioClip: {fileID: 8300000, guid: f0fad5afe731ab44e8cbba27549bfa0e, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
@@ -6087,7 +6083,19 @@ MonoBehaviour:
   m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1980386706}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: SpeedChanged
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1839358821
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -34,7 +31,7 @@ public class Note : MonoBehaviour
 
             case 1: // when activated by stage manager
                 stageManager = transform.GetComponentInParent<StageManager>();
-                speed = GameManager.Instance.actualSpeed[(int)GameManager.Instance.noteSpeed];
+                speed = GameManager.Instance.speeds[GameManager.Instance.crtSpeed];
                 initialPos = transform.position; // initial position (position of spawner)
                 initialTime = (float)AudioSettings.dspTime; // activated timing
                 
@@ -52,17 +49,17 @@ public class Note : MonoBehaviour
 
                 // speed = (current time / beat) * distance.
                 // -> time taken for move initial position to destination is ONE BEAT. 
-                float defaultSpeed = (((float)AudioSettings.dspTime - initialTime) / stageManager.secondPerBeat) * dist;
+                float defaultSpeed = (((float)AudioSettings.dspTime - initialTime) / (stageManager.secondPerBeat * (1 / speed * 2)) * dist);
 
                 // position = initial position + direction * speed * useroffset
-                transform.position = initialPos + dirVec * defaultSpeed * speed;
+                transform.position = initialPos + dirVec * defaultSpeed;
                 status = 2; // change status into 2 (don't need to calculate distance)
                 break;
 
             case 2:
                 // moving mechanism is same.
-                defaultSpeed= (((float)AudioSettings.dspTime - initialTime) / stageManager.secondPerBeat) * dist;
-                transform.position = initialPos + dirVec * defaultSpeed * speed;
+                defaultSpeed= (((float)AudioSettings.dspTime - initialTime) / (stageManager.secondPerBeat * (1 / speed * 2))) * dist;
+                transform.position = initialPos + dirVec * defaultSpeed;
 
                 // if arrive on destroy line, destroy
                 if(transform.position.y < Camera.main.ScreenToWorldPoint(new Vector2(0, -1 * Screen.height)).y)
@@ -81,11 +78,11 @@ public class Note : MonoBehaviour
         // the closer, the higher grade
         dist = Vector3.Distance(transform.position, destination);
 
-        if (dist < perfectRange / GameManager.Instance.noteSpeed) // set 0.5
+        if (dist < perfectRange / GameManager.Instance.crtSpeed) // set 0.5
         {
             return 3;
         }
-        else if(dist <greatRange / GameManager.Instance.noteSpeed) // set 0.85
+        else if(dist <greatRange / GameManager.Instance.crtSpeed) // set 0.85
         {
             return 2;
         }
