@@ -1,0 +1,10 @@
+{
+    "songList" :
+    [
+        {"title" : "Miles", "composer" : "Electronic Boutique", "difficulty" : "5", "bpm" : 130},
+        {"title" : "Syriana", "composer" : "Bexter", "difficulty" : "8", "bpm" : 135},
+        {"title" : "A Lie", "composer" : "Makou", "difficulty" : "3", "bpm" : 95},
+        {"title" : "Good Morning", "composer" : "ND Lee", "difficulty" : "4", "bpm" : 140},
+        {"title" : "Heartbeat", "composer" : "ND Lee", "difficulty" : "6", "bpm" : 120}
+    ]
+}

@@ -62,12 +62,13 @@ public class Note : MonoBehaviour
                 transform.position = initialPos + dirVec * defaultSpeed;
 
                 // if arrive on destroy line, destroy
+                /*
                 if(transform.position.y < Camera.main.ScreenToWorldPoint(new Vector2(0, -1 * Screen.height)).y)
                 {
                     // grading this note MISS
                     stageManager.ShowGrade(0);
                     Exit();
-                }
+                }*/
                 break;
         }
     }

@@ -377,9 +377,12 @@
 "Assets/LitJson/Netstandard15Polyfill.cs"
 "Assets/LitJson/ParserToken.cs"
 "Assets/Scripts/AudioManager.cs"
+"Assets/Scripts/BasicUI.cs"
+"Assets/Scripts/DestroyLine.cs"
 "Assets/Scripts/GameManager.cs"
-"Assets/Scripts/Hit.cs"
 "Assets/Scripts/HitCollider.cs"
+"Assets/Scripts/HitManager.cs"
+"Assets/Scripts/MusicSelecting.cs"
 "Assets/Scripts/Note.cs"
 "Assets/Scripts/NoteData.cs"
 "Assets/Scripts/ObjectPoolManager.cs"
@@ -387,7 +390,6 @@
 "Assets/Scripts/StageManager.cs"
 "Assets/Scripts/TouchArea.cs"
 "Assets/Scripts/UIManager.cs"
-"Assets/Scripts/UIManagerNonPlay.cs"
 "Assets/Scripts/VisualJudgeLine.cs"
 -langversion:9.0
 
