@@ -474,7 +474,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 228.1}
-  m_SizeDelta: {x: 364.27, y: 50}
+  m_SizeDelta: {x: 701.7, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &43155551
 MonoBehaviour:
@@ -498,8 +498,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 0 COMBO !
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0662a17f47d189b4c8ff7b704642b53e, type: 2}
+  m_sharedMaterial: {fileID: -358315143863077757, guid: 0662a17f47d189b4c8ff7b704642b53e, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -530,7 +530,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -850,8 +850,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Score : 0'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0662a17f47d189b4c8ff7b704642b53e, type: 2}
+  m_sharedMaterial: {fileID: -358315143863077757, guid: 0662a17f47d189b4c8ff7b704642b53e, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2827,7 +2827,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioManager: {fileID: 1453549113}
-  uiManager: {fileID: 1980386706}
+  onPlayUI: {fileID: 1980386706}
   Spawners:
   - {fileID: 307758458}
   - {fileID: 161887595}
@@ -4110,6 +4110,7 @@ MonoBehaviour:
   - 0.5
   - 1
   - 2
+  crtSongID: 0
 --- !u!1 &1358928602
 GameObject:
   m_ObjectHideFlags: 0
@@ -4885,7 +4886,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioSource: {fileID: 0}
   stageManager: {fileID: 873557676}
-  uiManager: {fileID: 1980386706}
+  onPlayUI: {fileID: 0}
 --- !u!1 &1517186228
 GameObject:
   m_ObjectHideFlags: 0
@@ -6625,6 +6626,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1980386707}
   - component: {fileID: 1980386706}
+  - component: {fileID: 1980386708}
   m_Layer: 0
   m_Name: UIManager
   m_TagString: Untagged
@@ -6656,11 +6658,6 @@ MonoBehaviour:
   result_scoreText: {fileID: 315413887}
   result_comboText: {fileID: 1843462703}
   result_rankText: {fileID: 199031852}
-  noteSpeed: 0
-  musicVolume: 0
-  noteSpeedText: {fileID: 1561768450}
-  noteSpeedSlider: {fileID: 1800568453}
-  musicVolumeSlider: {fileID: 1442071151}
   stageManager: {fileID: 873557676}
   audioManager: {fileID: 1453549113}
   timerUI: {fileID: 1140311281}
@@ -6679,6 +6676,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1987079801}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1980386708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1980386705}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e67cc78c7a367844967cf71d4921532, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultUI: {fileID: 705157014}
+  optionUI: {fileID: 1542878101}
+  menuUI: {fileID: 324050498}
+  musicVolume: 0
+  noteSpeed: 0
+  noteSpeedText: {fileID: 1561768450}
+  noteSpeedSlider: {fileID: 1800568453}
+  musicVolumeSlider: {fileID: 1442071151}
+  audioManager: {fileID: 0}
 --- !u!1 &1987079800
 GameObject:
   m_ObjectHideFlags: 0

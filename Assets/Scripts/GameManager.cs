@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour
     public int crtSpeed; // 0,1,2 : slider value
     public float[] speeds = {0.5f, 1f, 2f}; // 0.5,1,2 : actual speed = speeds[crtSpeed]
 
+    public int crtSongID;
+
     public static GameManager Instance
     {
         get
@@ -57,6 +59,12 @@ public class GameManager : MonoBehaviour
         float volume = PlayerPrefs.HasKey("musicVolume") ? PlayerPrefs.GetFloat("musicVolume") : -20f;
         audioMixer.SetFloat("Music", volume);
         crtSpeed = PlayerPrefs.HasKey("noteSpeed") ? PlayerPrefs.GetInt("noteSpeed") : 1;
+
+        if (!PlayerPrefs.HasKey("selectedSong"))
+        {
+            PlayerPrefs.SetInt("selectedSong", 0);
+        }
+        crtSongID = PlayerPrefs.GetInt("selectedSong");
     }
 
     public void ReadyToDrawLine()

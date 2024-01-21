@@ -1,10 +1,16 @@
 {
     "songList" :
     [
-        {"title" : "Miles", "composer" : "Electronic Boutique", "difficulty" : "5", "bpm" : 130},
-        {"title" : "Syriana", "composer" : "Bexter", "difficulty" : "8", "bpm" : 135},
-        {"title" : "A Lie", "composer" : "Makou", "difficulty" : "3", "bpm" : 95},
-        {"title" : "Good Morning", "composer" : "ND Lee", "difficulty" : "4", "bpm" : 140},
-        {"title" : "Heartbeat", "composer" : "ND Lee", "difficulty" : "6", "bpm" : 120}
+        { "songID" : 1, "title" : "Miles", "composer" : "Electronic Boutique", "difficulty" : 5, "bpm" : 130},
+        {"songID" : 2, "title" : "Syriana", "composer" : "Bexter", "difficulty" : 8, "bpm" : 135},
+        {"songID" : 3, "title" : "A Lie", "composer" : "Makou", "difficulty" : 3, "bpm" : 95},
+        {"songID" : 4, "title" : "Good Morning", "composer" : "ND Lee", "difficulty" : 4, "bpm" : 140},
+        {"songID" : 5, "title" : "BBIBBOBBIBBO", "composer" : "Kim Teut-dol", "difficulty" : 2, "bpm" : 100},
+        {"songID" : 6, "title" : "Mood Indigo", "composer" : "Cheeze", "difficulty" : 5, "bpm" : 74},
+        {"songID" : 7, "title" : "Kirin", "composer" : "Thornapple", "difficulty" : 9, "bpm" : 118},
+        {"songID" : 8, "title" : "We Go", "composer" : "Fromis_9", "difficulty" : 6, "bpm" : 132},
+        {"songID" : 9, "title" : "Spicy", "composer" : "aespa", "difficulty" : 8, "bpm" : 112},
+        {"songID" : 10, "title" : "WA DA DA", "composer" : "Kep1er", "difficulty" : 10, "bpm" : 140},
+        {"songID" : 11, "title" : "No Pain", "composer" : "SILICA GEL", "difficulty" : 4, "bpm" : 110}
     ]
 }

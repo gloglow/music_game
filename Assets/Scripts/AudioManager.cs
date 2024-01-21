@@ -6,7 +6,7 @@ public class AudioManager : MonoBehaviour
 {
     public AudioSource audioSource;
     public StageManager stageManager;
-    public UIManager uiManager;
+    public OnPlayUI onPlayUI;
 
     private void Awake()
     {

@@ -11,7 +11,7 @@ public class StageManager : MonoBehaviour
 
     // managing a stageUI, music, note.
     [SerializeField] private AudioManager audioManager;
-    [SerializeField] private UIManager uiManager;
+    [SerializeField] private OnPlayUI onPlayUI;
     [SerializeField] private Transform[] Spawners; // positions where notes are activated.
     [SerializeField] private TextMeshProUGUI gradeText; // UI text of grade.
 
@@ -197,7 +197,7 @@ public class StageManager : MonoBehaviour
                 gradeText.text = "Miss";
                 maxCombo = combo;
                 combo = 0;
-                uiManager.updateCombo(combo);
+                onPlayUI.updateCombo(combo);
                 return;
             case 1:
                 gradeText.text = "Bad";
@@ -214,8 +214,8 @@ public class StageManager : MonoBehaviour
         }
         score += grade;
         combo++;
-        uiManager.updateScore(score);
-        uiManager.updateCombo(combo);
+        onPlayUI.updateScore(score);
+        onPlayUI.updateCombo(combo);
     }
 
     private void checkResult()
@@ -229,7 +229,7 @@ public class StageManager : MonoBehaviour
         else if (rate > rankBStandard) rank = 'B';
         else rank = 'C';
 
-        uiManager.ShowResultUI(maxCombo, score, rank);
+        onPlayUI.ShowResultUI(maxCombo, score, rank);
         isPause = true;
     }
 }
