@@ -14,12 +14,11 @@ public class Note : MonoBehaviour
     private float dist; // distance between initial position and destination.
 
     // range of perfect and great grade
-    [SerializeField] private float perfectRange;
-    [SerializeField] private float greatRange;
+    [SerializeField] private float perfectRange, greatRange; // 0.75, 0.83
     public float index;
     private float speed;
 
-    StageManager stageManager;
+    public StageManager stageManager;
     public int status; // 0 : idle, 1 : set destination and speed, 2 : move
 
     private void Update()
@@ -30,7 +29,6 @@ public class Note : MonoBehaviour
                 break;
 
             case 1: // when activated by stage manager
-                stageManager = transform.GetComponentInParent<StageManager>();
                 speed = GameManager.Instance.speeds[GameManager.Instance.crtSpeed];
                 initialPos = transform.position; // initial position (position of spawner)
                 initialTime = (float)AudioSettings.dspTime; // activated timing
@@ -60,15 +58,6 @@ public class Note : MonoBehaviour
                 // moving mechanism is same.
                 defaultSpeed= (((float)AudioSettings.dspTime - initialTime) / (stageManager.secondPerBeat * (1 / speed * 2))) * dist;
                 transform.position = initialPos + dirVec * defaultSpeed;
-
-                // if arrive on destroy line, destroy
-                /*
-                if(transform.position.y < Camera.main.ScreenToWorldPoint(new Vector2(0, -1 * Screen.height)).y)
-                {
-                    // grading this note MISS
-                    stageManager.ShowGrade(0);
-                    Exit();
-                }*/
                 break;
         }
     }

@@ -2169,6 +2169,7 @@ MonoBehaviour:
   stageManager: {fileID: 873557676}
   hitColliders: []
   hitEffects: []
+  judgeLine: {fileID: 951450923}
   touchArea: {fileID: 584533958}
   hitCnt: 4
 --- !u!4 &742536658
@@ -2419,8 +2420,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1980386706}
-        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+      - m_Target: {fileID: 1980386708}
+        m_TargetAssemblyTypeName: BasicUI, Assembly-CSharp
         m_MethodName: MoveScene
         m_Mode: 5
         m_Arguments:
@@ -2522,8 +2523,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1980386706}
-        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+      - m_Target: {fileID: 1980386708}
+        m_TargetAssemblyTypeName: BasicUI, Assembly-CSharp
         m_MethodName: MoveScene
         m_Mode: 5
         m_Arguments:
@@ -2586,7 +2587,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a927692299668964f9b48b5a9a6978a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioManager: {fileID: 1453549113}
   onPlayUI: {fileID: 1980386706}
   Spawners:
   - {fileID: 307758458}
@@ -2864,6 +2864,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   idealScreenSize: {x: 195, y: 90}
   lineRendererPosCnt: 25
+  lineStartPos: {x: 0, y: 0, z: 0}
+  lineEndPos: {x: 0, y: 0, z: 0}
   lineOffset: 2
   stageManager: {fileID: 873557676}
   part: {fileID: 6726594572516832027, guid: f932c804c9f25bf47b27ff6be91a804c, type: 3}
@@ -3183,8 +3185,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1980386706}
-        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+      - m_Target: {fileID: 1980386708}
+        m_TargetAssemblyTypeName: BasicUI, Assembly-CSharp
         m_MethodName: ShowOption
         m_Mode: 1
         m_Arguments:
@@ -3866,12 +3868,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46874879504f8f143bd56da1f934df3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  idealScreenSize: {x: 195, y: 90}
-  lineStartPos: {x: 0, y: 0, z: 0}
-  lineEndPos: {x: 0, y: 0, z: 0}
-  lineRendererPosCnt: 25
-  lineOffset: 2
-  lineRendererPosArr: []
   audioMixer: {fileID: 24100000, guid: 22313d41ee3215540b3205d6f84d8e72, type: 2}
   crtSpeed: 0
   speeds:
@@ -3879,6 +3875,7 @@ MonoBehaviour:
   - 1
   - 2
   crtSongID: 0
+  crtSongTitle: 
 --- !u!1 &1358928602
 GameObject:
   m_ObjectHideFlags: 0
@@ -4653,8 +4650,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioSource: {fileID: 0}
-  stageManager: {fileID: 873557676}
-  onPlayUI: {fileID: 0}
 --- !u!1 &1517186228
 GameObject:
   m_ObjectHideFlags: 0
@@ -6457,12 +6452,11 @@ MonoBehaviour:
   defaultUI: {fileID: 705157014}
   optionUI: {fileID: 1542878101}
   menuUI: {fileID: 324050498}
-  musicVolume: 0
   noteSpeed: 0
+  musicVolume: 0
   noteSpeedText: {fileID: 1561768450}
   noteSpeedSlider: {fileID: 1800568453}
   musicVolumeSlider: {fileID: 1442071151}
-  audioManager: {fileID: 0}
 --- !u!1 &1987079800
 GameObject:
   m_ObjectHideFlags: 0

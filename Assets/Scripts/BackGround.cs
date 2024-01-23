@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class BackGround : MonoBehaviour
 {
+    // moving background image.
+
     [SerializeField] private GameObject image1;
     [SerializeField] private GameObject image2;
+
     void Update()
     {
         MoveBackgroundImages();

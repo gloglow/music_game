@@ -16,6 +16,7 @@ public class HitManager : MonoBehaviour
     [SerializeField] private HitCollider[] hitColliders; // array to manage hit colliders
     [SerializeField] private ParticleSystem[] hitEffects; // array to manage hit effects
 
+    [SerializeField] private JudgeLine judgeLine;
     [SerializeField] private TouchArea touchArea; // available touch area
 
     [SerializeField] private int hitCnt; // the maximum number of available touch. I thought users will play with 2~4 fingers, so I set this variable 4.
@@ -145,7 +146,7 @@ public class HitManager : MonoBehaviour
         // so calculate position of collider and effect to be on the judgeline for them.
 
         // calculate direction vector of ray.
-        Vector3 dirVec = ((GameManager.Instance.lineStartPos + GameManager.Instance.lineEndPos) * 0.5f) - point;
+        Vector3 dirVec = ((judgeLine.lineStartPos + judgeLine.lineEndPos) * 0.5f) - point;
         dirVec = Vector3.Normalize(dirVec);
 
         RaycastHit rayHit;

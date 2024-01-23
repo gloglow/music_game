@@ -10,7 +10,7 @@ public class DestroyLine : MonoBehaviour
         // when collide with note
         if (other.gameObject.layer == 8) // layer of note
         {
-            stageManager.ShowGrade(0); // grade the note.
+            stageManager.ShowGrade(0); // grade the note (miss)
             ObjectPoolManager.Instance.notePool.Release(other.gameObject); // return note back to object pool.
         }
     }

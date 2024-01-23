@@ -9,8 +9,7 @@ public class StageManager : MonoBehaviour
 {
     private string noteDataFilePath = Application.streamingAssetsPath + "/Json/miles.json";
 
-    // managing a stageUI, music, note.
-    [SerializeField] private AudioManager audioManager;
+    // managing a stageUI, note.
     [SerializeField] private OnPlayUI onPlayUI;
     [SerializeField] private Transform[] Spawners; // positions where notes are activated.
     [SerializeField] private TextMeshProUGUI gradeText; // UI text of grade.
@@ -103,11 +102,11 @@ public class StageManager : MonoBehaviour
                 // after first 8 beats, music start.
                 if (beatCnt == musicStartAfterBeats + 1)
                 {
-                    MusicPlay();
+                    AudioManager.Instance.MusicPlay();
                 }
 
                 // there is any note data && current beat == note beat, make note.
-                while (noteList.Count > index && (beatCnt - musicStartAfterBeats + speedLogic) == (int)noteList[index].beat)
+                while (noteList.Count > index && (beatCnt - musicStartAfterBeats + speedLogic + 1) == (int)noteList[index].beat)
                 {
                     float f; // the waiting time of note. (if note is 1/4 note, not wait.)
                     if (noteList[index].beat == (beatCnt - musicStartAfterBeats + speedLogic))// == 0) // 1/4 note.
@@ -126,7 +125,7 @@ public class StageManager : MonoBehaviour
         }
 
         // if there isn't note in noteList, and audio is not playing, show result.
-        if(index == noteList.Count && !audioManager.audioSource.isPlaying)
+        if(index == noteList.Count && !AudioManager.Instance.audioSource.isPlaying)
         {
             checkResult();
         }
@@ -135,7 +134,7 @@ public class StageManager : MonoBehaviour
     public void Pause() // when pause button is pressed in playing time.
     {
         isPause = true;
-        audioManager.MusicPause();
+        AudioManager.Instance.MusicPause();
 
         // record the time when pause button is pressed.
         pauseTimer = (float)AudioSettings.dspTime;
@@ -155,7 +154,7 @@ public class StageManager : MonoBehaviour
 
         // add the time passed during pause to lastBeatTime.
         lastBeatTime += (float)AudioSettings.dspTime - pauseTimer;
-        audioManager.MusicPlay();
+        AudioManager.Instance.MusicPlay();
 
         // reactivate notes.
         int childCnt = transform.childCount;
@@ -174,6 +173,7 @@ public class StageManager : MonoBehaviour
         GameObject obj = ObjectPoolManager.Instance.notePool.Get();
         Note note = obj.GetComponent<Note>();
         note.transform.parent = transform;
+        note.stageManager = this;
 
         // activate note.
         note.status = 1;
@@ -181,11 +181,6 @@ public class StageManager : MonoBehaviour
         note.dirVec = new Vector3(noteList[crtIndex].x, noteList[crtIndex].y, 0);
         crtIndex++;
         if (isPause) note.status = 0;
-    }
-
-    public void MusicPlay()
-    {
-        audioManager.MusicPlay();
     }
 
     public void ShowGrade(int grade)

@@ -2,16 +2,19 @@ using UnityEngine;
 
 public class JudgeLine : MonoBehaviour 
 {
-    private LineRenderer lineRenderer;
+    // draw judge line and destroy line.
+
+    // values for draw line
     [SerializeField] private Vector2 idealScreenSize; // Resolution Reference : Apple iPhone 12
     [SerializeField] private int lineRendererPosCnt;
-    private Vector3 lineStartPos;
-    private Vector3 lineEndPos;
+    public  Vector3 lineStartPos, lineEndPos;
     [SerializeField] private float lineOffset;
+
+    private LineRenderer lineRenderer;
     public StageManager stageManager;
 
     [SerializeField] private GameObject part; // object what actually check note
-    [SerializeField] private GameObject dPart;
+    [SerializeField] private GameObject dPart; // part of destroy line.
     [SerializeField] private float partWidth; // width of object. best is 0.03.
 
     private void Start()
@@ -37,7 +40,7 @@ public class JudgeLine : MonoBehaviour
         // variables for drawing line
         Vector3 stPos, edPos, center;
 
-        // draw parabola with linerenderer and Slerp. 
+        // draw parabola with linerenderer and Slerp. (visual)
         for (int i = 0; i < lineRendererPosCnt; i++)
         {
             stPos = lineStartPos;
@@ -51,7 +54,7 @@ public class JudgeLine : MonoBehaviour
             lineRenderer.SetPosition(i, point);
         }
 
-        Draw();
+        Draw(); // draw real judge line and destroy line.
     }
 
     public void Draw()
@@ -81,7 +84,7 @@ public class JudgeLine : MonoBehaviour
         }
     }
 
-    public Vector3[] GetLinePoints()
+    public Vector3[] GetLinePoints() // get line points for draw toucharea.
     {
         Vector3[] arr = new Vector3[lineRendererPosCnt];
         int tmp = lineRenderer.GetPositions(arr);

@@ -26,27 +26,13 @@ public class OnPlayUI : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI timerUI;
 
-    // use for line rendering.
-    private Vector3[] linePoints;
-    private int lineLength;
-
     // unpause timer
     private int seconds3Timer;
 
     private void Start()
     {
         touchArea.Draw();
-        //realJudgeLine.Draw();
         seconds3Timer = 3;
-        
-        // 
-        GetLineInfo();
-    }
-
-    private void GetLineInfo()
-    {
-        linePoints = GameManager.Instance.lineRendererPosArr;
-        lineLength = linePoints.Length;
     }
 
     public void OpenMenu()

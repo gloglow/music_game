@@ -2,18 +2,21 @@ ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
     - AudioManager
+    - BackGround
+    - BasicUI
     - CFX_AutoDestructShuriken
+    - DestroyLine
     - GameManager
-    - Hit
     - HitCollider
+    - HitManager
+    - JudgeLine
+    - MusicSelecting
     - Note
     - ObjectPoolManager
-    - RealJudgeLine
+    - OnPlayUI
+    - SongList
     - StageManager
     - TouchArea
-    - UIManager
-    - UIManagerNonPlay
-    - VisualJudgeLine
     Unity.PlasticSCM.Editor.dll:
     - Unity.PlasticSCM.Editor.PlasticWindow
     Unity.Rider.Editor.dll:
@@ -82,88 +85,67 @@ ScriptsOnlyBuild:
     - UnityEngine.UI.SpriteState
   methodsToPreserve:
   - assembly: Assembly-CSharp
-    fullTypeName: UIManagerNonPlay
+    fullTypeName: BasicUI
     methodName: ShowOption
   - assembly: Assembly-CSharp
-    fullTypeName: UIManagerNonPlay
+    fullTypeName: BasicUI
     methodName: BackToDefault
   - assembly: Assembly-CSharp
-    fullTypeName: UIManagerNonPlay
-    methodName: BackToDefault
-  - assembly: Assembly-CSharp
-    fullTypeName: UIManagerNonPlay
+    fullTypeName: BasicUI
     methodName: ApplyPref
   - assembly: Assembly-CSharp
-    fullTypeName: UIManagerNonPlay
+    fullTypeName: BasicUI
+    methodName: BackToDefault
+  - assembly: Assembly-CSharp
+    fullTypeName: BasicUI
     methodName: ExitGame
   - assembly: Assembly-CSharp
-    fullTypeName: UIManagerNonPlay
+    fullTypeName: BasicUI
     methodName: MoveScene
   - assembly: Assembly-CSharp
-    fullTypeName: UIManagerNonPlay
-    methodName: VolumeChanged
-  - assembly: Assembly-CSharp
-    fullTypeName: UIManagerNonPlay
-    methodName: SpeedChanged
-  - assembly: Assembly-CSharp
-    fullTypeName: UIManagerNonPlay
+    fullTypeName: BasicUI
     methodName: MoveScene
   - assembly: Assembly-CSharp
-    fullTypeName: UIManagerNonPlay
+    fullTypeName: MusicSelecting
+    methodName: StartPlay
+  - assembly: Assembly-CSharp
+    fullTypeName: BasicUI
     methodName: BackToDefault
   - assembly: Assembly-CSharp
-    fullTypeName: UIManagerNonPlay
+    fullTypeName: BasicUI
     methodName: ApplyPref
   - assembly: Assembly-CSharp
-    fullTypeName: UIManagerNonPlay
-    methodName: SpeedChanged
+    fullTypeName: MusicSelecting
+    methodName: CloseAlertPanel
   - assembly: Assembly-CSharp
-    fullTypeName: UIManagerNonPlay
-    methodName: MoveScene
-  - assembly: Assembly-CSharp
-    fullTypeName: UIManagerNonPlay
-    methodName: VolumeChanged
-  - assembly: Assembly-CSharp
-    fullTypeName: UIManagerNonPlay
+    fullTypeName: BasicUI
     methodName: ShowOption
   - assembly: Assembly-CSharp
-    fullTypeName: UIManagerNonPlay
+    fullTypeName: BasicUI
     methodName: BackToDefault
   - assembly: Assembly-CSharp
-    fullTypeName: UIManager
+    fullTypeName: BasicUI
     methodName: MoveScene
   - assembly: Assembly-CSharp
-    fullTypeName: UIManager
+    fullTypeName: BasicUI
     methodName: MoveScene
   - assembly: Assembly-CSharp
-    fullTypeName: UIManager
-    methodName: MoveScene
-  - assembly: Assembly-CSharp
-    fullTypeName: UIManager
-    methodName: MoveScene
-  - assembly: Assembly-CSharp
-    fullTypeName: UIManager
+    fullTypeName: BasicUI
     methodName: ShowOption
   - assembly: Assembly-CSharp
-    fullTypeName: UIManager
+    fullTypeName: OnPlayUI
     methodName: OpenMenu
   - assembly: Assembly-CSharp
-    fullTypeName: UIManager
-    methodName: VolumeChanged
-  - assembly: Assembly-CSharp
-    fullTypeName: UIManager
+    fullTypeName: OnPlayUI
     methodName: UnPause
   - assembly: Assembly-CSharp
-    fullTypeName: UIManager
+    fullTypeName: OnPlayUI
     methodName: Pause
   - assembly: Assembly-CSharp
     fullTypeName: StageManager
     methodName: Pause
   - assembly: Assembly-CSharp
-    fullTypeName: UIManager
-    methodName: ApplyPref
-  - assembly: Assembly-CSharp
-    fullTypeName: UIManager
+    fullTypeName: OnPlayUI
     methodName: OpenMenu
   sceneClasses:
     Assets/Scenes/MusicSelect.unity:
@@ -175,15 +157,13 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 21
       Script: {instanceID: 0}
-    - Class: 23
-      Script: {instanceID: 0}
     - Class: 28
       Script: {instanceID: 0}
     - Class: 48
       Script: {instanceID: 0}
-    - Class: 64
-      Script: {instanceID: 0}
     - Class: 81
+      Script: {instanceID: 0}
+    - Class: 82
       Script: {instanceID: 0}
     - Class: 89
       Script: {instanceID: 0}
@@ -196,28 +176,32 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 17392}
     - Class: 114
-      Script: {instanceID: 17822}
+      Script: {instanceID: 17824}
     - Class: 114
-      Script: {instanceID: 18044}
+      Script: {instanceID: 17982}
     - Class: 114
-      Script: {instanceID: 18362}
+      Script: {instanceID: 18048}
     - Class: 114
-      Script: {instanceID: 20438}
+      Script: {instanceID: 18366}
     - Class: 114
-      Script: {instanceID: 20508}
+      Script: {instanceID: 19410}
     - Class: 114
-      Script: {instanceID: 21116}
+      Script: {instanceID: 19700}
     - Class: 114
-      Script: {instanceID: 21282}
+      Script: {instanceID: 20444}
     - Class: 114
-      Script: {instanceID: 21640}
+      Script: {instanceID: 20514}
     - Class: 114
-      Script: {instanceID: 21656}
+      Script: {instanceID: 21122}
     - Class: 114
-      Script: {instanceID: 23426}
+      Script: {instanceID: 21288}
+    - Class: 114
+      Script: {instanceID: 21660}
+    - Class: 114
+      Script: {instanceID: 22420}
+    - Class: 114
+      Script: {instanceID: 22756}
     - Class: 115
-      Script: {instanceID: 0}
-    - Class: 120
       Script: {instanceID: 0}
     - Class: 128
       Script: {instanceID: 0}
@@ -270,8 +254,6 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 82
       Script: {instanceID: 0}
-    - Class: 83
-      Script: {instanceID: 0}
     - Class: 89
       Script: {instanceID: 0}
     - Class: 104
@@ -283,43 +265,45 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 17392}
     - Class: 114
-      Script: {instanceID: 17822}
+      Script: {instanceID: 17576}
     - Class: 114
-      Script: {instanceID: 18044}
+      Script: {instanceID: 17824}
     - Class: 114
-      Script: {instanceID: 18362}
+      Script: {instanceID: 18048}
     - Class: 114
-      Script: {instanceID: 18722}
+      Script: {instanceID: 18366}
     - Class: 114
-      Script: {instanceID: 19390}
+      Script: {instanceID: 18726}
     - Class: 114
-      Script: {instanceID: 19696}
+      Script: {instanceID: 19700}
     - Class: 114
-      Script: {instanceID: 19750}
+      Script: {instanceID: 19756}
     - Class: 114
-      Script: {instanceID: 20408}
+      Script: {instanceID: 20414}
     - Class: 114
-      Script: {instanceID: 20438}
+      Script: {instanceID: 20444}
     - Class: 114
-      Script: {instanceID: 20508}
+      Script: {instanceID: 20514}
     - Class: 114
-      Script: {instanceID: 20856}
+      Script: {instanceID: 20862}
     - Class: 114
-      Script: {instanceID: 21116}
+      Script: {instanceID: 21122}
     - Class: 114
-      Script: {instanceID: 21282}
+      Script: {instanceID: 21288}
     - Class: 114
-      Script: {instanceID: 21656}
+      Script: {instanceID: 21660}
     - Class: 114
-      Script: {instanceID: 22450}
+      Script: {instanceID: 22456}
     - Class: 114
-      Script: {instanceID: 22632}
+      Script: {instanceID: 22638}
     - Class: 114
-      Script: {instanceID: 23426}
+      Script: {instanceID: 22756}
     - Class: 114
-      Script: {instanceID: 23476}
+      Script: {instanceID: 23434}
     - Class: 114
-      Script: {instanceID: 23540}
+      Script: {instanceID: 23484}
+    - Class: 114
+      Script: {instanceID: 23548}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 120
@@ -361,19 +345,15 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 21
       Script: {instanceID: 0}
-    - Class: 23
-      Script: {instanceID: 0}
     - Class: 28
       Script: {instanceID: 0}
     - Class: 48
       Script: {instanceID: 0}
     - Class: 49
       Script: {instanceID: 0}
-    - Class: 64
-      Script: {instanceID: 0}
     - Class: 81
       Script: {instanceID: 0}
-    - Class: 83
+    - Class: 82
       Script: {instanceID: 0}
     - Class: 89
       Script: {instanceID: 0}
@@ -388,32 +368,32 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 17392}
     - Class: 114
-      Script: {instanceID: 17822}
+      Script: {instanceID: 17824}
     - Class: 114
-      Script: {instanceID: 18044}
+      Script: {instanceID: 17982}
     - Class: 114
-      Script: {instanceID: 18362}
+      Script: {instanceID: 18048}
     - Class: 114
-      Script: {instanceID: 19446}
+      Script: {instanceID: 18366}
     - Class: 114
-      Script: {instanceID: 19722}
+      Script: {instanceID: 19450}
     - Class: 114
-      Script: {instanceID: 20438}
+      Script: {instanceID: 19700}
     - Class: 114
-      Script: {instanceID: 20508}
+      Script: {instanceID: 19728}
     - Class: 114
-      Script: {instanceID: 21116}
+      Script: {instanceID: 20444}
     - Class: 114
-      Script: {instanceID: 21282}
+      Script: {instanceID: 20514}
     - Class: 114
-      Script: {instanceID: 21640}
+      Script: {instanceID: 21122}
     - Class: 114
-      Script: {instanceID: 21656}
+      Script: {instanceID: 21288}
     - Class: 114
-      Script: {instanceID: 23426}
+      Script: {instanceID: 21660}
+    - Class: 114
+      Script: {instanceID: 22756}
     - Class: 115
-      Script: {instanceID: 0}
-    - Class: 120
       Script: {instanceID: 0}
     - Class: 128
       Script: {instanceID: 0}
@@ -518,7 +498,7 @@ ScriptsOnlyBuild:
     className: UnityOnDropMessageListener
   - hash:
       serializedVersion: 2
-      Hash: c45445ce0b0f2194c738f5d2630a8af3
+      Hash: 4f1a9f4cd24a76d15dbe1332cae9f5a6
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: GameManager
@@ -546,6 +526,12 @@ ScriptsOnlyBuild:
     assemblyName: UnityEngine.UI
     namespaceName: UnityEngine.UI
     className: RawImage
+  - hash:
+      serializedVersion: 2
+      Hash: 44cee0e4789cb87555e6c5821eb7cbe5
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: DestroyLine
   - hash:
       serializedVersion: 2
       Hash: 106fafb7d15ba6b3c5a34a5c48a4a00d
@@ -600,6 +586,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.ProBuilder
     namespaceName: UnityEngine.ProBuilder.Shapes
     className: ProBuilderShape
+  - hash:
+      serializedVersion: 2
+      Hash: 2fe3dc25f9d1515e57645498ee64388c
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: BackGround
   - hash:
       serializedVersion: 2
       Hash: fce9b835d1e8b08e7ecea8da19f21986
@@ -842,16 +834,16 @@ ScriptsOnlyBuild:
     className: PhysicsRaycaster
   - hash:
       serializedVersion: 2
-      Hash: 05a6377020d9baadde412907ec066b80
-    assemblyName: Assembly-CSharp
-    namespaceName: 
-    className: RealJudgeLine
-  - hash:
-      serializedVersion: 2
       Hash: 042785b832afb73fd0585521aa7baf43
     assemblyName: Unity.Timeline
     namespaceName: UnityEngine.Timeline
     className: ControlPlayableAsset
+  - hash:
+      serializedVersion: 2
+      Hash: 388821cce67f4725de9340790aa302a0
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: MusicSelecting
   - hash:
       serializedVersion: 2
       Hash: 1a680d9a08de79b0d2c779e78c9843b4
@@ -884,7 +876,7 @@ ScriptsOnlyBuild:
     className: TMP_SubMeshUI
   - hash:
       serializedVersion: 2
-      Hash: 8cd3b312c5671de94567a7fbfcaf06eb
+      Hash: 8e0bc0e145d1e5da3975e63a35370fb3
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: AudioManager
@@ -998,7 +990,7 @@ ScriptsOnlyBuild:
     className: Toggle
   - hash:
       serializedVersion: 2
-      Hash: 08f37dd7844b0dd7a2d9a356908e335b
+      Hash: 05eb9015bb7f44c719c7c6f20b562078
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: TouchArea
@@ -1070,7 +1062,7 @@ ScriptsOnlyBuild:
     className: Text
   - hash:
       serializedVersion: 2
-      Hash: 23dfa5dd1267bf4aacb1819fe8c993e4
+      Hash: 6d4175b2ec1fe8af3ea3ed8f63eb4691
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: Note
@@ -1122,12 +1114,6 @@ ScriptsOnlyBuild:
     assemblyName: Unity.VisualScripting.Core
     namespaceName: Unity.VisualScripting
     className: UnityOnTriggerStay2DMessageListener
-  - hash:
-      serializedVersion: 2
-      Hash: fa18fd77f0c0f80ad1669da8cdbd5183
-    assemblyName: Assembly-CSharp
-    namespaceName: 
-    className: UIManagerNonPlay
   - hash:
       serializedVersion: 2
       Hash: 9104447b683bf70406fa01f12ecb564a
@@ -1250,16 +1236,22 @@ ScriptsOnlyBuild:
     className: UnityOnPointerDownMessageListener
   - hash:
       serializedVersion: 2
+      Hash: d56078228efeae574731317a8d55ae36
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: SongList
+  - hash:
+      serializedVersion: 2
       Hash: ee34255e3e86289bde9bad5e07b84cbc
     assemblyName: Unity.VisualScripting.Core
     namespaceName: Unity.VisualScripting
     className: UnityOnScrollRectValueChangedMessageListener
   - hash:
       serializedVersion: 2
-      Hash: 3a4891f9e81900aa2929b84b7f391004
+      Hash: 122c7351500a6c0a3bafc4a0f6b87d9d
     assemblyName: Assembly-CSharp
     namespaceName: 
-    className: UIManager
+    className: OnPlayUI
   - hash:
       serializedVersion: 2
       Hash: 830c3b545f6e6ee60a4cebab90516f2c
@@ -1292,10 +1284,16 @@ ScriptsOnlyBuild:
     className: SignalTrack
   - hash:
       serializedVersion: 2
-      Hash: 87525d8968c95386010fed145da9e83e
+      Hash: e11a242635e97a48e3ad1242311fda5a
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: StageManager
+  - hash:
+      serializedVersion: 2
+      Hash: 4ab41c5c2bb945e9e5605543a36a440e
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: BasicUI
   - hash:
       serializedVersion: 2
       Hash: 67272c9c30c50b68ef1ce72ac0191c57
@@ -1358,16 +1356,16 @@ ScriptsOnlyBuild:
     className: TMP_ScrollbarEventHandler
   - hash:
       serializedVersion: 2
-      Hash: 4ffb5eec29dac675b8810180eb03db13
+      Hash: 4b9f9290e867b59c24f137da32e9522a
     assemblyName: Assembly-CSharp
     namespaceName: 
-    className: VisualJudgeLine
+    className: JudgeLine
   - hash:
       serializedVersion: 2
-      Hash: 391a37e78bc6b6e1edea005754c9ed99
+      Hash: 9fb0dc2e427ab2b3b04c28c4d463c641
     assemblyName: Assembly-CSharp
     namespaceName: 
-    className: Hit
+    className: HitManager
   - hash:
       serializedVersion: 2
       Hash: ff76cf6cf52b4db7b95af6ffadca9288

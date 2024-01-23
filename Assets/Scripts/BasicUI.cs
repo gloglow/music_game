@@ -2,55 +2,57 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using UnityEditor;
 
 public class BasicUI : MonoBehaviour
 {
+    // UI set.
     [SerializeField] private GameObject defaultUI;
     [SerializeField] private GameObject optionUI;
     [SerializeField] private GameObject menuUI;
 
-    [SerializeField] private float musicVolume;
-    [SerializeField] private float noteSpeed;
+    // Option value
+    [SerializeField] private float noteSpeed, musicVolume;
     [SerializeField] private TextMeshProUGUI noteSpeedText;
-    [SerializeField] private Slider noteSpeedSlider;
-    [SerializeField] private Slider musicVolumeSlider;
-
-    [SerializeField] private AudioManager audioManager;
+    [SerializeField] private Slider noteSpeedSlider, musicVolumeSlider;
 
     private void Start()
     {
-        InitializeUserPref();
+        // Load user preference
+        LoadUserPref();
+
+        if(SceneManager.GetActiveScene().name == "PlayScene")
+        {
+            noteSpeedSlider.enabled = false;
+        }
         noteSpeedSlider.onValueChanged.AddListener(SpeedChanged);
         musicVolumeSlider.onValueChanged.AddListener(VolumeChanged);
     }
 
-    private void InitializeUserPref()
+    private void LoadUserPref()
     {
+        // if there is player data, set ui value.
         musicVolumeSlider.value = PlayerPrefs.HasKey("musicVolume") ? PlayerPrefs.GetFloat("musicVolume") : -20f;
         musicVolume = musicVolumeSlider.value;
+
         noteSpeedSlider.value = PlayerPrefs.HasKey("noteSpeed") ? PlayerPrefs.GetInt("noteSpeed") : 1;
         noteSpeed = noteSpeedSlider.value;
         noteSpeedText.text = GameManager.Instance.speeds[(int)noteSpeedSlider.value].ToString();
     }
 
-    public void ShowOption()
+    public void ShowOption() // When option btn pressed
     {
         defaultUI.SetActive(false);
-        menuUI.SetActive(false);
         optionUI.SetActive(true);
+        if(SceneManager.GetActiveScene().name == "PlayScene")
+            menuUI.SetActive(false);
     }
 
-    public void BackToDefault()
+    public void BackToDefault() // When back btn pressed
     {
         defaultUI.SetActive(true);
-        menuUI.SetActive(false);
         optionUI.SetActive(false);
-    }
-
-    public void MoveScene(string sceneName)
-    {
-        SceneManager.LoadScene(sceneName);
+        if (SceneManager.GetActiveScene().name == "PlayScene")
+            menuUI.SetActive(false);
     }
 
     public void ExitGame()
@@ -58,24 +60,14 @@ public class BasicUI : MonoBehaviour
         Application.Quit();
     }
 
+    public void MoveScene(string sceneName)
+    {
+        GameManager.Instance.MoveScene(sceneName);
+    }
+    
     public void VolumeChanged(float value)
     {
         musicVolume = musicVolumeSlider.value;
-    }
-
-    public float SpeedToActualSpeed(float value)
-    {
-        switch (value)
-        {
-            case 0:
-                return 0.5f;
-            case 1:
-                return 1f;
-            case 2:
-                return 2f;
-            default:
-                return 1f;
-        }
     }
 
     public void SpeedChanged(float value)

@@ -8,32 +8,36 @@ using UnityEngine.SceneManagement;
 
 public class MusicSelecting : MonoBehaviour
 {
-    private string songDataFilePath = Application.streamingAssetsPath + "/Json/songList.json";
+    // music select scene UI.
 
+    private string songDataFilePath = Application.streamingAssetsPath + "/Json/songList.json"; // song list json file.
+
+    public List<SongData> songDataList = new List<SongData>();
+
+    [SerializeField] private int songListLength; // the number of song object to display. 10 is best.
+    [SerializeField] private GameObject songList; // parent of song object.
+
+    // UI.
     [SerializeField] private GameObject prefab_song;
-    [SerializeField] private int songListLength;
-    [SerializeField] private GameObject songList;
-
     [SerializeField] private TextMeshProUGUI titleText;
     [SerializeField] private TextMeshProUGUI composerText;
     [SerializeField] private TextMeshProUGUI difficultyText;
     [SerializeField] private GameObject unablePlayAlert;
     [SerializeField] private GameObject pointer;
 
-    public int head;
-    public int tail;
-
-    public List<SongData> songDataList = new List<SongData>();
+    // song index value for display.
+    public int head, tail;
     
     private void Start()
     {
-        LoadSongData();
-        MakeSongList();
-        ShowSongInfo(GameManager.Instance.crtSongID);
+        LoadSongData(); // load data from json file.
+        MakeSongList(); // make song objects.
+        ShowSongInfo(GameManager.Instance.crtSongID); // (left) show song info.
     }
 
     private void Update()
     {
+        // pointer UI.
         if (Input.GetMouseButton(0))
         {
             pointer.transform.Rotate(new Vector3(0, 0, -2f));
@@ -65,7 +69,10 @@ public class MusicSelecting : MonoBehaviour
 
     private void MakeSongList()
     {
+        // load the song player last played.
         int centerID = PlayerPrefs.GetInt("selectedSong");
+
+        // make song objects.
         for (int i = 0; i < songListLength; i++)
         {
             GameObject obj = Instantiate(prefab_song, songList.transform);
@@ -73,6 +80,8 @@ public class MusicSelecting : MonoBehaviour
             
             SongList song = obj.GetComponent<SongList>();
             song.musicSelecting = this;
+            song.songCnt = songDataList.Count;
+
             int tmpID = centerID - songListLength / 2 + i;
             if(tmpID < 0)
             {
@@ -96,6 +105,7 @@ public class MusicSelecting : MonoBehaviour
 
     public void IndexCalculating(SongList song, bool isTop)
     {
+        // when song object moved out of range
         int tmpID;
         if(isTop)
         {
@@ -129,6 +139,8 @@ public class MusicSelecting : MonoBehaviour
     public void ShowSongInfo(int index)
     {
         titleText.text = songDataList[index].title;
+        GameManager.Instance.crtSongTitle = songDataList[index].title;
+        StartCoroutine(AudioManager.Instance.ChangeMusic(songDataList[index].title));
         composerText.text = "- Composer\n" + songDataList[index].composer;
         string str = "- Difficulty\n";
         for(int i = 0; i< songDataList[index].difficulty; i++) 
@@ -138,11 +150,11 @@ public class MusicSelecting : MonoBehaviour
         difficultyText.text = str;
     }
 
-    public void StartPlay()
+    public void StartPlay(string str)
     {
         if(GameManager.Instance.crtSongID == 0)
         {
-            SceneManager.LoadScene("PlayScene");
+            GameManager.Instance.MoveScene(str);
         }
         else
         {

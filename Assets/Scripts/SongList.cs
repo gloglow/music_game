@@ -8,6 +8,7 @@ public class SongList : MonoBehaviour
 {
     public TextMeshProUGUI titleText;
     public int songID;
+    public int songCnt;
     private Vector3 mousePosition;
     [SerializeField] private float mouseOffset;
     private float songListHeight = 1250f;
@@ -21,6 +22,7 @@ public class SongList : MonoBehaviour
         }
         if (Input.GetMouseButton(0))
         {
+            // drag -> move song list
             float ypos = (mousePosition.y - Input.mousePosition.y) * mouseOffset;
             transform.position -= new Vector3(0, ypos, 0);
             if (Mathf.Abs(transform.localPosition.y) < 100 && GameManager.Instance.crtSongID != songID)
@@ -31,8 +33,8 @@ public class SongList : MonoBehaviour
         }
         if (Input.GetMouseButtonUp(0))
         {
-            Vector3 tmp = transform.localPosition;
-            transform.localPosition = new Vector3(tmp.x, 250f * Mathf.RoundToInt(tmp.y / 250f), tmp.z);
+            Vector3 tmpPos = transform.localPosition;
+            transform.localPosition = new Vector3(tmpPos.x, 250f * Mathf.RoundToInt(tmpPos.y / 250f), tmpPos.z);
         }
 
         Vector3 crtLocalPos = transform.localPosition;
@@ -41,12 +43,12 @@ public class SongList : MonoBehaviour
             transform.localPosition = new Vector3(crtLocalPos.x, -songListHeight, crtLocalPos.z);
             musicSelecting.IndexCalculating(this, false);
         }
-        if (transform.localPosition.y < -songListHeight)
+        else if (transform.localPosition.y < -songListHeight)
         {
             transform.localPosition = new Vector3(crtLocalPos.x, songListHeight, crtLocalPos.z);
             musicSelecting.IndexCalculating(this, true);
         }
-        if (transform.localPosition.y <= 250f && transform.localPosition.y >= -250f)
+        else if (transform.localPosition.y <= 250f && transform.localPosition.y >= -250f)
         {
             float tmp = 1.2f - ((float)Mathf.Abs(transform.localPosition.y) / 1250f);
             transform.localScale = new Vector3(tmp, tmp, tmp);
