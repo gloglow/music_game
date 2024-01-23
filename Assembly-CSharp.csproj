@@ -67,7 +67,6 @@
     <Compile Include="Assets\Scripts\ObjectPoolManager.cs" />
     <Compile Include="Assets\LitJson\JsonMockWrapper.cs" />
     <Compile Include="Assets\Scripts\SongData.cs" />
-    <Compile Include="Assets\Scripts\VisualJudgeLine.cs" />
     <Compile Include="Assets\LitJson\Lexer.cs" />
     <Compile Include="Assets\JMO Assets\Cartoon FX (legacy)\Scripts\CFX_LightIntensityFade.cs" />
     <Compile Include="Assets\LitJson\JsonException.cs" />
@@ -79,7 +78,6 @@
     <Compile Include="Assets\Scripts\BackGround.cs" />
     <Compile Include="Assets\Scripts\HitManager.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
-    <Compile Include="Assets\Scripts\RealJudgeLine.cs" />
     <Compile Include="Assets\LitJson\JsonData.cs" />
     <Compile Include="Assets\Scripts\Note.cs" />
     <Compile Include="Assets\Scripts\MusicSelecting.cs" />
@@ -89,6 +87,7 @@
     <Compile Include="Assets\Scripts\TouchArea.cs" />
     <Compile Include="Assets\LitJson\JsonReader.cs" />
     <Compile Include="Assets\Scripts\BasicUI.cs" />
+    <Compile Include="Assets\Scripts\JudgeLine.cs" />
     <Compile Include="Assets\LitJson\JsonWriter.cs" />
     <Compile Include="Assets\Scripts\NoteData.cs" />
     <Compile Include="Assets\Scripts\SongList.cs" />

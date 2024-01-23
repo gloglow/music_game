@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class TouchArea : MonoBehaviour
 {
+    [SerializeField] private JudgeLine judgeLine;
     private LineRenderer lineRenderer;
     private MeshCollider meshCollider; // to sense input(mouse or touch)
 
@@ -13,11 +14,11 @@ public class TouchArea : MonoBehaviour
 
     public void Draw()
     {
-        Vector3[] lineArr = GameManager.Instance.lineRendererPosArr;
+        Vector3[] points = judgeLine.GetLinePoints();
         // draw line with points.
-        for (int i = 0; i < lineArr.Length; i++)
+        for (int i = 0; i < points.Length; i++)
         {
-            lineRenderer.SetPosition(i, lineArr[i]);
+            lineRenderer.SetPosition(i, points[i]);
         }
 
         // make mesh collider to sense input(ray from mouse or touch)

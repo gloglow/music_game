@@ -7,9 +7,11 @@ public class DestroyLine : MonoBehaviour
     public StageManager stageManager;
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.layer == 8)
+        // when collide with note
+        if (other.gameObject.layer == 8) // layer of note
         {
-
+            stageManager.ShowGrade(0); // grade the note.
+            ObjectPoolManager.Instance.notePool.Release(other.gameObject); // return note back to object pool.
         }
     }
 }

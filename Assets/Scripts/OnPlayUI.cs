@@ -5,9 +5,8 @@ using UnityEngine;
 public class OnPlayUI : MonoBehaviour
 {
     // objects using line renderer
-    [SerializeField] private VisualJudgeLine visualJudgeLine;
+    [SerializeField] private JudgeLine visualJudgeLine;
     [SerializeField] private TouchArea touchArea;
-    [SerializeField] private RealJudgeLine realJudgeLine;
 
     // ui set.
     [SerializeField] private GameObject defaultUI;
@@ -37,7 +36,7 @@ public class OnPlayUI : MonoBehaviour
     private void Start()
     {
         touchArea.Draw();
-        realJudgeLine.Draw();
+        //realJudgeLine.Draw();
         seconds3Timer = 3;
         
         // 

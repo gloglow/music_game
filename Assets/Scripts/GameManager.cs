@@ -49,8 +49,6 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         LoadPlayerData();
-        ReadyToDrawLine();
-        GetLinePoint();
     }
 
     private void LoadPlayerData()

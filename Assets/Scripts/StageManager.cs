@@ -41,7 +41,7 @@ public class StageManager : MonoBehaviour
     private int maxCombo;
 
     // standards of grading.
-    [SerializeField] private int perfectScore, greatScore, badScore;
+    [SerializeField] private int perfectScore, greatScore, badScore, missScore;
     [SerializeField] private int rankSStandard, rankAStandard, rankBStandard;
 
     private void Start()
@@ -198,6 +198,7 @@ public class StageManager : MonoBehaviour
                 maxCombo = combo;
                 combo = 0;
                 onPlayUI.updateCombo(combo);
+                grade = missScore;
                 return;
             case 1:
                 gradeText.text = "Bad";
