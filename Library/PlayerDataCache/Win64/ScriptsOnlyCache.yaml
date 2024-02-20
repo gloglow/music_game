@@ -6,6 +6,7 @@ ScriptsOnlyBuild:
     - BasicUI
     - CFX_AutoDestructShuriken
     - DestroyLine
+    - EditorManager
     - GameManager
     - HitCollider
     - HitManager
@@ -147,7 +148,144 @@ ScriptsOnlyBuild:
   - assembly: Assembly-CSharp
     fullTypeName: OnPlayUI
     methodName: OpenMenu
+  - assembly: Assembly-CSharp
+    fullTypeName: BasicUI
+    methodName: MoveScene
+  - assembly: Assembly-CSharp
+    fullTypeName: BasicUI
+    methodName: MoveScene
+  - assembly: Assembly-CSharp
+    fullTypeName: BasicUI
+    methodName: ShowOption
+  - assembly: Assembly-CSharp
+    fullTypeName: OnPlayUI
+    methodName: OpenMenu
+  - assembly: Assembly-CSharp
+    fullTypeName: OnPlayUI
+    methodName: UnPause
+  - assembly: Assembly-CSharp
+    fullTypeName: OnPlayUI
+    methodName: Pause
+  - assembly: Assembly-CSharp
+    fullTypeName: StageManager
+    methodName: Pause
+  - assembly: Assembly-CSharp
+    fullTypeName: OnPlayUI
+    methodName: OpenMenu
   sceneClasses:
+    Assets/Scenes/Editor.unity:
+    - Class: 1
+      Script: {instanceID: 0}
+    - Class: 4
+      Script: {instanceID: 0}
+    - Class: 20
+      Script: {instanceID: 0}
+    - Class: 21
+      Script: {instanceID: 0}
+    - Class: 23
+      Script: {instanceID: 0}
+    - Class: 28
+      Script: {instanceID: 0}
+    - Class: 33
+      Script: {instanceID: 0}
+    - Class: 43
+      Script: {instanceID: 0}
+    - Class: 48
+      Script: {instanceID: 0}
+    - Class: 54
+      Script: {instanceID: 0}
+    - Class: 64
+      Script: {instanceID: 0}
+    - Class: 65
+      Script: {instanceID: 0}
+    - Class: 81
+      Script: {instanceID: 0}
+    - Class: 82
+      Script: {instanceID: 0}
+    - Class: 89
+      Script: {instanceID: 0}
+    - Class: 104
+      Script: {instanceID: 0}
+    - Class: 108
+      Script: {instanceID: 0}
+    - Class: 114
+      Script: {instanceID: 16726}
+    - Class: 114
+      Script: {instanceID: 17392}
+    - Class: 114
+      Script: {instanceID: 17576}
+    - Class: 114
+      Script: {instanceID: 17824}
+    - Class: 114
+      Script: {instanceID: 18048}
+    - Class: 114
+      Script: {instanceID: 18366}
+    - Class: 114
+      Script: {instanceID: 18726}
+    - Class: 114
+      Script: {instanceID: 19700}
+    - Class: 114
+      Script: {instanceID: 19756}
+    - Class: 114
+      Script: {instanceID: 20414}
+    - Class: 114
+      Script: {instanceID: 20444}
+    - Class: 114
+      Script: {instanceID: 20514}
+    - Class: 114
+      Script: {instanceID: 20862}
+    - Class: 114
+      Script: {instanceID: 21122}
+    - Class: 114
+      Script: {instanceID: 21288}
+    - Class: 114
+      Script: {instanceID: 21660}
+    - Class: 114
+      Script: {instanceID: 22456}
+    - Class: 114
+      Script: {instanceID: 22638}
+    - Class: 114
+      Script: {instanceID: 22756}
+    - Class: 114
+      Script: {instanceID: 23434}
+    - Class: 114
+      Script: {instanceID: 23484}
+    - Class: 114
+      Script: {instanceID: 23548}
+    - Class: 114
+      Script: {instanceID: 25290}
+    - Class: 115
+      Script: {instanceID: 0}
+    - Class: 120
+      Script: {instanceID: 0}
+    - Class: 128
+      Script: {instanceID: 0}
+    - Class: 135
+      Script: {instanceID: 0}
+    - Class: 157
+      Script: {instanceID: 0}
+    - Class: 196
+      Script: {instanceID: 0}
+    - Class: 198
+      Script: {instanceID: 0}
+    - Class: 199
+      Script: {instanceID: 0}
+    - Class: 212
+      Script: {instanceID: 0}
+    - Class: 213
+      Script: {instanceID: 0}
+    - Class: 222
+      Script: {instanceID: 0}
+    - Class: 223
+      Script: {instanceID: 0}
+    - Class: 224
+      Script: {instanceID: 0}
+    - Class: 241
+      Script: {instanceID: 0}
+    - Class: 243
+      Script: {instanceID: 0}
+    - Class: 245
+      Script: {instanceID: 0}
     Assets/Scenes/MusicSelect.unity:
     - Class: 1
       Script: {instanceID: 0}
@@ -1408,9 +1546,16 @@ ScriptsOnlyBuild:
     assemblyName: Unity.VisualScripting.Core
     namespaceName: Unity.VisualScripting
     className: UnityOnSliderValueChangedMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 7dc9e1f6b4875aa61e3e7e6c1f9a765e
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: EditorManager
   platform: 19
   scenePathNames:
   - Assets/Scenes/Title.unity
   - Assets/Scenes/MusicSelect.unity
   - Assets/Scenes/PlayScene.unity
+  - Assets/Scenes/Editor.unity
   playerPath: "C:/Users/db_98/OneDrive/\uBC14\uD0D5 \uD654\uBA74/\uC0C8 \uD3F4\uB354/music_game.exe"

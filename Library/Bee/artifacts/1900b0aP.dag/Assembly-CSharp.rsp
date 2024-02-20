@@ -326,6 +326,7 @@
 "Assets/Scripts/BackGround.cs"
 "Assets/Scripts/BasicUI.cs"
 "Assets/Scripts/DestroyLine.cs"
+"Assets/Scripts/EditorManager.cs"
 "Assets/Scripts/GameManager.cs"
 "Assets/Scripts/HitCollider.cs"
 "Assets/Scripts/HitManager.cs"

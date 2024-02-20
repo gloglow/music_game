@@ -5,13 +5,14 @@ public class JudgeLine : MonoBehaviour
     // draw judge line and destroy line.
 
     // values for draw line
-    [SerializeField] private Vector2 idealScreenSize; // Resolution Reference : Apple iPhone 12
+    [SerializeField] private Vector2 idealScreenSize; // Resolution Reference : 1920 x 1080.
     [SerializeField] private int lineRendererPosCnt;
     public  Vector3 lineStartPos, lineEndPos;
     [SerializeField] private float lineOffset;
 
     private LineRenderer lineRenderer;
     public StageManager stageManager;
+    public CameraResolution cameraResolution;
 
     [SerializeField] private GameObject part; // object what actually check note
     [SerializeField] private GameObject dPart; // part of destroy line.
@@ -27,10 +28,21 @@ public class JudgeLine : MonoBehaviour
 
     private void ReadyToDrawLine()
     {
+        Vector2 lineScreenStartPos;
+        float screenResolution = 16f / 9f;
+        float lineHeightPos = 0.8f;
+        if (cameraResolution.scaleHeight < 1) // wide height
+        {
+            lineScreenStartPos = new Vector2(0, Screen.height * 0.5f + Screen.width * (1 / screenResolution) * 0.5f * lineHeightPos);
+        }
+        else // wide width
+        {
+            float tmp = Screen.height * screenResolution * 0.5f;
+            lineScreenStartPos = new Vector2(Screen.width * 0.5f + tmp, Screen.height * lineHeightPos);
+        }
         // To make ideal line for every resolution
-        float idealLinePoint = Screen.width * idealScreenSize.y / idealScreenSize.x;
-        lineStartPos = Camera.main.ScreenToWorldPoint(new Vector2(0, idealLinePoint));
-        lineEndPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, idealLinePoint));
+        lineStartPos = Camera.main.ScreenToWorldPoint(lineScreenStartPos);
+        lineEndPos = new Vector3(lineStartPos.x * (-1), lineStartPos.y);
         lineStartPos.z = 0;
         lineEndPos.z = 0;
     }

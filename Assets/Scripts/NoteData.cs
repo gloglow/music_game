@@ -5,8 +5,9 @@ using UnityEngine;
 [System.Serializable]
 public class NoteData
 {
-    public int spawnPoint;
+    public float xPos;
+    public int bar;
     public float beat;
-    public float x;
-    public float y;
+    public float unitVecX;
+    public float unitVecY;
 }

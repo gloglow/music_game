@@ -11,7 +11,7 @@ public class StageManager : MonoBehaviour
 
     // managing a stageUI, note.
     [SerializeField] private OnPlayUI onPlayUI;
-    [SerializeField] private Transform[] Spawners; // positions where notes are activated.
+    [SerializeField] private float spawnYPos; // positionY where notes are activated.
     [SerializeField] private TextMeshProUGUI gradeText; // UI text of grade.
 
     [SerializeField] private float bpm; // music bpm.
@@ -74,16 +74,15 @@ public class StageManager : MonoBehaviour
         {
             var noteDataFile = File.ReadAllText(noteDataFilePath);
             JsonData noteD = JsonMapper.ToObject(noteDataFile.ToString());
-            title = noteD[0].ToString();
-            composer = noteD[1].ToString();
-            for (int i = 0; i < int.Parse(noteD[2].ToString()); i++)
+            for (int i = 0; i < noteD.Count; i++)
             {
                 // load notedata and add in notedata list.
                 NoteData noteData = new NoteData();
-                noteData.spawnPoint = int.Parse(noteD[3][i]["point"].ToString());
-                noteData.beat = float.Parse(noteD[3][i]["beat"].ToString());
-                noteData.x = float.Parse(noteD[3][i]["x"].ToString());
-                noteData.y = float.Parse(noteD[3][i]["y"].ToString());
+                noteData.xPos = float.Parse(noteD[i]["xPos"].ToString());
+                noteData.bar = int.Parse(noteD[i]["bar"].ToString());
+                noteData.beat = float.Parse(noteD[i]["beat"].ToString());
+                noteData.unitVecX = float.Parse(noteD[i]["unitVecX"].ToString());
+                noteData.unitVecY = float.Parse(noteD[i]["unitVecY"].ToString());
                 noteList.Add(noteData);
             }
         }
@@ -109,7 +108,7 @@ public class StageManager : MonoBehaviour
                 while (noteList.Count > index && (beatCnt - musicStartAfterBeats + speedLogic + 1) == (int)noteList[index].beat)
                 {
                     float f; // the waiting time of note. (if note is 1/4 note, not wait.)
-                    if (noteList[index].beat == (beatCnt - musicStartAfterBeats + speedLogic))// == 0) // 1/4 note.
+                    if (noteList[index].beat == (beatCnt - musicStartAfterBeats + speedLogic)) // 1/4 note.
                     {
                         f = 0;
                     }
@@ -177,8 +176,8 @@ public class StageManager : MonoBehaviour
 
         // activate note.
         note.status = 1;
-        note.transform.position = Spawners[noteList[crtIndex].spawnPoint].transform.position;
-        note.dirVec = new Vector3(noteList[crtIndex].x, noteList[crtIndex].y, 0);
+        note.transform.position = new Vector3(noteList[crtIndex].xPos, spawnYPos, 0);
+        note.dirVec = new Vector3(noteList[crtIndex].unitVecX, noteList[crtIndex].unitVecY, 0);
         crtIndex++;
         if (isPause) note.status = 0;
     }

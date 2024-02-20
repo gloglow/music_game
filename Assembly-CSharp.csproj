@@ -75,6 +75,7 @@
     <Compile Include="Assets\LitJson\JsonMapper.cs" />
     <Compile Include="Assets\LitJson\ParserToken.cs" />
     <Compile Include="Assets\JMO Assets\Cartoon FX (legacy)\Scripts\CFX_LightFlicker.cs" />
+    <Compile Include="Assets\Scripts\EditorJudgeLine.cs" />
     <Compile Include="Assets\Scripts\BackGround.cs" />
     <Compile Include="Assets\Scripts\HitManager.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="Assets\Scripts\StageManager.cs" />
     <Compile Include="Assets\Scripts\TouchArea.cs" />
     <Compile Include="Assets\LitJson\JsonReader.cs" />
+    <Compile Include="Assets\Scripts\CameraResolution.cs" />
     <Compile Include="Assets\Scripts\BasicUI.cs" />
     <Compile Include="Assets\Scripts\JudgeLine.cs" />
     <Compile Include="Assets\LitJson\JsonWriter.cs" />
