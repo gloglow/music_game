@@ -1,17 +1,17 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class DestroyLine : MonoBehaviour
 {
     public StageManager stageManager;
+    [SerializeField] private ObjectPoolManager poolManager;
     private void OnTriggerEnter(Collider other)
     {
-        // when collide with note
-        if (other.gameObject.layer == 8) // layer of note
+        if (other.gameObject.layer == 8) // ノーツのレイヤー
         {
-            stageManager.ShowGrade(0); // grade the note (miss)
-            ObjectPoolManager.Instance.notePool.Release(other.gameObject); // return note back to object pool.
+            stageManager.ShowGrade(0); // failで判定
+            poolManager.notePool.Release(other.gameObject); // ノーツを解除
         }
     }
 }

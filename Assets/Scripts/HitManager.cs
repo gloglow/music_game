@@ -1,32 +1,96 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class HitManager : MonoBehaviour
 {
-    // Managing input. -> check whether input was in available area or not, and manage colliders and effects.
+    // インプットを管理：インプットがtouch area内で行われたかを確認し、コライダーとエフェクターを管理
 
-    [SerializeField] private GameObject prefab_hitCollider; // prefab of hit collider
-    [SerializeField] private ParticleSystem prefab_hitEffect; // prefab of hit effect
+    [SerializeField] private GameObject prefab_hitCollider;
+    [SerializeField] private ParticleSystem prefab_hitEffect;
 
     [SerializeField] private StageManager stageManager;
 
-    [SerializeField] private HitCollider[] hitColliders; // array to manage hit colliders
-    [SerializeField] private ParticleSystem[] hitEffects; // array to manage hit effects
+    [SerializeField] private HitCollider[] hitColliders;
+    [SerializeField] private ParticleSystem[] hitEffects;
 
     [SerializeField] private JudgeLine judgeLine;
-    [SerializeField] private TouchArea touchArea; // available touch area
+    [SerializeField] private TouchArea touchArea;
 
-    [SerializeField] private int hitCnt; // the maximum number of available touch. I thought users will play with 2~4 fingers, so I set this variable 4.
+    [SerializeField] private int hitCnt; // インプットの最大数。プレイの際、ユーザは2~4個の指を使うため、4で設定。
 
     private void Start()
     {
         hitColliders = new HitCollider[hitCnt];
         hitEffects = new ParticleSystem[hitCnt];
 
-        // instantiate hit colliders and effects. and set their array.
+        MakeHitCollidersAndEffects();
+    }
+
+    private void Update()
+    {
+        if (!stageManager.isPause)
+        {
+            // PC. 
+            if (Input.GetMouseButtonDown(0))
+            {
+                // マウスクリックがあれば、そのインプットがtouch area内で行われたか確認
+                Vector3 point = isinTouchArea(Input.mousePosition);
+
+                if (point != new Vector3(999, 999, 999))
+                {
+                    // touch area内ならば、その位置を判定線上の位置に変換
+                    point = DecideHitPos(point);
+                }
+
+                // マウスクリックは同時に一つの位置でだけ行われるため、一つのhitを発生。
+                ActivateHit(0, point);
+            }
+
+            if (Input.GetMouseButtonUp(0))
+            {
+                // マウスクリックが終わればコライダーを非活性化
+                hitColliders[0].gameObject.SetActive(false);
+            }
+
+            //　モバイル
+            if (Input.touchCount > 0)
+            {
+                // モバイルではインプットが同時に一つ以上の位置で行われる。
+                for (int i = 0; i < Input.touchCount; i++)
+                {
+                    Touch tmpTouch = Input.GetTouch(i);
+                    Vector3 point = isinTouchArea(tmpTouch);
+
+                    if (point != new Vector3(999, 999, 999))
+                    {
+                        point = DecideHitPos(point);
+                    }
+
+                    //　タッチが始めればhitを発生。
+                    if (tmpTouch.phase == TouchPhase.Began)
+                    {
+                        ActivateHit(i, point);
+                    }
+                    // タッチ中、hitを移動させる
+                    else if (tmpTouch.phase == TouchPhase.Moved || tmpTouch.phase == TouchPhase.Stationary)
+                    {
+                        hitColliders[i].transform.position = point;
+                    }
+                    // タッチが終わればコライダーを非活性化
+                    else
+                    {
+                        hitColliders[i].gameObject.SetActive(false);
+                    }
+                }
+            }
+        }
+        
+    }
+
+    private void MakeHitCollidersAndEffects()
+    {
         for (int i = 0; i < hitCnt; i++)
         {
             HitCollider hitCollider = Instantiate(prefab_hitCollider).GetComponent<HitCollider>();
@@ -45,87 +109,26 @@ public class HitManager : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        if (!stageManager.isPause)
-        {
-            // PC. 
-            if (Input.GetMouseButtonDown(0))
-            {
-                // if there was mouse input, check whether input is in toucharea.
-                Vector3 point = isinTouchArea(Input.mousePosition);
-
-                if (point != new Vector3(999, 999, 999))
-                {
-                    // if input is in toucharea, calculate position where collider and effect will be made.
-                    point = DecideColliderPos(point);
-                }
-
-                // PC only use mouse click so only need one collider and one effect.
-                ActivateHit(0, point);
-            }
-
-            if (Input.GetMouseButtonUp(0))
-            {
-                // when mouseclick ended, hit collider off.
-                hitColliders[0].gameObject.SetActive(false);
-            }
-
-            // Mobile.
-            if (Input.touchCount > 0)
-            {
-                // there can be one touch or multiple touches.
-                for (int i = 0; i < Input.touchCount; i++)
-                {
-                    Touch tmpTouch = Input.GetTouch(i);
-                    Vector3 point = isinTouchArea(tmpTouch);
-
-                    if (point != new Vector3(999, 999, 999))
-                    {
-                        point = DecideColliderPos(point);
-                    }
-
-                    // when start touch, make collider and effect.
-                    if (tmpTouch.phase == TouchPhase.Began)
-                    {
-                        ActivateHit(i, point);
-                    }
-                    // during touching, move collider to touch position.
-                    else if (tmpTouch.phase == TouchPhase.Moved || tmpTouch.phase == TouchPhase.Stationary)
-                    {
-                        hitColliders[i].transform.position = point;
-                    }
-                    // when end touch, hit collider off.
-                    else
-                    {
-                        hitColliders[i].gameObject.SetActive(false);
-                    }
-                }
-            }
-        }
-        
-    }
-
     private Vector3 isinTouchArea(Vector3 mousepos)
     {
-        // check whether input is in available touch area or not.
+        // インプットがtouch area内で行われたかを確認
 
         Ray ray = Camera.main.ScreenPointToRay(mousepos);
         RaycastHit rayHit;
-        int layerMask = (1 << 9); // toucharea layer
+        int layerMask = (1 << 9); // touch areaのレイヤー
         if (Physics.Raycast(ray, out rayHit, Mathf.Infinity, layerMask))
         {
-            // if input is in toucharea, return the point.
+            // touch area内なら、その位置を返還
             return rayHit.point;
         }
         else 
         { 
-            // else, return meaningless vector.
+            // じゃなければ意味のないベクトルを返還
             return new Vector3(999, 999, 999); 
         }
     }
 
-    private Vector3 isinTouchArea(Touch touch) // overloading for mobile.
+    private Vector3 isinTouchArea(Touch touch) // モバイル
     {
         Ray ray = Camera.main.ScreenPointToRay(touch.position);
         RaycastHit rayHit;
@@ -140,35 +143,32 @@ public class HitManager : MonoBehaviour
         }
     }
 
-    private Vector3 DecideColliderPos(Vector3 point)
+    private Vector3 DecideHitPos(Vector3 point)
     {
-        // touch area is wide than actual judgeline.
-        // so calculate position of collider and effect to be on the judgeline for them.
+        // touch areaは判定線より広いため、インプットの位置を判定線上の位置に変換
 
-        // calculate direction vector of ray.
-        Vector3 dirVec = ((judgeLine.lineStartPos + judgeLine.lineEndPos) * 0.5f) - point;
+        Vector3 dirVec = judgeLine.lineCenterPos - point;
         dirVec = Vector3.Normalize(dirVec);
 
         RaycastHit rayHit;
-        int layerMask = (1 << 7); // layer of real judge line.
+        int layerMask = (1 << 7); // 判定線のレイヤー
 
         if (Physics.Raycast(point, dirVec, out rayHit, Mathf.Infinity, layerMask) 
             || Physics.Raycast(point, -dirVec, out rayHit, Mathf.Infinity, layerMask))
         {
-            // draw ray for two point with infinite length.
-            // return rayHit.point that is on judgeline.
+            // インプットの位置から判定線に向かってrayをし、rayに打たれた位置を返還
             return rayHit.point;
         }
         else
         {
-            // else, return meaningless vector.
+            // じゃなければ意味のないベクトルを返還
             return new Vector3(999, 999, 999);
         }
     }
 
     private void ActivateHit(int index, Vector3 pos)
     {
-        // when there was touch, activate collider and effect.
+        //　インプットがあればコライダーとエフェクターを活性化
         hitColliders[index].gameObject.SetActive(true);
         hitEffects[index].gameObject.SetActive(true);
         hitColliders[index].transform.position = pos;

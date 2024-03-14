@@ -9,12 +9,12 @@ EditorBuildSettings:
     path: Assets/Scenes/Title.unity
     guid: 357feb5c6e1ea1042946c7f79f311906
   - enabled: 1
+    path: Assets/Scenes/ModeSelect.unity
+    guid: eafdbcb3c3a9d3b47b0a0f827e60f9d9
+  - enabled: 1
     path: Assets/Scenes/MusicSelect.unity
-    guid: 62ffb056597058e428cee3a0d12b8eaf
+    guid: f85e847478facad48ad19acac6fd3cb0
   - enabled: 1
     path: Assets/Scenes/PlayScene.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
-  - enabled: 1
-    path: Assets/Scenes/Editor.unity
-    guid: 5ee44f227432fb847a783840ff9cb205
   m_configObjects: {}

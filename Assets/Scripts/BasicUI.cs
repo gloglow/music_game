@@ -39,6 +39,26 @@ public class BasicUI : MonoBehaviour
         noteSpeedText.text = GameManager.Instance.speeds[(int)noteSpeedSlider.value].ToString();
     }
 
+    public void OnDefault()
+    {
+        defaultUI.SetActive(true);
+    }
+
+    public void OffDefault()
+    {
+        defaultUI.SetActive(false);
+    }
+
+    public void OnOption()
+    {
+        optionUI.SetActive(true);
+    }
+
+    public void OffOption()
+    {
+        optionUI.SetActive(false);
+    }
+
     public void ShowOption() // When option btn pressed
     {
         defaultUI.SetActive(false);

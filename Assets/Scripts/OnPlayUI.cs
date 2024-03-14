@@ -87,7 +87,6 @@ public class OnPlayUI : MonoBehaviour
         // after 3 seconds, unpause game.
         yield return new WaitForSeconds(time);
         defaultUI.SetActive(true);
-        stageManager.PlayBack();
     }
 
     public void updateScore(int score)

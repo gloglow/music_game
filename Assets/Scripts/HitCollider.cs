@@ -1,16 +1,17 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class HitCollider : MonoBehaviour
 {
     public StageManager stageManager;
+    [SerializeField] ObjectPoolManager poolManager;
+
     private void OnTriggerEnter(Collider other)
     {
-        // when collide with note
-        if (other.gameObject.layer == 8) // layer of note
+        if (other.gameObject.layer == 8) // ノーツのレイヤー
         {
             Note note = other.gameObject.GetComponent<Note>();
-            stageManager.ShowGrade(note.Grading()); // grade the note.
-            ObjectPoolManager.Instance.notePool.Release(other.gameObject); // return note back to object pool.
+            // stageManager.ShowGrade(note.Grading());
+            poolManager.notePool.Release(other.gameObject); // ノーツを解除
         }
     }
 }

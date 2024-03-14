@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -7,7 +7,11 @@ using TMPro;
 
 public class StageManager : MonoBehaviour
 {
-    private string noteDataFilePath = Application.streamingAssetsPath + "/Json/miles.json";
+    [SerializeField] private DataManager dataManager;
+    [SerializeField] private ObjectPoolManager poolManager;
+    [SerializeField] private AudioManager audioManager;
+
+    private NoteData crtNote;
 
     // managing a stageUI, note.
     [SerializeField] private OnPlayUI onPlayUI;
@@ -45,19 +49,67 @@ public class StageManager : MonoBehaviour
 
     private void Start()
     {
+        ReadyToStart();
+        dataManager.GetNotes("miles");
+    }
+
+    
+    private void Update()
+    {
+        if (!isPause)
+        {
+            // 以前ビートの時間から1ビートの時間が経ったらビートカウントを増加
+            if (AudioSettings.dspTime - lastBeatTime > secondPerBeat)
+            {
+                beatCnt++;
+                lastBeatTime += secondPerBeat;
+
+                // 8ビート以降、準備時間が過ぎたら音楽を再生
+                if (beatCnt == musicStartAfterBeats + 1)
+                {
+                    audioManager.MusicPlay();
+                }
+
+                //　次のノーツが生成されるタイミングになったら生成
+                while (noteList.Count > index 
+                    && (beatCnt - musicStartAfterBeats + speedLogic + 1) == (noteList[index].bar - 1) * 4 + (int)noteList[index].beat - 1)
+                {
+                    crtNote = noteList[index];
+                    float delayTime; // ノーツの生成を遅延させる時間。（1/4音符は０、1/8音符は0.5)
+                    if (noteList[index].beat == 1) // 1/4音符
+                    {
+                        delayTime = 0;
+                    }
+                    else // 1/8音符, 1/16音符
+                    {
+                        delayTime = (crtNote.beat - (int)crtNote.beat) * secondPerBeat * 0.5f;
+                    }
+                    StartCoroutine(MakeNote(delayTime));
+                    index++;
+                }
+            }
+        }
+
+        // if there isn't note in noteList, and audio is not playing, show result.
+        if(index == noteList.Count && !audioManager.audioSource.isPlaying)
+        {
+            checkResult();
+        }
+    }
+
+    private void ReadyToStart()　//　初期化
+    {
         startTime = (float)AudioSettings.dspTime;
         lastBeatTime = startTime;
         secondPerBeat = 60 / bpm;
-        
-        // load note data from json file.
-        LoadNoteData();
 
-        // initialize play data.
         score = 0;
         combo = 0;
         maxCombo = 0;
 
-        switch(GameManager.Instance.crtSpeed)
+        dataManager.GetMusic(GameManager.Instance.crtMusicName);
+
+        switch (GameManager.Instance.crtSpeed)
         {
             case 0: speedLogic = 3; break;
             case 1: speedLogic = 1; break;
@@ -65,80 +117,20 @@ public class StageManager : MonoBehaviour
         }
     }
 
-    private void LoadNoteData()
+    public void AddNoteList(NoteData noteData)
     {
-        // load json file
-        // json file [title, composer, note count, notedata[startpoint, directionx, directiony]
-
-        if (File.Exists(noteDataFilePath))
-        {
-            var noteDataFile = File.ReadAllText(noteDataFilePath);
-            JsonData noteD = JsonMapper.ToObject(noteDataFile.ToString());
-            for (int i = 0; i < noteD.Count; i++)
-            {
-                // load notedata and add in notedata list.
-                NoteData noteData = new NoteData();
-                noteData.xPos = float.Parse(noteD[i]["xPos"].ToString());
-                noteData.bar = int.Parse(noteD[i]["bar"].ToString());
-                noteData.beat = float.Parse(noteD[i]["beat"].ToString());
-                noteData.unitVecX = float.Parse(noteD[i]["unitVecX"].ToString());
-                noteData.unitVecY = float.Parse(noteD[i]["unitVecY"].ToString());
-                noteList.Add(noteData);
-            }
-        }
-        else Debug.Log("????");
+        noteList.Add(noteData);
     }
-    private void Update()
-    {
-        if (!isPause)
-        {
-            // count beat because note should be activated and move with beat timing.
-            if (AudioSettings.dspTime - lastBeatTime > secondPerBeat) // if over one beat time passed from last beat time, count beat.
-            {
-                beatCnt++;
-                lastBeatTime += secondPerBeat;
 
-                // after first 8 beats, music start.
-                if (beatCnt == musicStartAfterBeats + 1)
-                {
-                    AudioManager.Instance.MusicPlay();
-                }
-
-                // there is any note data && current beat == note beat, make note.
-                while (noteList.Count > index && (beatCnt - musicStartAfterBeats + speedLogic + 1) == (int)noteList[index].beat)
-                {
-                    float f; // the waiting time of note. (if note is 1/4 note, not wait.)
-                    if (noteList[index].beat == (beatCnt - musicStartAfterBeats + speedLogic)) // 1/4 note.
-                    {
-                        f = 0;
-                    }
-                    else // 1/8 note, 1/16 note, etc
-                    {
-                        // if beat of a note is 6.5, at 6th beat, wait 0.5beat time and be made.
-                        f = (noteList[index].beat - (beatCnt - musicStartAfterBeats + speedLogic)) * secondPerBeat * GameManager.Instance.speeds[GameManager.Instance.crtSpeed] * 0.5f;
-                    }
-                    StartCoroutine(MakeNote(f));
-                    index++;
-                }
-            }
-        }
-
-        // if there isn't note in noteList, and audio is not playing, show result.
-        if(index == noteList.Count && !AudioManager.Instance.audioSource.isPlaying)
-        {
-            checkResult();
-        }
-    }
-    
-    public void Pause() // when pause button is pressed in playing time.
+    public void Pause()　//　音楽を一時停止
     {
         isPause = true;
-        AudioManager.Instance.MusicPause();
+        audioManager.MusicPause();
 
-        // record the time when pause button is pressed.
+        // 一時停止された時間を記録
         pauseTimer = (float)AudioSettings.dspTime;
 
-        // all of notes stop when pause button is pressed.
+        // 生成された全てのノーツの動作を中止
         for (int i = 0; i < transform.childCount; i++)
         {
             Note note = transform.GetChild(i).GetComponent<Note>();
@@ -146,16 +138,15 @@ public class StageManager : MonoBehaviour
         }
     }
 
-    public void PlayBack()
+    public void Resume()
     {
-        // unpause.
         isPause = false;
 
-        // add the time passed during pause to lastBeatTime.
+        // 停止されていた時間分、基準時間に反映
         lastBeatTime += (float)AudioSettings.dspTime - pauseTimer;
-        AudioManager.Instance.MusicPlay();
+        audioManager.MusicResume();
 
-        // reactivate notes.
+        // ノーツの動作を再活性化
         int childCnt = transform.childCount;
         for (int i = 0; i < childCnt; i++)
         {
@@ -167,18 +158,20 @@ public class StageManager : MonoBehaviour
 
     IEnumerator MakeNote(float time)
     {
-        yield return new WaitForSeconds(time);  
-        // bring note from note object pool.
-        GameObject obj = ObjectPoolManager.Instance.notePool.Get();
+        yield return new WaitForSeconds(time);
+
+        //　ノーツを生成
+        GameObject obj = poolManager.notePool.Get();
         Note note = obj.GetComponent<Note>();
         note.transform.parent = transform;
         note.stageManager = this;
 
-        // activate note.
+        //　ノーツを活性化
         note.status = 1;
         note.transform.position = new Vector3(noteList[crtIndex].xPos, spawnYPos, 0);
         note.dirVec = new Vector3(noteList[crtIndex].unitVecX, noteList[crtIndex].unitVecY, 0);
         crtIndex++;
+
         if (isPause) note.status = 0;
     }
 

@@ -12,7 +12,6 @@ public class SongList : MonoBehaviour
     private Vector3 mousePosition;
     [SerializeField] private float mouseOffset;
     private float songListHeight = 1250f;
-    public MusicSelecting musicSelecting;
 
     private void Update()
     {
@@ -25,10 +24,9 @@ public class SongList : MonoBehaviour
             // drag -> move song list
             float ypos = (mousePosition.y - Input.mousePosition.y) * mouseOffset;
             transform.position -= new Vector3(0, ypos, 0);
-            if (Mathf.Abs(transform.localPosition.y) < 100 && GameManager.Instance.crtSongID != songID)
+            if (Mathf.Abs(transform.localPosition.y) < 100)
             {
-                GameManager.Instance.crtSongID = songID;
-                musicSelecting.ShowSongInfo(songID);
+
             }
         }
         if (Input.GetMouseButtonUp(0))
@@ -41,12 +39,10 @@ public class SongList : MonoBehaviour
         if(transform.localPosition.y > songListHeight)
         {
             transform.localPosition = new Vector3(crtLocalPos.x, -songListHeight, crtLocalPos.z);
-            musicSelecting.IndexCalculating(this, false);
         }
         else if (transform.localPosition.y < -songListHeight)
         {
             transform.localPosition = new Vector3(crtLocalPos.x, songListHeight, crtLocalPos.z);
-            musicSelecting.IndexCalculating(this, true);
         }
         else if (transform.localPosition.y <= 250f && transform.localPosition.y >= -250f)
         {

@@ -60,13 +60,14 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.16f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\TitleUI.cs" />
     <Compile Include="Assets\Scripts\HitCollider.cs" />
     <Compile Include="Assets\JMO Assets\Cartoon FX (legacy)\Scripts\CFX_AutoRotate.cs" />
     <Compile Include="Assets\Scripts\DestroyLine.cs" />
     <Compile Include="Assets\LitJson\IJsonWrapper.cs" />
+    <Compile Include="Assets\Scripts\ModeSelectUI.cs" />
     <Compile Include="Assets\Scripts\ObjectPoolManager.cs" />
     <Compile Include="Assets\LitJson\JsonMockWrapper.cs" />
-    <Compile Include="Assets\Scripts\SongData.cs" />
     <Compile Include="Assets\LitJson\Lexer.cs" />
     <Compile Include="Assets\JMO Assets\Cartoon FX (legacy)\Scripts\CFX_LightIntensityFade.cs" />
     <Compile Include="Assets\LitJson\JsonException.cs" />
@@ -75,13 +76,13 @@
     <Compile Include="Assets\LitJson\JsonMapper.cs" />
     <Compile Include="Assets\LitJson\ParserToken.cs" />
     <Compile Include="Assets\JMO Assets\Cartoon FX (legacy)\Scripts\CFX_LightFlicker.cs" />
-    <Compile Include="Assets\Scripts\EditorJudgeLine.cs" />
     <Compile Include="Assets\Scripts\BackGround.cs" />
     <Compile Include="Assets\Scripts\HitManager.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\LitJson\JsonData.cs" />
+    <Compile Include="Assets\Scripts\MusicSelectUI.cs" />
+    <Compile Include="Assets\Scripts\MusicInfo.cs" />
     <Compile Include="Assets\Scripts\Note.cs" />
-    <Compile Include="Assets\Scripts\MusicSelecting.cs" />
     <Compile Include="Assets\Scripts\AudioManager.cs" />
     <Compile Include="Assets\JMO Assets\Cartoon FX (legacy)\Scripts\CFX_AutoDestructShuriken.cs" />
     <Compile Include="Assets\Scripts\StageManager.cs" />
@@ -90,6 +91,7 @@
     <Compile Include="Assets\Scripts\CameraResolution.cs" />
     <Compile Include="Assets\Scripts\BasicUI.cs" />
     <Compile Include="Assets\Scripts\JudgeLine.cs" />
+    <Compile Include="Assets\Scripts\DataManager.cs" />
     <Compile Include="Assets\LitJson\JsonWriter.cs" />
     <Compile Include="Assets\Scripts\NoteData.cs" />
     <Compile Include="Assets\Scripts\SongList.cs" />
