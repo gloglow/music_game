@@ -2,57 +2,50 @@
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-using LitJson;
-using TMPro;
 
 public class StageManager : MonoBehaviour
 {
     [SerializeField] private DataManager dataManager;
     [SerializeField] private ObjectPoolManager poolManager;
-    [SerializeField] private AudioManager audioManager;
+    [SerializeField] private OnPlayUI onPlayUI;
 
     private NoteData crtNote;
 
-    // managing a stageUI, note.
-    [SerializeField] private OnPlayUI onPlayUI;
-    [SerializeField] private float spawnYPos; // positionY where notes are activated.
-    [SerializeField] private TextMeshProUGUI gradeText; // UI text of grade.
+    [SerializeField] private float spawnYPos; // ノーツが生成される位置のy座標
 
-    [SerializeField] private float bpm; // music bpm.
-    [SerializeField] private int musicStartAfterBeats; // the number of initial beats. set 8.
-    public bool isPause;
+    [SerializeField] private float bpm; // 音楽の速さ
+    [SerializeField] private int musicStartAfterBeats; // 音楽が始まる前の時間
 
-    [SerializeField] private int beatCnt; // counting beat.
-    private float startTime; // start timing of audio system. 
-    private float lastBeatTime; // timing of last beat.
+    [SerializeField] private int beatCnt; // ビートのカウンター
+    private float startTime; // audio systemが始まる時間
+    private float lastBeatTime; // 最後のビートの時間
 
-    public float secondPerBeat; // second per beat. calculated by bpm.
+    public float secondPerBeat; //　1ビート当たりの時間。bpmで計算
     private int speedLogic;
 
-    // note data.
-    private static List<NoteData> noteList = new List<NoteData>();
-    private string title;
-    private string composer;
-    private int index = 0;
+    private static List<NoteData> noteList = new List<NoteData>();　// ノーツデータ
+
+    private int index = 0;　
     private int crtIndex = 0;
 
-    private float pauseTimer; // save the time when pause button is pressed.
+    public bool isPause;
+    private float pauseTimer; // 停止された時間を記録
+    private int second3Timer;　//　停止を解除して再開するためのタイマー
 
-    // play data.
+    // プレイデータ
     private int score;
     private int combo;
     private int maxCombo;
+    private int missCnt;
 
-    // standards of grading.
-    [SerializeField] private int perfectScore, greatScore, badScore, missScore;
-    [SerializeField] private int rankSStandard, rankAStandard, rankBStandard;
+    [SerializeField] private float perfectRange, greatRange; // 各判定の基準。perfect：0.75, great：0.83
+    [SerializeField] private int[] scoreList; // 各判定の点数。0:bad, １：great, ２：perfect
+    [SerializeField] private int rankSStandard, rankAStandard, rankBStandard;　//　成績の基準。
 
     private void Start()
     {
-        ReadyToStart();
-        dataManager.GetNotes("miles");
+        ReadyToStart();　//　初期化
     }
-
     
     private void Update()
     {
@@ -67,12 +60,12 @@ public class StageManager : MonoBehaviour
                 // 8ビート以降、準備時間が過ぎたら音楽を再生
                 if (beatCnt == musicStartAfterBeats + 1)
                 {
-                    audioManager.MusicPlay();
+                    AudioManager.instance.MusicPlay();
                 }
 
                 //　次のノーツが生成されるタイミングになったら生成
                 while (noteList.Count > index 
-                    && (beatCnt - musicStartAfterBeats + speedLogic + 1) == (noteList[index].bar - 1) * 4 + (int)noteList[index].beat - 1)
+                    && (beatCnt - musicStartAfterBeats + 1) == (noteList[index].bar - 1) * 4 + (int)noteList[index].beat - 1)
                 {
                     crtNote = noteList[index];
                     float delayTime; // ノーツの生成を遅延させる時間。（1/4音符は０、1/8音符は0.5)
@@ -84,37 +77,48 @@ public class StageManager : MonoBehaviour
                     {
                         delayTime = (crtNote.beat - (int)crtNote.beat) * secondPerBeat * 0.5f;
                     }
-                    StartCoroutine(MakeNote(delayTime));
+                    StartCoroutine(MakeNote(delayTime + secondPerBeat * 0.5f));
                     index++;
                 }
             }
         }
 
-        // if there isn't note in noteList, and audio is not playing, show result.
-        if(index == noteList.Count && !audioManager.audioSource.isPlaying)
+        // 音楽が終わったら
+        if(!isPause && !AudioManager.instance.audioSource.isPlaying && index >= noteList.Count)
         {
-            checkResult();
+            GameManager.Instance.crtScore = score;
+            GameManager.Instance.crtMiss = missCnt;
+            GameManager.Instance.crtCombo = maxCombo;
+            GameManager.Instance.crtRank = WhatisRank();
+            GameManager.Instance.MoveScene("Result");
         }
     }
 
     private void ReadyToStart()　//　初期化
     {
-        startTime = (float)AudioSettings.dspTime;
+        startTime = (float)AudioSettings.dspTime;　//　音楽システムが始まった時間を記録
         lastBeatTime = startTime;
         secondPerBeat = 60 / bpm;
 
+        //　初期化
         score = 0;
         combo = 0;
         maxCombo = 0;
+        missCnt = 0;
+        second3Timer = 3;
 
-        dataManager.GetMusic(GameManager.Instance.crtMusicName);
+        AudioManager.instance.MusicStop();
+        AudioManager.instance.audioSource.loop = false;
 
+        //　後に修正すべきなロジック
         switch (GameManager.Instance.crtSpeed)
         {
             case 0: speedLogic = 3; break;
             case 1: speedLogic = 1; break;
             case 2: speedLogic = 0; break;
         }
+
+        dataManager.GetNotes("miles");　//　ノーツデータをロード
     }
 
     public void AddNoteList(NoteData noteData)
@@ -122,12 +126,12 @@ public class StageManager : MonoBehaviour
         noteList.Add(noteData);
     }
 
-    public void Pause()　//　音楽を一時停止
+    public void Pause()　//　音楽を停止
     {
         isPause = true;
-        audioManager.MusicPause();
+        AudioManager.instance.MusicPause();
 
-        // 一時停止された時間を記録
+        // 停止された時間を記録
         pauseTimer = (float)AudioSettings.dspTime;
 
         // 生成された全てのノーツの動作を中止
@@ -138,13 +142,37 @@ public class StageManager : MonoBehaviour
         }
     }
 
-    public void Resume()
+    public void UnPause()　//　停止を解除
+    {
+        onPlayUI.OnOffTimer(true);
+        for(int i=0; i<4; i++)
+        {
+            StartCoroutine(TimerUpdate(i));
+        }
+    }
+
+    IEnumerator TimerUpdate(int time)　//　3秒後に再開
+    {
+        yield return new WaitForSeconds(time);
+
+        onPlayUI.TimerUpdate(3 - time);
+        second3Timer--;
+
+        if (second3Timer < 0)
+        {
+            Resume();
+            onPlayUI.OnOffTimer(false);
+            second3Timer = 3;
+        }
+    }
+
+    public void Resume()　//　停止を解除
     {
         isPause = false;
 
         // 停止されていた時間分、基準時間に反映
         lastBeatTime += (float)AudioSettings.dspTime - pauseTimer;
-        audioManager.MusicResume();
+        AudioManager.instance.MusicResume();
 
         // ノーツの動作を再活性化
         int childCnt = transform.childCount;
@@ -175,49 +203,55 @@ public class StageManager : MonoBehaviour
         if (isPause) note.status = 0;
     }
 
-    public void ShowGrade(int grade)
+    public void Grading(float distance)　//　ノーツと判定線間の距離を使い、成績を決める
     {
-        // display grade and combo.
-        switch (grade)
+        if (distance == -1)　//　miss判定の場合
         {
-            case 0:
-                gradeText.text = "Miss";
-                maxCombo = combo;
-                combo = 0;
-                onPlayUI.updateCombo(combo);
-                grade = missScore;
-                return;
-            case 1:
-                gradeText.text = "Bad";
-                grade = badScore;
-                break;
-            case 2:
-                gradeText.text = "Great";
-                grade = greatScore;
-                break;
-            case 3:
-                gradeText.text = "Perfect";
-                grade = perfectScore;
-                break;
+            maxCombo = combo;
+            combo = 0;
+            missCnt++;
+            onPlayUI.UpdateCombo(combo);
+            onPlayUI.ChangeGradeText((int)distance);
+            return;
         }
-        score += grade;
+
+        int grade = DistanceToGrade(distance);
+        onPlayUI.ChangeGradeText(grade);
+
+        score += scoreList[grade];
         combo++;
-        onPlayUI.updateScore(score);
-        onPlayUI.updateCombo(combo);
+
+        //　UIアップデート
+        onPlayUI.UpdateScore(score);
+        onPlayUI.UpdateCombo(combo);
     }
 
-    private void checkResult()
+    private int DistanceToGrade(float distance)　//　距離
     {
-        // show result (rank, maxcombo, score)
-        char rank;
-        float rate = (score / 5) / noteList.Count;
-        
-        if (rate > rankSStandard) rank = 'S';
-        else if (rate > rankAStandard) rank = 'A';
-        else if (rate > rankBStandard) rank = 'B';
-        else rank = 'C';
+        if (distance < perfectRange) // perfectで判定
+        {
+            return 2;
+        }
+        else if (distance < greatRange) // greatで判定
+        {
+            return 1;
+        }
+        else // badで判定
+        {
+            return 0;
+        }
+    }
 
-        onPlayUI.ShowResultUI(maxCombo, score, rank);
-        isPause = true;
+    private string WhatisRank() //　プレイを評価
+    {
+        float rate = score / (scoreList[2] * noteList.Count);
+        if (rate >= rankSStandard)
+            return "S";
+        else if (rate >= rankAStandard)
+            return "A";
+        else if (rate >= rankBStandard)
+            return "B";
+        else
+            return "C";
     }
 }

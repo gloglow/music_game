@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -6,8 +6,8 @@ using UnityEngine;
 public class TitleUI: MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI startBtn;
-    [SerializeField] private float alphaChange;
-    private int switchAlphaUp = -1;
+    [SerializeField] private float alphaChange;　//　スタートボタンのalphaが変わる速度
+    private int switchAlphaUp = -1;　//　１：alpha増加　-1：alpha減少
 
     private void Update()
     {

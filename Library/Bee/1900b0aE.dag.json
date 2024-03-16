@@ -25953,7 +25953,7 @@
         "Assets/Scripts/NoteData.cs",
         "Assets/Scripts/ObjectPoolManager.cs",
         "Assets/Scripts/OnPlayUI.cs",
-        "Assets/Scripts/SongList.cs",
+        "Assets/Scripts/ResultUI.cs",
         "Assets/Scripts/StageManager.cs",
         "Assets/Scripts/TitleUI.cs",
         "Assets/Scripts/TouchArea.cs",

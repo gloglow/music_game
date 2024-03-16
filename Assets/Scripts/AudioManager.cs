@@ -6,15 +6,48 @@ using UnityEngine.Networking;
 
 public class AudioManager : MonoBehaviour
 {
-    // manage audio play and stop
+    public static AudioManager instance;¡¡//¡¡«·«ó«°«ë«È«ó
 
-    private string musicPath = Application.streamingAssetsPath + "/Sounds/Music/"; // music file path. 
-    
     public AudioSource audioSource;
+
+    public AudioClip defaultBGM;
+    public AudioClip resultBGM;
+
+    public static AudioManager Instance
+    {
+        get
+        {
+            if (!instance)
+            {
+                instance = FindObjectOfType(typeof(AudioManager)) as AudioManager;
+
+                if (instance == null)
+                {
+                    Debug.Log("no singleton obj");
+                }
+            }
+            return instance;
+        }
+    }
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else if (instance != this)
+        {
+            Destroy(gameObject);
+        }
+        DontDestroyOnLoad(gameObject);
+    }
 
     private void Start()
     {
         audioSource = GetComponent<AudioSource>();
+        audioSource.clip = defaultBGM;
+        audioSource.Play();
     }
 
     public void ChangeMusic(AudioClip audioClip)

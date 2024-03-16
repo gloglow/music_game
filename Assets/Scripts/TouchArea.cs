@@ -1,10 +1,10 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class TouchArea : MonoBehaviour
 {
     [SerializeField] private JudgeLine judgeLine;
     private LineRenderer lineRenderer;
-    private MeshCollider meshCollider; // to sense input(mouse or touch)
+    private MeshCollider meshCollider; // インプットを認識するためのコライダー
 
     private void Start()
     {
@@ -14,14 +14,14 @@ public class TouchArea : MonoBehaviour
 
     public void Draw()
     {
-        Vector3[] points = judgeLine.GetLinePoints();
-        // draw line with points.
+        Vector3[] points = judgeLine.GetLinePoints();　//　judge lineの上にtouch areaを描く
+        
         for (int i = 0; i < points.Length; i++)
         {
             lineRenderer.SetPosition(i, points[i]);
         }
 
-        // make mesh collider to sense input(ray from mouse or touch)
+        //　line rendererで描いたtouch areaがインプットを認識できるように、mesh コライダー
         Mesh mesh = new Mesh();
         lineRenderer.BakeMesh(mesh, true);
         meshCollider.sharedMesh = mesh;

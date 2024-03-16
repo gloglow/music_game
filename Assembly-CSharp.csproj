@@ -89,12 +89,12 @@
     <Compile Include="Assets\Scripts\TouchArea.cs" />
     <Compile Include="Assets\LitJson\JsonReader.cs" />
     <Compile Include="Assets\Scripts\CameraResolution.cs" />
+    <Compile Include="Assets\Scripts\ResultUI.cs" />
     <Compile Include="Assets\Scripts\BasicUI.cs" />
     <Compile Include="Assets\Scripts\JudgeLine.cs" />
     <Compile Include="Assets\Scripts\DataManager.cs" />
     <Compile Include="Assets\LitJson\JsonWriter.cs" />
     <Compile Include="Assets\Scripts\NoteData.cs" />
-    <Compile Include="Assets\Scripts\SongList.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

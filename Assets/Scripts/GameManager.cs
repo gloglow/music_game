@@ -1,18 +1,23 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    private static GameManager instance; // ���󫰫�ȫ�
+    private static GameManager instance; // シングルトン
 
     public AudioMixer audioMixer;
 
-    public int crtSpeed; // 0,1,2 : slider value
-    public float[] speeds = {0.5f, 1f, 2f}; // 0.5,1,2 : actual speed = speeds[crtSpeed]
+    public int crtSpeed; // スライダーのバリュー：0,1,2
+    public float[] speeds = {0.5f, 1f, 2f}; // 
 
+    public int crtMusicIndex;
     public string crtMusicName;
+    public int crtScore;
+    public int crtMiss;
+    public int crtCombo;
+    public string crtRank;
 
     public static GameManager Instance
     {
@@ -46,7 +51,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        crtMusicName = "titleMusic";
+        crtMusicName = "TitleMusic";
         LoadPlayerData();
     }
 
@@ -60,8 +65,8 @@ public class GameManager : MonoBehaviour
 
     public void ChangeMusicVolume(float value)
     {
-        // volume less than -40, almost mute.
-        if (value == -40)
+        // -40以下はほぼ聞こえないので、ミュートにする
+        if (value <= -40)
             value = -80;
         audioMixer.SetFloat("Music", value);
     }
@@ -73,12 +78,26 @@ public class GameManager : MonoBehaviour
 
     public void MoveScene(string sceneName)
     {
+        switch (sceneName)
+        {
+            case "ModeSelect":
+                if(AudioManager.instance.audioSource.clip != AudioManager.instance.defaultBGM)
+                {
+                    AudioManager.instance.audioSource.clip = AudioManager.instance.defaultBGM;
+                    AudioManager.instance.audioSource.Play();
+                }
+                break;
+            case "Result":
+                AudioManager.instance.audioSource.clip = AudioManager.instance.resultBGM;
+                AudioManager.instance.audioSource.Play();
+                break;
+        }
         SceneManager.LoadScene(sceneName);
     }
 
     public void SaveOptionData(int noteSpeed, float volume)
     {
-        // change current game option and save data.
+        // 設定変更を適用
         ChangeNoteSpeed(noteSpeed);
         ChangeMusicVolume(volume);
         PlayerPrefs.SetFloat("musicVolume", volume);

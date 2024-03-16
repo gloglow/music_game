@@ -19,23 +19,6 @@ public class Note : MonoBehaviour
 
     public int index;　//　何番目のノーツなのか
 
-    /*
-    public Vector3 dirVec; // direction vector to move.
-
-    // variables to calculate move speed.
-    private Vector3 initialPos; // position when note is activated (spawner's position)
-    public float initialTime; // time when note is activated
-    private Vector3 destination; // on judge line.
-    private float dist; // distance between initial position and destination.
-
-    // range of perfect and great grade
-    [SerializeField] private float perfectRange, greatRange; // 0.75, 0.83
-    public float index;
-    private float speed;
-
-    public StageManager stageManager;
-    public int status; // 0 : idle, 1 : set destination and speed, 2 : move
-    */
     private void Update()
     {
         switch (status)
@@ -44,7 +27,8 @@ public class Note : MonoBehaviour
                 break;
 
             case 1:　//　移動に必要な変数を初期化、到達ポイントを把握
-                speed = GameManager.Instance.speeds[GameManager.Instance.crtSpeed];
+                //speed = GameManager.Instance.speeds[GameManager.Instance.crtSpeed];
+                speed = 
                 initialTime = (float)AudioSettings.dspTime;　//　生成された時の時間を初期時間として記録
                 initialPos = transform.position; // 生成された時の位置を初期位置として記録
                 GetDestination();　//　到達ポイントを把握
@@ -52,7 +36,7 @@ public class Note : MonoBehaviour
                 break;
             case 2: // 移動
                 Vector3 route = destination - initialPos;　//　移動する経路
-                float timePassed = ((float)AudioSettings.dspTime - initialTime) / (stageManager.secondPerBeat * speed);　//　どれぐらい時間が経ったか（生成された時は０、到達ポイントに届く時は１）
+                float timePassed = ((float)AudioSettings.dspTime - initialTime) / (stageManager.secondPerBeat * 2);　//　どれぐらい時間が経ったか（生成された時は０、到達ポイントに届く時は１）
 
                 transform.position = initialPos + route * timePassed;
                 break;
@@ -70,31 +54,14 @@ public class Note : MonoBehaviour
         }
     }
 
-    /*
-    public int Grading()
-    {
-        // grading by calculating distance between note and judgeline.
-        // the closer, the higher grade
-        dist = Vector3.Distance(transform.position, destination);
-
-        if (dist < perfectRange / GameManager.Instance.crtSpeed) // set 0.5
-        {
-            return 3;
-        }
-        else if(dist <greatRange / GameManager.Instance.crtSpeed) // set 0.85
-        {
-            return 2;
-        }
-        else // bad grade.
-        {
-            return 1;
-        }
-    }*/
-
-    public void Exit()
+    public void Exit(bool isMiss)
     {
         //　ノーツを非活性化
         status = 0;
+        if (isMiss)
+            stageManager.Grading(-1);
+        else
+            stageManager.Grading(Vector3.Distance(transform.position, destination));　//　判定線との距離に基づいて判定
         notePool.Release(gameObject);
     }
 }

@@ -5,6 +5,7 @@ public class JudgeLine : MonoBehaviour
     // 判定線を描く
 
     [SerializeField] private StageManager stageManager;
+    [SerializeField] private TouchArea touchArea;
 
     // 判定線の形を決定する変数
     [SerializeField] private Vector2 idealScreenSize; // Resolution : 1920 x 1080.
@@ -29,6 +30,7 @@ public class JudgeLine : MonoBehaviour
         SetLineStartEndPos();　//　判定線の始まる点と終わる点を決定
         DrawLine();　//　line rendererを使い、線を描く
         CreateLineParts();　//　partオブジェクトを線の上に配置
+        touchArea.Draw();
     }
 
     private void SetLineStartEndPos() // 判定線の始まる点と終わる点を決定
@@ -95,15 +97,13 @@ public class JudgeLine : MonoBehaviour
 
             judgeFail.transform.position = judge.transform.position + new Vector3(0, -3f, 0);
             judgeFail.transform.rotation = judge.transform.rotation;
-
-            DestroyLine dpart = judgeFail.GetComponent<DestroyLine>();
-            dpart.stageManager = stageManager;
         }
     }
 
     public Vector3[] GetLinePoints() // touch areaを描くための関数
     {
         Vector3[] arr = new Vector3[lineRendererPosCnt];
+        int tmp = lineRenderer.GetPositions(arr);
         return arr;
     }
 }
